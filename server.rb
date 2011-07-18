@@ -5,7 +5,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'rexml/document'
-require 'active_support' # for singularize
+require 'active_support/core_ext/string' # for singularize
 require 'fast_stemmer' #for stem
 require './dic-session'
 
@@ -14,7 +14,15 @@ def identity
   return self
 end
 
+
+
 get '/dic' do
+  if params[:_callback]
+    content_type 'text/javascript', :charset => 'utf-8'
+  else
+    content_type 'text/json', :charset => 'utf-8'
+  end
+
   session = DicSession.new
   xml = nil
   result = ''
@@ -26,9 +34,8 @@ get '/dic' do
   #if文の条件式がfalse(nil)になるのは、生でも単数形でもstemしても単語が見つからなかった時
 
   if params[:_callback]
-    "Content-Type: text/javascript; charset=utf-8;\r\n\r\n" +
-      params[:_callback] + '("' + result + '");'
+    params[:_callback] + '("' + result + '");'
   else
-    "Content-Type: text/json; charset=utf-8;\r\n\r\n" + '"' + result + '"'
+    '"' + result + '"'
   end
 end
