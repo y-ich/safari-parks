@@ -19,13 +19,13 @@ class DicSession
   end
 
 # 単語に該当するitemIdの配列を返します。
-  def search(word)
+  def search(word, match)
     params = {
-      :Dic => 'EJdict',
+      :Dic => 'EJdict', # 'EJdict', 'EdictJE', 'wpedia'
       :Word => word,
-      :Scope => 'HEADWORD',
-      :Match => 'EXACT',
-      :Merge => 'OR',
+      :Scope => 'HEADWORD', # 'HEADWORD', 'ANYWHERE'
+      :Match => match, # 'STARTWITH', 'ENDWITH', 'CONTAIN', 'EXACT'
+      :Merge => 'OR', # 'AND', 'OR'
       :Prof => 'XHTML',
       :PageSize => '10',
       :PageIndex => '0'

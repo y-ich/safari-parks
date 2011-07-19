@@ -15,8 +15,9 @@ get '/dic' do
   end
 
   session = DicSession.new
-  ids = session.search(params[:Word])
-  ids = session.search(params[:Word].stem) if ids.empty?
+  ids = session.search(params[:Word], 'EXACT')
+  ids = session.search(params[:Word].stem, 'EXACT') if ids.empty?
+  ids = session.search(params[:Word].stem, 'STARTWITH') if ids.empty?
 
   result = ids.inject('') { |m, e| m += session.retrieve(e) }
   session.close
