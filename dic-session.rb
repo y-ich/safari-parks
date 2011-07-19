@@ -1,28 +1,62 @@
 # -*- coding: utf-8 -*-
+#
+# イースト辞書WebサービスAPI
+#
 require 'net/http'
 require 'rexml/document'
 
 class DicSession
-  @@address = 'btonic.est.co.jp'
-  @@searchPath = '/NetDic/NetDicV09.asmx/SearchDicItemLite?&Dic=EJdict&Word='
-  @@searchOptions = '&Scope=HEADWORD&Match=EXACT&Merge=OR&Prof=XHTML&PageSize=10&PageIndex=0'
-  @@retrievePath = '/NetDic/NetDicV09.asmx/GetDicItemLite?Dic=EJdict&Item='
+  ADDRESS = 'btonic.est.co.jp'
+  SEARCH_PATH = '/NetDic/NetDicV09.asmx/SearchDicItemLite'
+  RETRIEVE_PATH = '/NetDic/NetDicV09.asmx/GetDicItemLite'
+
   def initialize()
-    @session = Net::HTTP.start(@@address)
+    @session = Net::HTTP.start(ADDRESS)
   end
-  def searchDic(word)
-    response = @session.get(@@searchPath + word + @@searchOptions)
-    xml = REXML::Document.new response.body
-    if REXML::XPath.first(xml, '//ItemCount').text.to_i == 0
-      return nil
-    end
-    return xml
+
+  def close
+    @session.finish
   end
-  def retrieveDic(itemId)
-    response = @session.get(@@retrievePath + itemId + '&Loc=&Prof=XHTML')
+
+# 単語に該当するitemIdの配列を返します。
+  def search(word)
+    params = {
+      :Dic => 'EJdict',
+      :Word => word,
+      :Scope => 'HEADWORD',
+      :Match => 'EXACT',
+      :Merge => 'OR',
+      :Prof => 'XHTML',
+      :PageSize => '10',
+      :PageIndex => '0'
+    }
+    response = @session.get(SEARCH_PATH + '?' + params_to_string(params))
     xml = REXML::Document.new response.body
-    result = REXML::XPath.first(xml, '//span[@class="NetDicHeadTitle"]').text + '\n' +
+
+    result = []
+    REXML::XPath.each(xml, '//ItemID') { |e| result.push(e.text) }
+    return result
+  end
+
+# itemId(数値文字列)に対応する単語の意味を取り出します。
+  def retrieve(itemId)
+    params = {
+      :Dic => 'EJdict',
+      :Item => itemId,
+      :Loc => '',
+      :Prof => 'XHTML'
+    }
+    response = @session.get(RETRIEVE_PATH + '?' + params_to_string(params))
+    xml = REXML::Document.new response.body
+    result = REXML::XPath.first(xml, '//span[@class="NetDicHeadTitle"]').text +
+      '\n' +
       REXML::XPath.first(xml, '//div[@class="NetDicBody"]/div').text + '\n'
     return result
+  end
+
+  private
+  
+  def params_to_string(params)
+    params.collect {|k, e| k.to_s + '=' + e }.join('&')
   end
 end
