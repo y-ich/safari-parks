@@ -1,3 +1,4 @@
 sinatra version '>=1.2.6' --source rubygems.org
+thin version '>=1.2.11' --source rubygems.org
 fast-stemmer version '>=1.0.0' --source rubygems.org
 i18n version '>=0.5.0' --source rubygems.org
