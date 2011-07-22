@@ -20,7 +20,7 @@ def search(word, condition = 'exact')
   File.open(DIC_FILE) { |f|
     until f.eof?
       line = f.gets
-      line.sub!(/\n/, '');
+      line.chomp!
       result.insert(-1, line.sub(/\t/, '\n')) if reg =~ line
       # ここで単語の後のtabを改行に換える整形もしておく。
     end
