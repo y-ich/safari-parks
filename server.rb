@@ -11,9 +11,9 @@ DIC_FILE = 'PrepTutorEJDIC/PrepTutorEJDIC.UTF-8.txt'
 
 def search(word, condition = 'exact')
   if condition == 'beginwith' then
-    reg = Regexp.new("^#{word}")
+    reg = Regexp.new("^#{word}", true)
   else
-    reg = Regexp.new("^#{word}\\t")
+    reg = Regexp.new("^#{word}\\t", true)
   end
     
   result = []
