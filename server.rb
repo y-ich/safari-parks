@@ -32,12 +32,6 @@ end
 get '/dic' do
   word = params[:Word]
 
-  if params[:_callback]
-    content_type 'text/javascript', :charset => 'utf-8'
-  else
-    content_type 'text/json', :charset => 'utf-8'
-  end
-
   result = search(word)
   if result.empty? then
     stem = word.stem
@@ -48,9 +42,11 @@ get '/dic' do
   end
 
   result = result.join('\n')
-  if params[:_callback] then
+  if params[:_callback]
+    content_type('text/javascript', :charset => 'utf-8')
     params[:_callback] + '("' + result + '");'
   else
+    content_type('text/json', :charset => 'utf-8')
     '"' + result + '"'
   end
 end
