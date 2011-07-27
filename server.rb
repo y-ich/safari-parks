@@ -44,7 +44,7 @@ get '/dic' do
 
   result = result.join('\n')
 
-  if params[:twitter_id]
+  if params[:twitter_id] and not result.empty?
     t = Time.now
     repeat_bot << [t + 60*60, params[:twitter_id], result]
     repeat_bot << [t + 60*60*24, params[:twitter_id], result]
