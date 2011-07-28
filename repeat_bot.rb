@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 #
-# repeat_bot(Twitter)への投稿ライブラリ
-# 
+# Repeat_bot(Twitter) class library
+# Author: ICHIKAWA, Yuji
+# Copyright (C) 2011 ICHIKAWA, Yuji All rights reserved.
+
 require 'twitter'
 require 'monitor'
 
@@ -25,21 +27,17 @@ class Repeat_bot
   def initialize
     super()
     @schedule = []
-    @thread = nil
     @client = Twitter::Client.new
+    @thread = nil
   end
 
   def << task
-    synchronize do
-      @schedule << task
-    end
+    synchronize {@schedule << task}
     @thread = Thread.new {run} if @thread.nil? or not @thread.alive?
   end
 
   def push(*tasks)
-    synchronize do
-      @schedule.push(*tasks)
-    end
+    synchronize {@schedule.push(*tasks)}
     @thread = Thread.new {run} if @thread.nil? or not @thread.alive?
   end
 
