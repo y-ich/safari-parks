@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+#
+# repeat_bot(Twitter)への投稿ライブラリ
+# 
 require 'twitter'
 require 'monitor'
 

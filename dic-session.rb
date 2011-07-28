@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # イースト辞書WebサービスAPI
-#
+# 未使用
 require 'net/http'
 require 'rexml/document'
 

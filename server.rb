@@ -1,55 +1,50 @@
 # -*- coding: utf-8 -*-
 #
-# Bookmarklet連携CGIサーバー
-#
+# JSONP Japanese-English dictionary server with twitter bot cooperation
+# Author: ICHIKAWA, Yuji
+# Usage:
+#   GET parameters - Word, _callback, twitter_id
+# Copyright (C) 2011 ICHIKAWA, Yuji All rights reserved.
+
 require 'sinatra'
 require 'fast_stemmer' #for stem
-# require './dic-session' # ローカル辞書にしてイースト辞書webサービスは使わないようにした。
 require './repeat_bot'
 
 DIC_FILE = 'PrepTutorEJDIC/PrepTutorEJDIC.UTF-8.txt'
 repeat_bot = Repeat_bot.new
 
+# returns search result.
+# The format of returned value is ["word\nmeaning", "word\nmeaning", ...].
 def search(word, condition = 'exact')
-  if condition == 'beginwith'
-    reg = Regexp.new("^#{word}", true)
-  else
-    reg = Regexp.new("^#{word}\\t", true)
-  end
+  reg = Regexp.new(condition == 'beginwith' ? "^#{word}" : "^#{word}\\t", true)
+  # dictionary line format is "word\tmeaning\n"
     
   result = []
-  File.open(DIC_FILE) { |f|
+  File.open(DIC_FILE) do |f|
     until f.eof?
       line = f.gets
-      line.chomp!
-      result.insert(-1, line.sub(/\t/, '\n')) if reg =~ line
-      # ここで単語の後のtabを改行に換える整形もしておく。
+      result << line.chomp.sub(/\t/, '\n') if reg =~ line
     end
-  }
-
+  end
   return result
 end
 
 get '/dic' do
-  word = params[:Word]
-
-  result = search(word)
+  result = search(params[:Word])
   if result.empty?
-    stem = word.stem
+    stem = params[:Word].stem
     result = search(stem)
     if result.empty?
       result = search(stem, 'beginwith')
     end
   end
-
   result = result.join('\n')
 
   if params[:twitter_id] and not result.empty?
     t = Time.now
-    repeat_bot << [t + 60*60, params[:twitter_id], result]
-    repeat_bot << [t + 60*60*24, params[:twitter_id], result]
-    repeat_bot << [t + 60*60*24*7, params[:twitter_id], result]
-    repeat_bot << [t + 60*60*24*30, params[:twitter_id], result]
+    [60*60, 60*60*24, 60*60*24*7, 60*60*24*30].each do |e|
+      repeat_bot << [t + e, params[:twitter_id], result]
+    end
   end
 
   if params[:_callback]
