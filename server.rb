@@ -41,10 +41,10 @@ get '/dic' do
   result = result.join('\n')
 
   if params[:twitter_id] and not result.empty?
+    INTERVALS = [60*60, 60*60*24, 60*60*24*7, 60*60*24*30]
     t = Time.now
-    [60*60, 60*60*24, 60*60*24*7, 60*60*24*30].each do |e|
-      repeat_bot << [t + e, params[:twitter_id], result]
-    end
+    repeat_bot.push(*INTERVALS.map {|e| [t + e, params[:twitter_id], result]})
+    # '*' is needed because push needs arguments, not an array.
   end
 
   if params[:_callback]

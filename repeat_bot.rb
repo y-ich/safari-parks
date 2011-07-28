@@ -34,11 +34,13 @@ class Repeat_bot
   def << task
     synchronize {@schedule << task}
     @thread = Thread.new {run} if @thread.nil? or not @thread.alive?
+    self
   end
 
   def push(*tasks)
     synchronize {@schedule.push(*tasks)}
     @thread = Thread.new {run} if @thread.nil? or not @thread.alive?
+    self
   end
 
   def run
