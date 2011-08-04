@@ -8,6 +8,7 @@
 
 require 'sinatra'
 require 'fast_stemmer' #for stem
+require 'pg'
 require 'active_record'
 require 'logger'
 require 'delayed_job'
