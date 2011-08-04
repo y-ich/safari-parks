@@ -20,6 +20,8 @@ configure do
   ActiveRecord::Base.establish_connection(config[environment])
   Delayed::Worker.guess_backend
   Delayed::Worker.max_attempts = 1
+  INTERVALS = [1, 24, 24*7, 24*30]
+  INTERVALS = [0, 1, 24, 24*7, 24*30] if environment == 'development'
 end
 
 
@@ -69,7 +71,6 @@ get '/dic' do
   result = result.join('\n')
 
   if params[:twitter_id] and not result.empty?
-    INTERVALS = [0, 1, 24, 24*7, 24*30]
     tweet = '@' + params[:twitter_id] + ' ' + result
     INTERVALS.each do |interval|
       repeat_bot.delay(:run_at => interval.hours.from_now).update(tweet[0,140])
