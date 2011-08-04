@@ -8,14 +8,13 @@
 
 require 'sinatra'
 require 'fast_stemmer' #for stem
-require 'pg'
 require 'active_record'
 require 'logger'
 require 'delayed_job'
 require 'twitter'
 
 configure do
-  config = YAML::load(ERB.new(File.open('config/database.yml')))
+  config = YAML::load(ERB.new(File.open('config/database.yml')).result)
   environment = Sinatra::Application.environment.to_s
   ActiveRecord::Base.logger = Logger.new(STDOUT)
   ActiveRecord::Base.establish_connection(config[environment])
