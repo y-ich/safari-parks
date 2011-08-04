@@ -14,7 +14,7 @@ require 'delayed_job'
 require 'twitter'
 
 configure do
-  config = YAML::load(File.open('config/database.yml'))
+  config = YAML::load(ERB.new(File.open('config/database.yml')))
   environment = Sinatra::Application.environment.to_s
   ActiveRecord::Base.logger = Logger.new(STDOUT)
   ActiveRecord::Base.establish_connection(config[environment])
