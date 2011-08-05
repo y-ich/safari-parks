@@ -19,6 +19,6 @@ javascript:{
     s.type = 'text/javascript';
     s.src = 'http://safari-park.heroku.com/dic/search?Word=' +
 	w.replace(/^\s+/, '').replace(/\s+$/, '') + 
-	'&_callback=cb&twitter_id=<id>';
+	'&_callback=cb&twitter_id=<screen_name>';
     d.body.appendChild(s)
 }
