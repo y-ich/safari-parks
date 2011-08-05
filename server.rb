@@ -59,7 +59,7 @@ def search(word, condition = 'exact')
   return result
 end
 
-get '/dic' do
+get '/dic/search' do
   result = search(params[:Word])
   if result.empty?
     stem = params[:Word].stem

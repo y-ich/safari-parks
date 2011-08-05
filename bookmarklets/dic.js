@@ -17,8 +17,8 @@ javascript:{
 	}
     }
     s.type = 'text/javascript';
-    s.src = 'http://safari-parks.heroku.com/dic?Word=' +
+    s.src = 'http://safari-park.heroku.com/dic/search?Word=' +
 	w.replace(/^\s+/, '').replace(/\s+$/, '') + 
-	'&_callback=cb&twitter_id=y_ich';
+	'&_callback=cb&twitter_id=<id>';
     d.body.appendChild(s)
 }
