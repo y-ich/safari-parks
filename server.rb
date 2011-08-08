@@ -70,7 +70,7 @@ get '/' do
 end
 
 get '/dic/' do
-  redirect 'dic/index.html'
+  redirect '/dic/index.html'
 end
 
 get '/dic/search' do

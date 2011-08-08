@@ -3,10 +3,69 @@
 <head>
 <title>Twitter連携自然復習機能付き辞書ブックマークレット</title>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="index.css" type="text/css" />
+<script type="text/javascript">
+function bookmarklet_uri() {
+return "javascript:{var d=document;var w=d.getSelection().toString();var s=d.createElement('script');function cb(j){d.body.removeChild(s);alert(((j.length==0)?w+'%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F':j));}if(w.length==0){var fs=window.frames;for(var i=0;(i<fs.length)&&(w.length==0);i++){if(fs[i].getSelection!=null)w=fs[i].getSelection().toString();}console.log(w.length);if(w.length==0)w=prompt('%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B');}if(w!=null){s.type='text/javascript';s.src='http://safari-park.heroku.com/dic/search?Word='+w.replace(/^\s+/,'').replace(/\s+$/,'')+'&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "';d.body.appendChild(s);}}";
+}
+
+function generate() {
+  var uri = bookmarklet_uri();
+
+  document.location = document.location.toString().split('#')[0] + '#' + uri;
+  document.getElementById('bookmarklet').href = uri;
+}
+</script>
 </head>
 <body>
 <h1 align="center">Twitter連携自然復習機能付き辞書ブックマークレット</h1>
+<p>
+iPadやiPhone、Androidケータイで英語のウェブサイトを見るとき、辞書が連携してくれなくて辛くありませんか？。
+</p><p>
+辞書用ブックマークレットはたくさんありますが、みんな、辞書サイトを<b>別のページ</b>で開くか、<b>別の辞書アプリ</b>を開きます。単語の文脈が見えなくなりますし、読んでいたサイトに戻るのも面倒です。
+</p><p>
+別のアプローチでは、POPjisyoやずるっこなど素晴らしいサービスがありますが、モバイル端末用ブラウザに合わせたページは提供されておらず、現状では表示されなかったりレイアウトが乱れたりして活用が難しいです。
+</p><p>
+そこで、選択した単語の意味を<b>ポップアップウィンドウで表示</b>するブックマークレットを作成しました。
+<div align="center"><img src="images/safari.png"></div>
 
+<h2>こんな機能のブックマークレットです</h2>
+<ul>
+<li>単語を選択しブックマークレットをタップすると、ポップアップウィンドウで単語の意味を表示します。
+<li>Twitter連携機能があります。調べた単語と意味を、1時間後、1日後、1週間後、1ヶ月後にTwitterで知らせます。繰り返し思い出して自然に覚えましょう。
+</ul>
+
+<h2>インストールの仕方</h2>
+<h3>共通手順</h3>
+<p>
+1. 下の欄にあなたのTwitter IDを入力して、URL生成ボタンをタップしてください。
+Twitter連携に興味がなければ空欄のままで結構です。
+</p>
+<form action="">
+<label>Twitter ID: <input type="text" id="twitter_id" name="twitter_id"></label>
+<input type="button" value="URL生成" onclick="generate();">
+</form>
+<h3>Mobile Safariの場合</h3>
+<p>
+2. アドレスバーのアドレスが長くなったことを確認して、このページをブックマークしてください。
+</p>
+<p>
+3. ブックマークの編集で、登録したブックマークのアドレスで、javascriptより前の文字列を削除してください。
+</p>
+<h3>パソコンの場合</h3>
+<p>
+2. <a id="bookmarklet" href="">これをブックマークバーにドラッグしてドロップしてください。</a>
+</p>
+
+
+<h2>こんな風にも使えます</h2>
+<p>
+英単語は勉強したいけど、そもそも英語のウェブサイトを読むことがない？
+Twitterで@repeat_botをフォローしてください。
+あなたがフォローしている人たちが調べた単語をTLに入れることができます。
+
+<h2>連絡先</h2>
+ご意見、ご要望はichikawa.yuji at gmail.comまで是非お願いします。
+</p>
+<p align="center">Copyright (C) 2011 ICHIKAWA, Yuji All rights reserved.</p>
 </body>
 </html>
