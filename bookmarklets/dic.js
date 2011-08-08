@@ -17,7 +17,7 @@ javascript:{
     }
     if (w != null) {
 	s.type = 'text/javascript';
-	s.src = 'http://safari-park.heroku.com/dic/search?Word=' +
+	s.src = 'http://safari-park.herokuapp.com/dic/search?Word=' +
 	    w.replace(/^\s+/, '').replace(/\s+$/, '') + 
 	    '&_callback=cb&twitter_id=<screen_name>';
 	d.body.appendChild(s);

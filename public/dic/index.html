@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <script type="text/javascript">
 function bookmarklet_uri() {
-return "javascript:{var d=document;var w=d.getSelection().toString();var s=d.createElement('script');function cb(j){d.body.removeChild(s);alert(((j.length==0)?w+'%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F':j));}if(w.length==0){var fs=window.frames;for(var i=0;(i<fs.length)&&(w.length==0);i++){if(fs[i].getSelection!=null)w=fs[i].getSelection().toString();}console.log(w.length);if(w.length==0)w=prompt('%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B');}if(w!=null){s.type='text/javascript';s.src='http://safari-park.heroku.com/dic/search?Word='+w.replace(/^\s+/,'').replace(/\s+$/,'')+'&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "';d.body.appendChild(s);}}";
+return "javascript:{var d=document;var w=d.getSelection().toString();var s=d.createElement('script');function cb(j){d.body.removeChild(s);alert(((j.length==0)?w+'%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F':j));}if(w.length==0){var fs=window.frames;for(var i=0;(i<fs.length)&&(w.length==0);i++){if(fs[i].getSelection!=null)w=fs[i].getSelection().toString();}console.log(w.length);if(w.length==0)w=prompt('%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B');}if(w!=null){s.type='text/javascript';s.src='http://safari-park.herokuapp.com/dic/search?Word='+w.replace(/^\s+/,'').replace(/\s+$/,'')+'&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "';d.body.appendChild(s);}}";
 }
 
 function generate() {
