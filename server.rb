@@ -20,10 +20,15 @@ configure do
   ActiveRecord::Base.establish_connection(config[environment])
   Delayed::Worker.guess_backend
   Delayed::Worker.max_attempts = 1
-  INTERVALS = [1, 24, 24*7, 24*30]
-  INTERVALS = [0, 1, 24, 24*7, 24*30] if environment == 'development'
 end
 
+configure :development, :test do
+  INTERVALS = [0, 1, 24]
+end
+
+configure :production do
+  INTERVALS = [1, 24, 24*7, 24*30]
+end
 
 
 # 「自然に学習」 on nextliteracy
@@ -57,6 +62,15 @@ def search(word, condition = 'exact')
     end
   end
   return result
+end
+
+
+get '/' do
+  redirect '/index.html'
+end
+
+get '/dic/' do
+  redirect 'dic/index.html'
 end
 
 get '/dic/search' do
