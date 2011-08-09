@@ -13,7 +13,7 @@ return "javascript:{var d=document;var w=d.getSelection().toString();var s=d.cre
 function generate() {
   var uri = bookmarklet_uri();
 
-  document.location = document.location.toString().split('#')[0] + '#' + uri;
+  document.location = 'dic/bml.html#' + uri;
   document.getElementById('bookmarklet').href = uri;
 }
 </script>
@@ -48,7 +48,7 @@ URL生成ボタンをタップすると、ページが変わりますのでそ�
 </p>
 <form action="">
 <label>Twitter ID: <input type="text" id="twitter_id" name="twitter_id"></label>
-<input type="button" value="URL生成" onclick="generate();">
+<input type="button" value="ブックマーク生成" onclick="generate();">
 </form>
 
 <h2>こんな風にも使えます</h2>
