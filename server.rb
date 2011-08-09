@@ -30,19 +30,11 @@ configure :production do
   INTERVALS = [1, 24, 24*7, 24*30]
 end
 
-
-# 「自然に学習」 on nextliteracy
-CONSUMER_KEY = 'uJc6bLJMjoA2dJ1xnkhvyw'
-CONSUMER_SECRET = 'Z10pLyTGuZVbYEbr2MHqkyUIQo3wkQDDROjMYOWbo'
-# repeat_botの認証
-ACCESS_TOKEN = '343043759-NtkQE7odf9T26eTB6vaa07keyaSSMaU8YhuvUBd4'
-ACCESS_TOKEN_SECRET = '22qnX1llOsuzwb2gogcOQ0dWfO1lTak84JAH4u7CkE'
-
 Twitter.configure do |config|
-  config.consumer_key = CONSUMER_KEY
-  config.consumer_secret = CONSUMER_SECRET
-  config.oauth_token = ACCESS_TOKEN
-  config.oauth_token_secret = ACCESS_TOKEN_SECRET
+  config.consumer_key = ENV['CONSUMER_KEY']
+  config.consumer_secret = ENV['CONSUMER_SECRET']
+  config.oauth_token = ENV['ACCESS_TOKEN']
+  config.oauth_token_secret = ENV['ACCESS_TOKEN_SECRET']
 end
 repeat_bot = Twitter::Client.new
 
