@@ -6,13 +6,15 @@
 <title>Twitter連携機能付き辞書ブックマークレット</title>
 <meta charset="UTF-8">
 <script type="text/javascript">
-function bookmarklet_uri() {
-return "javascript:{var d=document;var w=d.getSelection().toString();var s=d.createElement('script');function cb(j){d.body.removeChild(s);alert(((j.length==0)?w+'%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F':j));}if(w.length==0){var fs=window.frames;for(var i=0;(i<fs.length)&&(w.length==0);i++){if(fs[i].getSelection!=null)w=fs[i].getSelection().toString();}console.log(w.length);if(w.length==0)w=prompt('%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B');}if(w!=null){s.type='text/javascript';s.src='http://safari-park.herokuapp.com/dic/search?Word='+w.replace(/^\s+/,'').replace(/\s+$/,'')+'&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "';d.body.appendChild(s);}}";
+function bookmarklet_ipad() {
+return "javascript:{var d=document;var w=d.getSelection().toString();var s=d.createElement('script');function cb(j){d.body.removeChild(s);alert(j.length?j:(w+'%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F'));}if(w.length==0){var fs=window.frames;for(var i=0;(i<fs.length)&&(w.length==0);i++){if(fs[i].getSelection!=null)w=fs[i].getSelection().toString();}console.log(w.length);if(w.length==0)w=prompt('%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B');}if(w!=null){s.type='text/javascript';s.src='http://safari-park.herokuapp.com/dic/search?Word='+w.replace(/^\s+/,'').replace(/\s+$/,'')+'&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "';d.body.appendChild(s);}}";
 }
 
-function generate() {
-  var uri = bookmarklet_uri();
+function bookmarklet_iphone() {
+return "javascript:{var%20d=document;var%20w=window;var%20e=d.createElement('button');function%20cb(j){d.body.removeChild(d.getElementById('dic_jsonp'));alert(((j.length==0)?w+'%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F':j));}e.id='dicButton';e.type='button';e.style.position='absolute';e.appendChild(d.createTextNode('J->E'));e.onclick=function(){var%20w=d.getSelection().toString();var%20s=d.createElement('script');if(w.length==0){var%20fs=window.frames;for(var%20i=0;(i<fs.length)&&(w.length==0);i++){if(fs[i].getSelection!=null)w=fs[i].getSelection().toString();}if(w.length==0)w=prompt('%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B');}if(w!=null){s.id='dic_jsonp';s.type='text/javascript';s.src='http://safari-park.herokuapp.com/dic/search?Word='+w.replace(/^\s+/,'').replace(/\s+$/,'')+'&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "';d.body.appendChild(s);}};d.body.appendChild(e);w.onscroll=function(){var%20b=d.getElementById('dicButton');b.style.top=(w.pageYOffset+w.innerHeight-24)+'px';b.style.left=(w.pageXOffset+w.innerWidth-56)+'px';};}";
+}
 
+function generate(uri) {
   document.location = 'bml.html#' + uri;
   document.getElementById('bookmarklet').href = uri;
 }
@@ -42,7 +44,8 @@ iPadやiPhone、Androidケータイで英語のウェブサイトを見るとき
 別のアプローチでは、POPjisyoやずるっこなど素晴らしいサービスがありますが、モバイル端末用ブラウザに合わせたページは提供されておらず、現状では表示されなかったりレイアウトが乱れたりして活用が難しいです。
 </p><p>
 そこで、単語の意味を<b>ポップアップウィンドウで表示</b>するブックマークレットを作成しました。
-<div align="center"><img src="images/safari.png"></div>
+<div align="center">iPadの場合<br><img src="images/safari.png"></div>
+<div align="center">iPhoneの場合<br><img src="images/iphone.png"></div>
 
 <h2>こんな機能のブックマークレットです</h2>
 <ul>
@@ -54,14 +57,14 @@ iPadやiPhone、Androidケータイで英語のウェブサイトを見るとき
 </ul>
 
 <h2>インストールの仕方</h2>
-<h3>共通手順</h3>
 <p>
 1. 下の欄にあなたのTwitter IDを入力してください。Twitter連携に興味がなければ空欄のままで結構です。<br>
 URL生成ボタンをタップすると、ページが変わりますのでそのページでインストールを続けてください。
 </p>
 <form action="">
 <label>Twitter ID: <input type="text" id="twitter_id" name="twitter_id"></label>
-<input type="button" value="ブックマーク生成" onclick="generate();">
+<input type="button" value="ブックマークバーあり(iPad)" onclick="generate(bookmarklet_ipad());">
+<input type="button" value="ブックマークバーなし(iPhone)" onclick="generate(bookmarklet_iphone());">
 </form>
 
 <h2>こんな風にも使えます</h2>
