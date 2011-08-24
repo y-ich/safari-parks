@@ -9,7 +9,7 @@ javascript:{
     e.id = 'dicButton';
     e.type = 'button';
     e.style.position = 'absolute';
-    e.appendChild(d.createTextNode('J->E'));
+    e.appendChild(d.createTextNode('E->J'));
     e.onclick = function () {
 	var w = d.getSelection().toString();
 	var s = d.createElement('script');
