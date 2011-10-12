@@ -76,11 +76,15 @@ get '/dic/search' do
   end
   result = result.join('\n')
 
-  if params[:twitter_id] and not result.empty?
+  if params[:twitter_id] and params[:twitter_id] =~ /^\w+$/ and not result.empty?
     tweet = '@' + params[:twitter_id] + ' ' + result
     INTERVALS.each do |interval|
       repeat_bot.delay(:run_at => interval.hours.from_now).update(tweet[0,140])
     end
+  end
+
+  if params[:twitter_id] and not params[:twitter_id] =~ /^\w+$/
+    result = 'ブックマークのtwitter_idが正しいかご確認ください\n' + result
   end
 
   if params[:_callback]
