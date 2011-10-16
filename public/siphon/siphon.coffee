@@ -47,7 +47,7 @@ makeSelect = ->
 
 
 window.applicationCache.addEventListener 'updateready', ->
-    if confirm 'アプリケーションの新しいバージョンが利用可能です。更新しますか？'
+    if confirm 'New version is available. Do you update?'
         window.applicationCache.swapCache()
         location.reload()
 
