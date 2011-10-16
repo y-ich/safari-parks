@@ -55,7 +55,7 @@ window.applicationCache.addEventListener 'updateready', ->
 # なぜか.readyの記述はcompileSource()よりも下に置かないといけない
 $(document).ready ->
     # スワイプによるスクロール禁止
-    document.ontouchmove = -> event.preventDefault()
+#    document.ontouchmove = -> event.preventDefault()
 
     # iPadのソフトウェアキーボードが閉じようとするのを防止
     $('.button').mousedown (event) -> event.preventDefault()
