@@ -1,5 +1,6 @@
 CACHE MANIFEST
 
+siphon.html
 http://code.jquery.com/jquery-1.6.4.min.js
 http://jashkenas.github.com/coffee-script/extras/coffee-script.js
 siphon.css
