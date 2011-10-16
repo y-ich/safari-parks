@@ -31,8 +31,7 @@ textarea#edit {
 	width: 100%;
 	top: 0;
 	bottom: 600px; /* stackの高さに合わせる。 */
-	background-color: black;
-	color: white;
+	background-color: white;
 	font-size: 10pt;
 }
 
