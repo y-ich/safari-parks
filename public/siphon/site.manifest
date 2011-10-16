@@ -2,10 +2,10 @@ CACHE MANIFEST
 
 CACHE:
 siphon.html
+siphon.css
+siphon.coffee
 http://code.jquery.com/jquery-1.6.4.min.js
 http://jashkenas.github.com/coffee-script/extras/coffee-script.js
-siphon.coffee
-siphon.css
 images/icon.png
 images/startup.png
 prelude/coffeekup-LICENSE

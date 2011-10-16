@@ -38,7 +38,6 @@ makeSelect = ->
     select = $('#files')[0]
 
     for i in [select.childNodes.length - 1..2] by -1
-        console.log i
         select.removeChild select.childNodes[i]
 
     for i in [0...localStorage.length]
@@ -49,13 +48,16 @@ makeSelect = ->
 
 window.applicationCache.addEventListener 'updateready', ->
     if confirm 'アプリケーションの新しいバージョンが利用可能です。更新しますか？'
-        cache.swapCache()
+        window.applicationCache.swapCache()
         location.reload()
 
 # なぜか.readyの記述はcompileSource()よりも下に置かないといけない
 $(document).ready ->
     # スワイプによるスクロール禁止
-#    document.ontouchmove = -> event.preventDefault()
+    document.ontouchmove = -> event.preventDefault()
+    for e in $('.scroll')
+        e.ontouchmove = ->
+            event.stopPropagation() if event.touches.length == 2
 
     # iPadのソフトウェアキーボードが閉じようとするのを防止
     $('.button').mousedown (event) -> event.preventDefault()
