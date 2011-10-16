@@ -1,12 +1,15 @@
 CACHE MANIFEST
 
+CACHE:
 siphon.html
 http://code.jquery.com/jquery-1.6.4.min.js
 http://jashkenas.github.com/coffee-script/extras/coffee-script.js
-siphon.css
 siphon.coffee
+siphon.css
 images/icon.png
 images/startup.png
 prelude/coffeekup-LICENSE
 prelude/coffeekup.coffee
 prelude/underscore.coffee
+
+NETWORK:
