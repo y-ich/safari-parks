@@ -7,3 +7,11 @@ siphon.css
 siphon.coffee
 images/icon.png
 images/startup.png
+prelude/coffeeup-LICENSE
+prelude/coffeeup.coffee
+prelude/package.json
+prelude/prelude.coffee
+prelude/qc-COPYING
+prelude/qc.js
+prelude/underscore.coffee
+prelude/ws.coffee
