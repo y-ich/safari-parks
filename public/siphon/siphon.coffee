@@ -22,8 +22,9 @@ compileSource = ->
             el.innerText = window.compiledJS
         else
             $(el).text window.compiledJS
+        $('#error').text('')
     catch error
-        $('#error').text(error.message).show()
+        $('#error').text(error.message)
 
 
 # Eval the compiled js.
