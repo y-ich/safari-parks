@@ -55,6 +55,7 @@ textarea#edit {
 	bottom: 0;
 	background: black;
 	color: white;
+	overflow: auto;
 }
 
 .buttons {
