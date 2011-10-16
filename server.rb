@@ -65,6 +65,10 @@ get '/dic/' do
   redirect '/dic/index.html'
 end
 
+get '/siphon/' do
+  redirect '/siphon/index.html'
+end
+
 get '/dic/search' do
   result = search(params[:Word])
   if result.empty?

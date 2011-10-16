@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html manifest="site.manifest">
+<head>
+<title>Siphon</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+<!-- フルスクリーンモード -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<!-- 数字を電話番号とみなさないように-->
+<meta name="format-detection" content="telephone=no" />
+<link rel="shortcut icon" href="images/favicon.ico" />
+<link rel="icon" href="images/favicon.ico" />
+<!-- ホーム画面用アイコン -->
+<link rel="apple-touch-icon" href="images/icon.png" />
+<!-- 起動画面 -->
+<link rel="apple-touch-startup-image" href="images/startup.png" />
+<link rel="stylesheet" type="text/css" href="siphon.css" />
+<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+<!-- CoffeeScriptコンパイラ -->
+<script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
+<script type="text/coffeescript" src="siphon.coffee"></script>
+</head>
+
+<body>
+<div id="wrapper">
+  <div id="contents">
+	<form>
+	  <textarea id="edit" spellcheck="false" type="url" autocapitalize="off" autocorrect="off">alert 'Let me run and edit me!'</textarea>
+	</form>
+	<div id="stack">
+	  <div id="error"></div>
+	  <div style="height:5px;"></div>
+	  <div class="buttons">
+		<div class="buttonrows">
+		  <!-- 
+		  <div class="special button">&larr;</div>
+		  <div class="special button">&rarr;</div>
+		  <div class="special button">end</div>
+		  -->
+		  <div id="tab" class="special button">tab</div>
+		  <div class="char button">(</div>
+		  <div class="char button">)</div>
+		  <div class="char button">[</div>
+		  <div class="char button">]</div>
+		  <div class="char button">{</div>
+		  <div class="char button">}</div>
+		  <div title="<" class="char button">&lt;</div>
+		  <div title=">" class="char button">&gt;</div>
+		  <div class="char button">.</div>
+		  <div class="char button">,</div>
+		</div>
+		<div class="buttonrows">
+		  <div class="char button">#</div>
+		  <div class="char button">$</div>
+		  <div class="char button">%</div>
+		  <div title="&" class="char button">&amp;</div>
+		  <div class="char button">-</div>
+		  <div class="char button">+</div>
+		  <div class="char button">*</div>
+		  <div class="char button">/</div>
+		  <div class="char button">=</div>
+		  <div class="char button">:</div>
+		</div>
+		<div id="numbers" class="buttonrows">
+		  <div class="char button">1</div>
+		  <div class="char button">2</div>
+		  <div class="char button">3</div>
+		  <div class="char button">4</div>
+		  <div class="char button">5</div>
+		  <div class="char button">6</div>
+		  <div class="char button">7</div>
+		  <div class="char button">8</div>
+		  <div class="char button">9</div>
+		  <div class="char button">0</div>
+		  <div id="run" class="special button">run</div>
+		</div>
+		<div class="buttonrows"></div>
+	  </div>
+	  <div id="spacer"></div>
+	<div id="menubar">
+	  <div id="new" class="menu">New</div>
+	  <div id="save" class="menu">Save</div>
+	  <div id="saveas" class="menu">Save As...</div>
+	  <form>
+		<select id="files" name="file" class="menu">
+		  <option id="default" value="" selected>select...</option>
+		</select>
+	  </form>
+	  <div id="open" class="menu">Open</div>
+	  <div id="delete" class="menu">Delete</div>
+	  <div id="update" class="menu">Update</div>
+	</div>
+	  <pre id="compiled" style="clear: both;"></pre>
+	</div>
+  </div>
+  <div id="footer"></div>
+</div>
+</body>
+</html>
