@@ -140,5 +140,8 @@ $(document).ready ->
         else
             alert 'I guess you are offline.'
 
+    $('#about').click ->
+        alert 'Siphon version 0.1.1\nCopyright (C) safari-park 2011'
+
     makeSelect()
     compileSource()
