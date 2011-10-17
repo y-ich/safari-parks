@@ -46,10 +46,36 @@ makeSelect = ->
         select.appendChild(e)
 
 
+# window.applicationCache.addEventListener 'checking', ->
+
+
+window.applicationCache.addEventListener 'noupdate', ->
+    alert 'Manifest has no change.'
+
+
+# window.applicationCache.addEventListener 'downloading', ->
+
+
+window.applicationCache.addEventListener 'progress', ->
+
+
+window.applicationCache.addEventListener 'obsolete', ->
+    alert 'No manifest, Offline feature disabled.'
+
+
 window.applicationCache.addEventListener 'updateready', ->
     if confirm 'New version is available. Do you update?'
         window.applicationCache.swapCache()
         location.reload()
+
+
+window.applicationCache.addEventListener 'cached', ->
+    alert 'Now cached.'
+
+
+window.applicationCache.addEventListener 'error', ->
+    alert 'Sorry, seems error.'
+
 
 # なぜか.readyの記述はcompileSource()よりも下に置かないといけない
 $(document).ready ->
@@ -101,14 +127,18 @@ $(document).ready ->
         else
             $('#edit').val localStorage[$('#files')[0].value]
 
-     $('#delete').click ->
+    $('#delete').click ->
         if $('#files')[0].value is ''
             alert 'select file'
         else
             localStorage.removeItem $('#files')[0].value
             makeSelect()
 
-     $('#update').click -> window.applicationCache.update() if navigator.onLine
+    $('#update').click ->
+        if navigator.onLine
+            window.applicationCache.update()
+        else
+            alert 'I guess you are offline.'
 
     makeSelect()
     compileSource()
