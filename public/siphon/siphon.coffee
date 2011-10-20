@@ -34,16 +34,23 @@ evalJS = ->
     catch error then alert error
 
 
-makeSelect = ->
-    select = $('#files')[0]
+$('#files_to_open').change (event) ->
+    if confirm 'Open ' + event.target.value + '?'
+        $('#edit').val localStorage[event.target.value]
 
-    for i in [select.childNodes.length - 1..2] by -1
-        select.removeChild select.childNodes[i]
 
+$('#files_to_delete').change (event) ->
+    if confirm 'Delete ' + event.target.value + '?'
+        localStorage.removeItem event.target.innerHTML
+
+
+keyOptions = ->
+    result = []
     for i in [0...localStorage.length]
         e = document.createElement('option')
         e.appendChild(document.createTextNode(localStorage.key(i)))
-        select.appendChild(e)
+        result.push e
+    result
 
 
 # window.applicationCache.addEventListener 'checking', ->
@@ -75,6 +82,7 @@ window.applicationCache.addEventListener 'cached', ->
 
 window.applicationCache.addEventListener 'error', ->
     alert 'Sorry, seems error.'
+
 
 
 # なぜか.readyの記述はcompileSource()よりも下に置かないといけない
@@ -115,33 +123,31 @@ $(document).ready ->
             currentFile = prompt 'filename:'
             return if currentFile is null
         localStorage.setItem currentFile, $('#edit').val()
-        makeSelect()
 
     $('#saveas').click ->
         currentFile = null
         $('#save').click()
 
     $('#open').click ->
-        if $('#files')[0].value is ''
-            alert 'select file'
-        else
-            $('#edit').val localStorage[$('#files')[0].value]
+        select = $('#files_to_open')
+        select.empty()
+        _(keyOptions()).each (e) -> select.append e
+        select.css 'display', 'block'
+        select.focus()
 
     $('#delete').click ->
-        if $('#files')[0].value is ''
-            alert 'select file'
-        else
-            localStorage.removeItem $('#files')[0].value
-            makeSelect()
+        select = $('#files_to_delete')
+        select.empty()
+        _(keyOptions()).each (e) -> select.append e
+        select.focus()
 
     $('#update').click ->
         if navigator.onLine
             window.applicationCache.update()
         else
-            alert 'I guess you are offline.'
+            alert 'seems you are offline...'
 
     $('#about').click ->
         alert 'Siphon version 0.1.1\nCopyright (C) safari-park 2011'
 
-    makeSelect()
     compileSource()

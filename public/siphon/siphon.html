@@ -14,8 +14,14 @@
 <link rel="apple-touch-icon" href="images/icon.png" />
 <!-- 起動画面 -->
 <link rel="apple-touch-startup-image" href="images/startup.png" />
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.css" />
 <link rel="stylesheet" type="text/css" href="siphon.css" />
 <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+<script>
+	$(document).bind("mobileinit", function(){
+	$.mobile.page.prototype.options.addBackBtn = true;});
+</script>
+<script src="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js"></script>
 <!-- CoffeeScriptコンパイラ -->
 <script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
 <script type="text/coffeescript" src="prelude/underscore.coffee"></script>
@@ -37,79 +43,96 @@
 </head>
 
 <body>
-<div id="wrapper">
-  <div id="contents">
+<div data-role="page" id="editorpage" data-theme="c">
+  <div data-role="header" class="ui-bar" data-theme="c" data-type="horizontal" data-backbtn="false">
+	<div data-role="controlgroup" data-type="horizontal">
+	  <div id="open" data-role="button" data-icon="grid">Open...</div>
+	  <div id="save" data-role="button" data-icon="check">Save</div>
+	  <div id="saveas" data-role="button" data-icon="plus">Save As...</div>
+	  <div id="delete" data-role="button" data-icon="delete">Delete...</div>
+	  <div id="update" data-role="button" data-icon="refresh">Cache Update</div>
+	  <div id="about" data-role="button" data-icon="info">About Siphon</div>
+	</div>
+  </div>
+  <div data-role="content" id="main">
 	<form>
 	  <textarea id="edit" class="scroll" spellcheck="false" type="url" autocapitalize="off" autocorrect="off">alert 'Let me run and edit me!'</textarea>
 	</form>
-	<div id="stack">
-	  <div id="error"></div>
-	  <div style="height:5px;"></div>
-	  <div class="buttons">
-		<div class="buttonrows">
-		  <!-- 
-		  <div class="special button">&larr;</div>
+	<div id="error"></div>
+	<div class="buttons">
+	  <div class="clear">
+		<!-- 
+			 <div class="special button">&larr;</div>
 		  <div class="special button">&rarr;</div>
 		  <div class="special button">end</div>
 		  -->
-		  <div id="tab" class="special button">tab</div>
-		  <div class="char button">(</div>
-		  <div class="char button">)</div>
-		  <div class="char button">[</div>
-		  <div class="char button">]</div>
-		  <div class="char button">{</div>
-		  <div class="char button">}</div>
-		  <div title="<" class="char button">&lt;</div>
-		  <div title=">" class="char button">&gt;</div>
-		  <div class="char button">.</div>
-		  <div class="char button">,</div>
-		</div>
-		<div class="buttonrows">
-		  <div class="char button">#</div>
-		  <div class="char button">$</div>
-		  <div class="char button">%</div>
-		  <div title="&" class="char button">&amp;</div>
-		  <div class="char button">-</div>
-		  <div class="char button">+</div>
-		  <div class="char button">*</div>
-		  <div class="char button">/</div>
-		  <div class="char button">=</div>
-		  <div class="char button">:</div>
-		</div>
-		<div id="numbers" class="buttonrows">
-		  <div class="char button">1</div>
-		  <div class="char button">2</div>
-		  <div class="char button">3</div>
-		  <div class="char button">4</div>
-		  <div class="char button">5</div>
-		  <div class="char button">6</div>
-		  <div class="char button">7</div>
-		  <div class="char button">8</div>
-		  <div class="char button">9</div>
-		  <div class="char button">0</div>
-		  <div id="run" class="special button">run</div>
-		</div>
-		<div class="buttonrows"></div>
+		<div id="tab" class="special button">tab</div>
+		<div class="char button">(</div>
+		<div class="char button">)</div>
+		<div class="char button">[</div>
+		<div class="char button">]</div>
+		<div class="char button">{</div>
+		<div class="char button">}</div>
+		<div title="<" class="char button">&lt;</div>
+		<div title=">" class="char button">&gt;</div>
+		<div class="char button">.</div>
+		<div class="char button">,</div>
 	  </div>
-	  <div id="spacer"></div>
-	<div id="menubar">
-	  <div id="new" class="menu">New</div>
-	  <div id="save" class="menu">Save</div>
-	  <div id="saveas" class="menu">Save As...</div>
-	  <form>
-		<select id="files" name="file" class="menu">
-		  <option id="default" value="" selected>select...</option>
-		</select>
-	  </form>
-	  <div id="open" class="menu">Open</div>
-	  <div id="delete" class="menu">Delete</div>
-	  <div id="update" class="menu">Update</div>
-	  <div id="about" class="menu">About</div>
-	</div>
-	  <pre id="compiled" class="scroll" style="clear: both;"></pre>
+	  <div class="clear">
+		<div class="char button">#</div>
+		<div class="char button">$</div>
+		<div class="char button">%</div>
+		<div title="&" class="char button">&amp;</div>
+		<div class="char button">-</div>
+		<div class="char button">+</div>
+		<div class="char button">*</div>
+		<div class="char button">/</div>
+		<div class="char button">=</div>
+		<div class="char button">:</div>
+	  </div>
+	  <div id="numbers" class="clear">
+		<div class="char button">1</div>
+		<div class="char button">2</div>
+		<div class="char button">3</div>
+		<div class="char button">4</div>
+		<div class="char button">5</div>
+		<div class="char button">6</div>
+		<div class="char button">7</div>
+		<div class="char button">8</div>
+		<div class="char button">9</div>
+		<div class="char button">0</div>
+	  </div>
+	  <div class="clear"></div>
 	</div>
   </div>
-  <div id="footer"></div>
+  <div data-role="footer" data-position="fixed" data-theme="c">
+	<div data-role="navbar">
+	  <ul>
+		<li><a href="#editorpage" class="ui-btn-active">Editor</a></li>
+		<li><a href="#compiledpage">Compiled Code</a></li>
+		<li><a href="#" id="run">Run</a></li>
+		<li><a href="#debug">Debug</a></li>
+		<li><a href="#ref">References</a></li>
+	  </ul>
+	</div>
+  </div>
 </div>
+
+<div data-role="page" id="compiledpage" data-theme="c">
+  <div data-role="header" data-theme="c">
+	<h1>Compiled JavaScript Code</h1>
+  </div>
+  <div data-role="content">
+	<pre id="compiled" class="scroll"></pre>
+  </div>
+  <div data-role="footer" data-position="fixed" data-theme="c">
+  </div>
+</div>
+
+<div data-role="page" id="debugpage" data-theme="c">
+</div>
+<div data-role="page" id="refpage" data-theme="c">
+</div>
+
 </body>
 </html>
