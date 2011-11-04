@@ -81,7 +81,8 @@ get '/dic/search' do
   result = result.join('\n')
 
   if not result.empty?
-    repeat_bot.delay(:run_at => 1.second.from_now).update(result[0,140])
+    tweet = '@nextliteracy ' + result
+    repeat_bot.delay(:run_at => 1.second.from_now).update(tweet[0,140])
     if params[:twitter_id] and params[:twitter_id] =~ /^\w+$/
       tweet = '@' + params[:twitter_id] + ' ' + result
       INTERVALS.each do |interval|
