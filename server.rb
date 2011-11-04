@@ -80,10 +80,13 @@ get '/dic/search' do
   end
   result = result.join('\n')
 
-  if params[:twitter_id] and params[:twitter_id] =~ /^\w+$/ and not result.empty?
-    tweet = '@' + params[:twitter_id] + ' ' + result
-    INTERVALS.each do |interval|
-      repeat_bot.delay(:run_at => interval.hours.from_now).update(tweet[0,140])
+  if not result.empty?
+    repeat_bot.delay(:run_at => 1.second.from_now).update(result[0,140])
+    if params[:twitter_id] and params[:twitter_id] =~ /^\w+$/
+      tweet = '@' + params[:twitter_id] + ' ' + result
+      INTERVALS.each do |interval|
+        repeat_bot.delay(:run_at => interval.hours.from_now).update(tweet[0,140])
+      end
     end
   end
 
