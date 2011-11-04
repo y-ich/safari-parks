@@ -9,6 +9,8 @@ javascript:{
     e.id = 'dicButton';
     e.type = 'button';
     e.style.position = 'absolute';
+	e.style.top = (w.pageYOffset + w.innerHeight - 24) + 'px';
+	e.style.left = (w.pageXOffset + w.innerWidth - 56) + 'px';
     e.appendChild(d.createTextNode('E->J'));
     e.onclick = function () {
 	var w = d.getSelection().toString();
@@ -31,9 +33,9 @@ javascript:{
 	}
     };
     d.body.appendChild(e);
-    w.onscroll = function () {
+    w.addEventListener('scroll', function () {
 	var b = d.getElementById('dicButton');
 	b.style.top = (w.pageYOffset + w.innerHeight - 24) + 'px';
 	b.style.left = (w.pageXOffset + w.innerWidth - 56) + 'px';
-    };
+    }, false);
 }

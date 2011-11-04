@@ -13,15 +13,7 @@ namespace :db do
   end
 end
 
-file "bookmarklets/dic.min.js" => "bookmarklets/dic.js" do |t|
-  File.open(t.prerequisites[0], 'r') do |orig|
-    File.open(t.name, 'w') do |min|
-      min.puts JSMin.minify(orig).gsub(/[\r\n\f]/, '')
-    end
-  end
-end
-
-file "bookmarklets/dic_iphone.min.js" => "bookmarklets/dic_iphone.js" do |t|
+rule(/\.min.js$/ => [proc {|file_name| file_name.sub(/\.min.js$/, '.js')}]) do |t|
   File.open(t.prerequisites[0], 'r') do |orig|
     File.open(t.name, 'w') do |min|
       min.puts JSMin.minify(orig).gsub(/[\r\n\f]/, '')
