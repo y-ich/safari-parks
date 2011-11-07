@@ -55,6 +55,16 @@ textarea#edit {
 #numbers {
 }
 
+.scroll {
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.key {
+	position: relative;
+	float: left;
+}
+
 .button {
 	float: left;
 	width: 58px;
@@ -62,7 +72,7 @@ textarea#edit {
 	line-height: 58px;
 	font-family: sans-serif;
 	font-size: 17pt;
-	background: #dbdbde;
+	background-color: #dbdbdb;
 	border: 1px solid black;
 	margin-right: 9px;
 	margin-bottom: 9px;
@@ -70,6 +80,14 @@ textarea#edit {
 	-webkit-box-shadow: 0px 2px 0px rgba(0,0,0,0.5);
 	-webkit-border-radius: 8px;  
 }
+
+.second {
+	visibility: hidden;
+	position: relative;
+	left: 0;
+	top: -220%;
+}
+
 /*
 #menubar {
 	clear: both;

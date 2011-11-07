@@ -84,28 +84,65 @@ window.applicationCache.addEventListener 'error', ->
     alert 'Sorry, seems error.'
 
 
+keyStart =
+    target: null
+    timer: null
+    pageX: 0
+    pageY: 0
+
+displaySecondKey = ->
+    secondKey = keyStart.target.childNodes[1]
+    secondKey.style.backgroundColor = '#0088ff'
+    secondKey.style.visibility = 'visible'
+    keyStart.timer = null
+
 
 # なぜか.readyの記述はcompileSource()よりも下に置かないといけない
 $(document).ready ->
+    # メインページにバックボタンは表示しない。
+    $('#editorpage').addBackBtn = false
+
+    ###
     # スワイプによるスクロール禁止
     document.ontouchmove = -> event.preventDefault()
     for e in $('.scroll')
         e.ontouchmove = ->
             event.stopPropagation() if event.touches.length == 2
+    # touches制限をしないと、textarea内でスクロールする余地がない時に全体スクロールする。
+    # touches制限しても、なにかの拍子に全体スクロールする。
 
     # iPadのソフトウェアキーボードが閉じようとするのを防止
     $('.button').mousedown (event) -> event.preventDefault()
+    ###
 
-    $('.char').click (event) ->
-        if this.innerHTML[0] is '&'
-            stringInput this.title
-        else
-            stringInput this.innerHTML
-        compileSource()
+    $('.button').bind 'touchstart',
+        (event) ->
+            this.style.backgroundColor = '#a0a0a0'
+            if this.childNodes.length >= 2
+                keyStart.target = this
+                keyStart.timer = setTimeout(displaySecondKey, 400)
+                keyStart.pageX = event.originalEvent.targetTouches[0].pageX
+                keyStart.pageY = event.originalEvent.targetTouches[0].pageY
 
-    $('#tab').click (event) ->
-        stringInput '  '
-        compileSource()
+    $('.button').bind 'touchmove',
+        (event) ->
+            if keyStart.timer? and event.originalEvent.targetTouches[0].pageY - keyStart.pageY < -30
+                clearTimeout keyStart.timer
+                displaySecondKey()
+            event.preventDefault()
+
+    $('.button').bind 'touchend',
+        (event) ->
+            clearTimeout keyStart.timer if keyStart.timer?
+            this.style.backgroundColor = '#dbdbdb'
+            if keyStart.target? and keyStart.target.childNodes[1].style.visibility == 'visible'
+                key = keyStart.target.childNodes[1].title
+                keyStart.target.childNodes[1].style.visibility = 'hidden'
+                keyStart.target = null
+            else
+                key = this.title
+            stringInput key
+            compileSource()
 
     $('#edit').focus()
 	# onloadで開始時にテキストエリアをアクティブにしたいがiPadでは機能していない
