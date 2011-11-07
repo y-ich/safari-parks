@@ -84,7 +84,8 @@ window.applicationCache.addEventListener 'error', ->
     alert 'Sorry, seems error.'
 
 
-keySound = new Audio '../sounds/Tink.aif'
+# keySound = new Audio '../sounds/Tink.aif'
+keySound = new Audio '../sounds/key_click1.mp3'
 
 keyStart =
     target: null
