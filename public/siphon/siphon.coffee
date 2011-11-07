@@ -84,6 +84,8 @@ window.applicationCache.addEventListener 'error', ->
     alert 'Sorry, seems error.'
 
 
+keySound = new Audio '../sounds/Tink.aif'
+
 keyStart =
     target: null
     timer: null
@@ -117,6 +119,7 @@ $(document).ready ->
 
     $('.button').bind 'touchstart',
         (event) ->
+            keySound.play()
             this.style.backgroundColor = '#a0a0a0'
             if this.childNodes.length >= 2
                 keyStart.target = this
