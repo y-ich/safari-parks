@@ -1,5 +1,5 @@
 # operation mode
-debugMode = true
+debugMode = false
 
 #
 # utilies
