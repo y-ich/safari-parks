@@ -100,7 +100,7 @@ window.applicationCache.addEventListener 'error', ->
 
 currentFile = null
 
-keySound = new Audio '../sounds/key_click1.mp3'
+keySound = new Audio '../sounds/bin090208110829001.mp3'
 
 keyState =
     target: null
