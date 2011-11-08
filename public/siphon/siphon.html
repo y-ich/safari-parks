@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- <html manifest="site.manifest">-->
+<html manifest="site.manifest">
 <html>
 <head>
 <title>Siphon</title>
@@ -47,10 +47,14 @@
 <div data-role="page" id="editorpage" data-theme="c">
   <div data-role="header" class="ui-bar" data-theme="c" data-type="horizontal" data-backbtn="false">
 	<div data-role="controlgroup" data-type="horizontal">
-	  <div id="open" data-role="button" data-icon="grid">Open...</div>
+	  <select id="open" data-icon="grid" data-iconpos="left">
+		<option>Open...</option>
+	  </select>
 	  <div id="save" data-role="button" data-icon="check">Save</div>
 	  <div id="saveas" data-role="button" data-icon="plus">Save As...</div>
-	  <div id="delete" data-role="button" data-icon="delete">Delete...</div>
+	  <select id="delete" data-icon="delete" data-iconpos="left">
+		<option>Delete...</option>
+	  </select>
 	  <div id="update" data-role="button" data-icon="refresh">Cache Update</div>
 	  <div id="about" data-role="button" data-icon="info">About Siphon</div>
 	</div>
