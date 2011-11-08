@@ -64,7 +64,13 @@ end
 get '/dic/' do
   redirect '/dic/index.html'
 end
+get '/dic' do
+  redirect '/dic/index.html'
+end
 
+get '/siphon' do
+  redirect '/siphon/index.html'
+end
 get '/siphon/' do
   redirect '/siphon/index.html'
 end

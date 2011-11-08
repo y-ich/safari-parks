@@ -81,7 +81,7 @@ window.applicationCache.addEventListener 'obsolete', ->
 
 
 window.applicationCache.addEventListener 'updateready', ->
-    if confirm 'New version is available. Do you update?'
+    if confirm 'New version is downloaded. Do you want to update?'
         window.applicationCache.swapCache()
         location.reload()
 
@@ -100,7 +100,6 @@ window.applicationCache.addEventListener 'error', ->
 
 currentFile = null
 
-# keySound = new Audio '../sounds/Tink.aif'
 keySound = new Audio '../sounds/key_click1.mp3'
 
 keyState =

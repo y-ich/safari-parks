@@ -31,11 +31,11 @@ body {
 }
 
 textarea#edit {
-	width: 96%;
+	width: 94%;
 	height: 350px;
 	max-height: 350px;
 	background-color: white;
-	font-size: 10pt;
+	font-size: 12pt;
 }
 
 #error {
