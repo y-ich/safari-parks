@@ -91,7 +91,7 @@ window.applicationCache.addEventListener 'cached', ->
 
 
 window.applicationCache.addEventListener 'error', ->
-    alert 'Sorry, seems error.'
+    alert 'Manifest check error.' if debugMode
 
 
 #
