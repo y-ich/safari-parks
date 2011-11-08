@@ -1,5 +1,5 @@
 # operation mode
-debugMode = false
+debugMode = true
 
 #
 # utilies
@@ -93,6 +93,7 @@ window.applicationCache.addEventListener 'cached', ->
 window.applicationCache.addEventListener 'error', ->
     alert 'Sorry, seems error.'
 
+
 #
 # global variables
 #
@@ -102,21 +103,21 @@ currentFile = null
 # keySound = new Audio '../sounds/Tink.aif'
 keySound = new Audio '../sounds/key_click1.mp3'
 
-keyStart =
+keyState =
     target: null
+    second: null
     timer: null
-    pageX: 0
-    pageY: 0
+    startX: 0
+    startY: 0
 
 #
 # dispatches
 #
 
 displaySecondKey = ->
-    secondKey = keyStart.target.childNodes[1]
-    secondKey.style.backgroundColor = '#0088ff'
-    secondKey.style.display = 'block'
-    keyStart.timer = null
+    keyState.second.style.backgroundColor = '#0088ff'
+    keyState.second.style.display = 'block'
+    keyState.timer = null
 
 clickSaveas = ->
         currentFile = prompt 'filename:'
@@ -146,30 +147,53 @@ $(document).ready ->
             keySound.play()
             this.style.backgroundColor = '#a0a0a0'
             if this.childNodes.length >= 2
-                keyStart.target = this
-                keyStart.timer = setTimeout(displaySecondKey, 400)
-                keyStart.pageX = event.originalEvent.targetTouches[0].pageX
-                keyStart.pageY = event.originalEvent.targetTouches[0].pageY
+                keyState.target = this
+                keyState.second = this.childNodes[1]
+                keyState.timer = setTimeout(displaySecondKey, 400)
+                keyState.startX = event.originalEvent.targetTouches[0].pageX
+                keyState.startY = event.originalEvent.targetTouches[0].pageY
 
     $('.button').bind 'touchmove',
         (event) ->
-            if keyStart.timer? and event.originalEvent.targetTouches[0].pageY - keyStart.pageY < -30
-                clearTimeout keyStart.timer
+            moveX = event.originalEvent.targetTouches[0].pageX - keyState.startX
+            moveY = event.originalEvent.targetTouches[0].pageY - keyState.startY
+            if moveX < -58 or moveX > 58 or moveY < -58*2 or moveY > 58
+                if keyState.timer?
+                    clearTimeout keyState.timer
+                    keyState.timer = null
+                if keyState.second? and keyState.second.style.display isnt 'none'and keyState.second.style.display isnt ''
+                   keyState.second.style.backgroundColor = '#dbdbdb'
+                else
+                    this.style.backgroundColor = '#dbdbdb'
+            else if keyState.second? and keyState.second.style.display isnt 'none' and keyState.second.style.display isnt ''
+                keyState.second.style.backgroundColor = '#0088ff'
+
+            if keyState.timer? and moveY < -30
+                clearTimeout keyState.timer
                 displaySecondKey()
+
             event.preventDefault() if debugMode
 
     $('.button').bind 'touchend',
         (event) ->
-            clearTimeout keyStart.timer if keyStart.timer?
-            this.style.backgroundColor = '#dbdbdb'
-            if keyStart.target? and keyStart.target.childNodes[1].style.display isnt 'none'
-                key = keyStart.target.childNodes[1].title
-                keyStart.target.childNodes[1].style.display = 'none'
-                keyStart.target = null
-            else
-                key = this.title
-            stringInput key
-            compileSource()
+            if keyState.timer?
+                clearTimeout keyState.timer
+                keyState.timer = null
+            if this.style.backgroundColor isnt 'rgb(219, 219, 219)' # '#dbdbdb'
+                if keyState.second? and keyState.second.style.display isnt 'none' and keyState.second.style.display isnt ''
+                    key = if keyState.second.style.backgroundColor isnt 'rgb(219, 219, 219)' # '#dbdbdb'
+                            keyState.target.childNodes[1].title
+                        else
+                            null
+                    keyState.second.style.display = 'none'
+                    keyState.target = null
+                    keyState.second = null
+                else
+                    key = this.title
+                if key? and key isnt ''
+                    stringInput key
+                    compileSource()
+                this.style.backgroundColor = '#dbdbdb'
 
     $('#edit').focus()
 	# onloadで開始時にテキストエリアをアクティブにしているが、ソフトキーボードは現れないという不具合あり。
