@@ -1,0 +1,19 @@
+CACHE MANIFEST
+# 2011/11/08
+
+CACHE:
+http://code.jquery.com/jquery-1.6.4.min.js
+http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js
+http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.css
+http://jashkenas.github.com/coffee-script/extras/coffee-script.js
+siphon.html
+siphon.css
+siphon.coffee
+../sounds/key_click1.mp3
+images/icon.png
+images/startup.png
+prelude/coffeekup-LICENSE
+prelude/coffeekup.coffee
+prelude/underscore.coffee
+
+NETWORK:
