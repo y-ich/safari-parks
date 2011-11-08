@@ -2,7 +2,7 @@ CACHE MANIFEST
 # 2011/11/08 13:53
 
 CACHE:
-NETWORK:
+#NETWORK:
 siphon.html
 siphon.css
 siphon.coffee
@@ -18,4 +18,3 @@ images/startup.png
 prelude/coffeekup-LICENSE
 prelude/coffeekup.coffee
 prelude/underscore.coffee
-*
