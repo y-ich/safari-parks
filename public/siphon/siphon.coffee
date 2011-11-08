@@ -129,6 +129,9 @@ $(document).ready ->
     # メインページにバックボタンは表示しない。
     $('#editorpage').addBackBtn = false
 
+    restHeight = window.innerHeight - (380 + 58 * 2 + 55)
+    $('#edit').css('height': restHeight + 'px')
+    $('#edit').css('max-height': restHeight + 'px')
     if not debugMode
         # スワイプによるスクロール禁止
         document.ontouchmove = -> event.preventDefault()

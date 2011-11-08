@@ -32,8 +32,6 @@ body {
 
 textarea#edit {
 	width: 94%;
-	height: 350px;
-	max-height: 350px;
 	background-color: white;
 	font-size: 12pt;
 }
