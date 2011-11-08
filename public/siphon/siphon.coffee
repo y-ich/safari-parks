@@ -135,7 +135,7 @@ $(document).ready ->
         document.ontouchmove = -> event.preventDefault()
         for e in $('.scroll')
             e.ontouchmove = ->
-                event.stopPropagation()
+                event.stopPropagation() if event.targetTouches.length is 2
         # touches制限をしないと、textarea内でスクロールする余地がない時に全体スクロールする。
         # touchesをtwo finger制限しても、なにかの拍子に全体スクロールする。
 
