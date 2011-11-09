@@ -1,5 +1,5 @@
 # operation mode
-debugMode = false
+debugMode = true
 
 # constants
 holdTime = 400 # milli seconds
@@ -113,13 +113,106 @@ keyState =
     startY: 0
 
 #
-# dispatches
+# software key with upper flick
 #
 
-displaySecondKey = ->
-    keyState.second.style.backgroundColor = '#0088ff'
-    keyState.second.style.display = 'block'
-    keyState.timer = null
+class KeyFSM
+    constructor: (@state, @observer) ->
+        @startX = 0
+        @startY = 0
+        @timer = null
+
+    holdTime: 400 # ms
+
+    setState: (state) ->
+        @state = state
+        this.changed()
+
+    subkey: -> if @observer.childNodes.length >= 2
+            @observer.childNodes[1]
+        else
+            null
+
+    changed: ->
+        @state.update(@observer, this.subkey())
+
+    clearTimer: ->
+        clearTimeout @timer if @timer?
+        @timer = null
+
+    touchStart: (startX, startY) ->
+        keySound.play()
+        @startX = startX
+        @startY = startY
+        this.setState keyActive
+        context = this
+        @timer = setTimeout(->
+                context.setState keySubActive
+            , this.holdTime) if this.subkey()?
+
+    touchMove: (event) ->
+        touchPoint = event.targetTouches[0]
+        moveX = touchPoint.pageX - @startX
+        moveY = touchPoint.pageY - @startY
+        @state.touchMove(this, moveX, moveY)
+
+    touchEnd: -> @state.touchEnd this
+
+
+class KeyState
+    constructor: ->
+
+    update: (main, sub) ->
+
+    touchMove: (fsm, moveX, moveY) ->
+
+    touchEnd: (fsm) ->
+
+    inRange: (moveX, moveY) -> -58 < moveX < 58 and -58*2 < moveY < 58
+
+keyInactive = new KeyState()
+keyInactive.update = (main, sub) ->
+    main.style.backgroundColor = '#dbdbdb'
+    sub.style.display = 'none' if sub?
+
+keyActive = new KeyState()
+keyActive.update = (main, sub) ->
+    main.style.backgroundColor = '#a0a0a0'
+keyActive.touchMove = (fsm, moveX, moveY) ->
+    if fsm.subkey()? and moveY < -30 and -30 < moveX < 30
+        fsm.clearTimer()
+        fsm.setState keySubActive
+    else if not this.inRange(moveX, moveY)
+        fsm.clearTimer()
+        fsm.setState keyInactive
+keyActive.touchEnd = (fsm) ->
+    fsm.clearTimer()
+    stringInput fsm.observer.title
+    fsm.setState keyInactive
+    compileSource()
+
+keySubActive = new KeyState()
+keySubActive.update = (main, sub) ->
+    sub.style.backgroundColor = '#0088ff'
+    sub.style.display = 'block'
+keySubActive.touchMove = (fsm, moveX, moveY) ->
+    if not this.inRange(moveX, moveY)
+        fsm.setState keySubInactive
+keySubActive.touchEnd = (fsm) ->
+    stringInput fsm.subkey().title
+    fsm.setState keyInactive
+    compileSource()
+
+keySubInactive = new KeyState()
+keySubInactive.update = (main, sub) ->
+   sub.style.backgroundColor = '#dbdbdb'
+keySubInactive.touchMove = (fsm, moveX, moveY) ->
+    fsm.setState keySubActive if this.inRange(moveX, moveY)
+keySubInactive.touchEnd = (fsm) ->
+    fsm.setState keyInactive
+
+
+# dispatches
 
 clickSaveas = ->
         currentFile = prompt 'filename:'
@@ -147,58 +240,22 @@ $(document).ready ->
         # iPadのソフトウェアキーボードが閉じようとするのを防止
         $('.button').mousedown (event) -> event.preventDefault()
 
-    $('.button').bind 'touchstart',
-        (event) ->
-            keySound.play()
-            this.style.backgroundColor = '#a0a0a0'
-            if this.childNodes.length >= 2
-                keyState.target = this
-                keyState.second = this.childNodes[1]
-                keyState.timer = setTimeout(displaySecondKey, holdTime)
-                keyState.startX = event.originalEvent.targetTouches[0].pageX
-                keyState.startY = event.originalEvent.targetTouches[0].pageY
+    #
+    # soft key board
+    #
+    $('.button').bind 'touchstart', (event) ->
+        touchPoint = event.originalEvent.targetTouches[0]
+        if not this.model?
+            this.model = new KeyFSM keyInactive, this
 
-    $('.button').bind 'touchmove',
-        (event) ->
-            moveX = event.originalEvent.targetTouches[0].pageX - keyState.startX
-            moveY = event.originalEvent.targetTouches[0].pageY - keyState.startY
-            if moveX < -58 or moveX > 58 or moveY < -58*2 or moveY > 58
-                if keyState.timer?
-                    clearTimeout keyState.timer
-                    keyState.timer = null
-                if keyState.second? and keyState.second.style.display isnt 'none'and keyState.second.style.display isnt ''
-                   keyState.second.style.backgroundColor = '#dbdbdb'
-                else
-                    this.style.backgroundColor = '#dbdbdb'
-            else if keyState.second? and keyState.second.style.display isnt 'none' and keyState.second.style.display isnt ''
-                keyState.second.style.backgroundColor = '#0088ff'
+        this.model.touchStart touchPoint.pageX, touchPoint.pageY
 
-            if keyState.timer? and moveY < -30
-                clearTimeout keyState.timer
-                displaySecondKey()
+    $('.button').bind 'touchmove', (event) ->
+        this.model.touchMove event.originalEvent
+        event.preventDefault() if debugMode
 
-            event.preventDefault() if debugMode
-
-    $('.button').bind 'touchend',
-        (event) ->
-            if keyState.timer?
-                clearTimeout keyState.timer
-                keyState.timer = null
-            if this.style.backgroundColor isnt 'rgb(219, 219, 219)' # '#dbdbdb'
-                if keyState.second? and keyState.second.style.display isnt 'none' and keyState.second.style.display isnt ''
-                    key = if keyState.second.style.backgroundColor isnt 'rgb(219, 219, 219)' # '#dbdbdb'
-                            keyState.target.childNodes[1].title
-                        else
-                            null
-                    keyState.second.style.display = 'none'
-                    keyState.target = null
-                    keyState.second = null
-                else
-                    key = this.title
-                if key? and key isnt ''
-                    stringInput key
-                    compileSource()
-                this.style.backgroundColor = '#dbdbdb'
+    $('.button').bind 'touchend', (event) ->
+        this.model.touchEnd()
 
     $('#edit').focus()
 	# onloadで開始時にテキストエリアをアクティブにしているが、ソフトキーボードは現れないという不具合あり。
@@ -213,7 +270,6 @@ $(document).ready ->
 
     $('#save').click ->
         if not currentFile? or currentFile is ''
-            console.log 'pass'
             clickSaveas()
         else
             localStorage.setItem(currentFile, $('#edit').val())
@@ -228,8 +284,7 @@ $(document).ready ->
             alert 'seems you are offline...'
 
     $('#about').click ->
-        console.log this
-        alert 'Siphon version 0.2.0\nCopyright (C) safari-park 2011'
+        alert 'Siphon version 0.2.1\nCopyright (C) safari-park 2011'
 
     resetSelects()
 
