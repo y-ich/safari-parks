@@ -1,6 +1,9 @@
 # operation mode
 debugMode = false
 
+# constants
+holdTime = 400 # milli seconds
+
 #
 # utilies
 #
@@ -41,7 +44,7 @@ evalJS = ->
     catch error then alert error
 
 
-keyOptions = ->
+fileOptions = ->
     result = []
     for i in [0...localStorage.length]
         e = document.createElement('option')
@@ -57,7 +60,7 @@ resetSelect = (id) ->
     option.value = ''
     option.disabled = true
     $(selector).append option
-    _(keyOptions()).each (e) -> $(selector).append e
+    _(fileOptions()).each (e) -> $(selector).append e
 
 resetSelects = ->
     resetSelect 'open'
@@ -151,7 +154,7 @@ $(document).ready ->
             if this.childNodes.length >= 2
                 keyState.target = this
                 keyState.second = this.childNodes[1]
-                keyState.timer = setTimeout(displaySecondKey, 400)
+                keyState.timer = setTimeout(displaySecondKey, holdTime)
                 keyState.startX = event.originalEvent.targetTouches[0].pageX
                 keyState.startY = event.originalEvent.targetTouches[0].pageY
 
@@ -225,6 +228,7 @@ $(document).ready ->
             alert 'seems you are offline...'
 
     $('#about').click ->
+        console.log this
         alert 'Siphon version 0.2.0\nCopyright (C) safari-park 2011'
 
     resetSelects()
