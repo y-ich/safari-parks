@@ -1,6 +1,6 @@
 # Siphon: CoffeeScript promgramming environment for iPad
 # author: ICHIKAWA, Yuji
-# Copyright (C) 2011 ICHIKAWA, Yuji
+# Copyright (C) 2011 safari-park
 
 #
 # parameters
@@ -92,7 +92,8 @@ clickSaveas = ->
 adjustEditHeight = ->
     $('#keys').css('bottm': 380 + 'px')
     $('#edit').css('height': restHeight + 'px')
-    restHeight = window.innerHeight - (380 + 58 * 2 + 55)
+    restHeight = window.innerHeight - (380 + (58 + 12) * 2 + 56)
+    console.log restHeight
     $('#edit').css('height': restHeight + 'px')
     $('#edit').css('max-height': restHeight + 'px')
 
@@ -192,7 +193,6 @@ class KeyState
 keyInactive = new KeyState()
 
 keyInactive.update = (main, sub) ->
-    main.style.backgroundColor = '#dbdbdb'
     sub.style.display = 'none' if sub?
 
 # active state
@@ -219,7 +219,8 @@ keyActive.touchEnd = (fsm) ->
 keySubActive = new KeyState()
 
 keySubActive.update = (main, sub) ->
-    sub.style.backgroundColor = '#0088ff'
+    $(sub).css('color', '#fff')
+    $(sub).css('background-image', '-webkit-gradient(linear, left top, left bottom, from(rgb(65,134,245)), to(rgb(25,79,220)))')
     sub.style.display = 'block'
 
 keySubActive.touchMove = (fsm, moveX, moveY) ->
@@ -235,7 +236,8 @@ keySubActive.touchEnd = (fsm) ->
 keySubInactive = new KeyState()
 
 keySubInactive.update = (main, sub) ->
-   sub.style.backgroundColor = '#dbdbdb'
+    $(sub).css('color', '#000')
+    $(sub).css('background-image', '-webkit-gradient(linear, left top, left bottom, from(#EEEEF0), to(#D2D2D8))')
 
 keySubInactive.touchMove = (fsm, moveX, moveY) ->
     fsm.setState keySubActive if @inRange(moveX, moveY)
@@ -292,7 +294,7 @@ $(document).ready ->
         #  Page scroll occurs when there is no space in scroll object if number of fingers are not restricted.
 
         # prevents native soft keyboard to slip down when button was released.
-        $('.key').mousedown (event) -> event.preventDefault()
+        $('.key.main').mousedown (event) -> event.preventDefault()
 
     #
     # HTML soft keyboard
@@ -338,7 +340,7 @@ $(document).ready ->
     $('#saveas').click clickSaveas
 
     $('#about').click ->
-        alert 'Siphon version 0.2.2\nCopyright (C) safari-park 2011'
+        alert 'Siphon version 0.2.3\nCopyright (C) safari-park 2011'
 
     resetSelects() # "Open...", and "Delete..." menus
 

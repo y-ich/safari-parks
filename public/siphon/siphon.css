@@ -1,22 +1,7 @@
 /*
-html {
-	height: 100%;
-}
-
-body {
-	background-color: #7a7983;
-	height: 100%;
-}
-
-#wrapper {
-	height: 100%;
-}
-
-#stack {
-	width: 100%;
-	position: absolute;
-	bottom: 0;
-}
+ Siphon: CoffeeScript programming environment for iPad
+ author: ICHIKAWA, Yuji
+ Copyright (C) 2011 safari-park
 */
 
 .ui-select {
@@ -26,18 +11,25 @@ body {
 
 #main {
 	position: absolute;
+	margin: 0;
+	padding: 0;
 	width: 100%;
 	height: 100%;
 }
 
 textarea#edit {
+	margin-top: 15px;
+	margin-left: 15px;
 	width: 94%;
+	height: 320px;
 	background-color: white;
 	font-size: 12pt;
 }
 
 #error {
-	width: 96%;
+	margin-top: 15px;
+	margin-left: 15px;
+	width: 95%;
 	height: 24px;
 	font-size: 16px;
 	color: red;
@@ -47,15 +39,17 @@ textarea#edit {
 #keys {
 	position: absolute;
 	width: 100%;
-	bottom: 380px; /* 一体英語ソフトキーボードの高さ */
-/*	bottom: 360px; *//* 分割英語ソフトキーボードの高さ */
+	bottom: 0;
+	margin: 0;
+	padding-top: 7px;
+	padding-left: 15px;
+	height: 485px;
+/*	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(158,157,167)), to(rgb(67,68,75))); */
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(200,200,210)), to(rgb(67,68,75)));
 }
 
 .clear {
 	clear: both;
-}
-
-#numbers {
 }
 
 .scroll {
@@ -64,19 +58,32 @@ textarea#edit {
 }
 
 .key {
+	position: relative;
 	float: left;
-	width: 58px;
-	height: 58px;
-	line-height: 58px;
+	border-radius: 5px;
+	color: #000;
+	display: block;
 	font-family: sans-serif;
 	font-size: 17pt;
-	background-color: #dbdbdb;
-	border: 1px solid black;
-	margin-right: 9px;
-	margin-bottom: 9px;
+	height: 57px;
+	line-height: 57px;
+	margin-right: 15px;
+	margin-bottom: 15px;
+	width: 57px;
 	text-align: center;
-	-webkit-box-shadow: 0px 2px 0px rgba(0,0,0,0.5);
-	-webkit-border-radius: 8px;  
+	vertical-align: middle;
+	z-index: 1;
+	user-select:none;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#EEEEF0), to(#D2D2D8));
+	box-shadow: inset 0 1px #FFF, 0 2px 2px #000;
+	text-shadow: 0 1px #FFF;
+}
+
+.key:active {
+	color: #ffffff;
+	background: #E7E7EC;
+	box-shadow: inset 0 1px #F7F7FC, 0 1px 1px #000;
+	top: 1px;
 }
 
 .sub {
@@ -84,6 +91,8 @@ textarea#edit {
 	position: relative;
 	left: 0;
 	top: -220%;
+	color: #000;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(65,134,245)), to(rgb(25,79,220)));
 }
 
 /*
