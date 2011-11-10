@@ -340,7 +340,7 @@ $(document).ready ->
     $('#saveas').click clickSaveas
 
     $('#about').click ->
-        alert 'Siphon version 0.2.3\nCopyright (C) safari-park 2011'
+        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.2.3\nCopyright (C) safari-park 2011'
 
     resetSelects() # "Open...", and "Delete..." menus
 
