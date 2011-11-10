@@ -93,7 +93,6 @@ adjustEditHeight = ->
     $('#keys').css('bottm': 380 + 'px')
     $('#edit').css('height': restHeight + 'px')
     restHeight = window.innerHeight - (380 + (58 + 12) * 2 + 56)
-    console.log restHeight
     $('#edit').css('height': restHeight + 'px')
     $('#edit').css('max-height': restHeight + 'px')
 
@@ -262,7 +261,8 @@ window.applicationCache.addEventListener 'updateready', ->
 window.applicationCache.addEventListener 'obsolete', ->
     alert 'Manifest was not found, so the application cache is being deleted.'
 window.applicationCache.addEventListener 'error', ->
-    alert 'Sorry. Application cache error.'
+    alert 'Sorry. Application cache error.' if debugMode
+    # error occurs offline without calling update().
 
 $(document).ready ->
     window.applicationCache.update() if navigator.onLine
