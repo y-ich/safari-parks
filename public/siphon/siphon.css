@@ -48,7 +48,7 @@ textarea#edit {
 	position: absolute;
 	width: 100%;
 	bottom: 380px; /* 一体英語ソフトキーボードの高さ */
-/*	bottom: 360px; /* 分割英語ソフトキーボードの高さ */
+/*	bottom: 360px; *//* 分割英語ソフトキーボードの高さ */
 }
 
 .clear {
