@@ -126,7 +126,7 @@ class KeyFSM
 
     setState: (state) ->
         @state = state
-        this.changed()
+        @changed()
 
     subkey: -> if @observer.childNodes.length >= 2
             @observer.childNodes[1]
@@ -134,7 +134,7 @@ class KeyFSM
             null
 
     changed: ->
-        @state.update(@observer, this.subkey())
+        @state.update(@observer, @subkey())
 
     clearTimer: ->
         clearTimeout @timer if @timer?
@@ -144,11 +144,11 @@ class KeyFSM
         keySound.play()
         @startX = startX
         @startY = startY
-        this.setState keyActive
+        @setState keyActive
         context = this
-        @timer = setTimeout(->
-                context.setState keySubActive
-            , this.holdTime) if this.subkey()?
+        @timer = setTimeout(=>
+                @setState keySubActive
+            , @holdTime) if @subkey()?
 
     touchMove: (event) ->
         touchPoint = event.targetTouches[0]
@@ -182,7 +182,7 @@ keyActive.touchMove = (fsm, moveX, moveY) ->
     if fsm.subkey()? and moveY < -30 and -30 < moveX < 30
         fsm.clearTimer()
         fsm.setState keySubActive
-    else if not this.inRange(moveX, moveY)
+    else if not @inRange(moveX, moveY)
         fsm.clearTimer()
         fsm.setState keyInactive
 keyActive.touchEnd = (fsm) ->
@@ -196,7 +196,7 @@ keySubActive.update = (main, sub) ->
     sub.style.backgroundColor = '#0088ff'
     sub.style.display = 'block'
 keySubActive.touchMove = (fsm, moveX, moveY) ->
-    if not this.inRange(moveX, moveY)
+    if not @inRange(moveX, moveY)
         fsm.setState keySubInactive
 keySubActive.touchEnd = (fsm) ->
     stringInput fsm.subkey().title
@@ -207,7 +207,7 @@ keySubInactive = new KeyState()
 keySubInactive.update = (main, sub) ->
    sub.style.backgroundColor = '#dbdbdb'
 keySubInactive.touchMove = (fsm, moveX, moveY) ->
-    fsm.setState keySubActive if this.inRange(moveX, moveY)
+    fsm.setState keySubActive if @inRange(moveX, moveY)
 keySubInactive.touchEnd = (fsm) ->
     fsm.setState keyInactive
 
