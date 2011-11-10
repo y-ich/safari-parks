@@ -44,7 +44,7 @@ textarea#edit {
 	border: 1px solid black;
 }
 
-.buttons {
+#keys {
 	position: absolute;
 	width: 100%;
 	bottom: 380px; /* 一体英語ソフトキーボードの高さ */
@@ -64,11 +64,6 @@ textarea#edit {
 }
 
 .key {
-	position: relative;
-	float: left;
-}
-
-.button {
 	float: left;
 	width: 58px;
 	height: 58px;
@@ -84,7 +79,7 @@ textarea#edit {
 	-webkit-border-radius: 8px;  
 }
 
-.second {
+.sub {
 	display: none;
 	position: relative;
 	left: 0;

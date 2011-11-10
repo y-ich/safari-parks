@@ -7,7 +7,7 @@
 #
 
 # operation mode
-debugMode = false
+debugMode = true
 
 # constants
 holdTime = 400 # milli seconds
@@ -88,6 +88,13 @@ clickSaveas = ->
         return if not currentFile?
         localStorage.setItem(currentFile, $('#edit').val())
         resetSelects()
+
+adjustEditHeight = ->
+    $('#keys').css('bottm': 380 + 'px')
+    $('#edit').css('height': restHeight + 'px')
+    restHeight = window.innerHeight - (380 + 58 * 2 + 55)
+    $('#edit').css('height': restHeight + 'px')
+    $('#edit').css('max-height': restHeight + 'px')
 
 #
 #
@@ -241,13 +248,13 @@ keySubInactive.touchEnd = (fsm) ->
 #
 #window.applicationCache.addEventListener 'checking', ->
 window.applicationCache.addEventListener 'noupdate', ->
-    alert 'Manifest has no change.'
+    alert 'Manifest has no change.' if debugMode
 #window.applicationCache.addEventListener 'downloading', ->
 #window.applicationCache.addEventListener 'progress', ->
 window.applicationCache.addEventListener 'cached', ->
-    alert 'Now cached.'
+    alert 'Conguatulation! You can use Siphon offline.'
 window.applicationCache.addEventListener 'updateready', ->
-    if confirm 'New version is downloaded. Do you want to update?'
+    if confirm 'New version was downloaded. Do you want to update?'
         window.applicationCache.swapCache()
         location.reload()
 window.applicationCache.addEventListener 'obsolete', ->
@@ -255,14 +262,21 @@ window.applicationCache.addEventListener 'obsolete', ->
 window.applicationCache.addEventListener 'error', ->
     alert 'Sorry. Application cache error.'
 
-
 $(document).ready ->
+    window.applicationCache.update() if navigator.onLine
+
     # jQuery Mobile setting
     $('#editorpage').addBackBtn = false # no back button on top page.
 
-    restHeight = window.innerHeight - (380 + 58 * 2 + 55)
-    $('#edit').css('height': restHeight + 'px')
-    $('#edit').css('max-height': restHeight + 'px')
+    adjustEditHeight()
+    # problem
+    #  When debug console is enabled on iPad, just after loading,
+    #  1. the debug console is not showed
+    #  2. the innnerHeight is as if it misses debug console.
+    #  3. so the edit area is larger than intention.
+    #  4. the position of soft key buttons is higher than intention.
+
+    document.body.onresize = adjustEditHeight
 
     if not debugMode
         # prevents page scroll
@@ -278,24 +292,24 @@ $(document).ready ->
         #  Page scroll occurs when there is no space in scroll object if number of fingers are not restricted.
 
         # prevents native soft keyboard to slip down when button was released.
-        $('.button').mousedown (event) -> event.preventDefault()
+        $('.key').mousedown (event) -> event.preventDefault()
 
     #
     # HTML soft keyboard
     #
-    $('.button').bind 'touchstart', (event) ->
+    $('.key.main').bind 'touchstart', (event) ->
         touchPoint = event.originalEvent.targetTouches[0]
 
         # lazy initialization
         this.model ?= new KeyFSM keyInactive, this
         this.model.touchStart touchPoint.pageX, touchPoint.pageY
 
-    $('.button').bind 'touchmove', (event) ->
+    $('.key.main').bind 'touchmove', (event) ->
         this.model.touchMove event.originalEvent
         event.preventDefault() if debugMode
         # Because page scroll are enabled at debug mode, page scroll are disabled on buttons
 
-    $('.button').bind 'touchend', (event) -> this.model.touchEnd()
+    $('.key.main').bind 'touchend', (event) -> this.model.touchEnd()
 
     $('#edit').focus()
 	# problem
@@ -323,14 +337,8 @@ $(document).ready ->
 
     $('#saveas').click clickSaveas
 
-    $('#update').click ->
-        if navigator.onLine
-            window.applicationCache.update()
-        else
-            alert 'seems you are offline...'
-
     $('#about').click ->
-        alert 'Siphon version 0.2.1\nCopyright (C) safari-park 2011'
+        alert 'Siphon version 0.2.2\nCopyright (C) safari-park 2011'
 
     resetSelects() # "Open...", and "Delete..." menus
 
