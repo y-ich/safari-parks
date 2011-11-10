@@ -7,7 +7,7 @@
 #
 
 # operation mode
-debugMode = true
+debugMode = false
 
 # constants
 holdTime = 400 # milli seconds
