@@ -75,7 +75,7 @@ resetSelect = (id) ->
     option.value = ''
     option.disabled = true
     $(selector).append option
-    _(fileOptions()).each (e) -> $(selector).append e
+    fileOptions().forEach (e) -> $(selector).append e
 
 # makes "Open..." and "Delete..." select menu.
 resetSelects = ->
@@ -340,7 +340,7 @@ $(document).ready ->
     $('#saveas').click clickSaveas
 
     $('#about').click ->
-        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.2.3\nCopyright (C) safari-park 2011'
+        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.2.3\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
 
     resetSelects() # "Open...", and "Delete..." menus
 
@@ -352,11 +352,25 @@ $(document).ready ->
         $('#open').selectmenu('refresh')
 
     $('#delete').change ->
-        if confirm 'Do you wan to delete "' + $('#delete')[0].value +
+        if confirm 'Do you want to delete "' + $('#delete')[0].value +
                 '"? (Current file is "' + currentFile + '".)'
             localStorage.removeItem $('#delete')[0].value
             resetSelects()
-        $('#delete')[0].selectedIndex = 0 # index = 0 means "Close..."
+        $('#delete')[0].selectedIndex = 0 # index = 0 means "Delete..."
         $('#delete').selectmenu('refresh')
+
+    $('#import').change ->
+        if confirm 'Do you want to import "' + $('#import')[0].value + '"?'
+            ###
+            # appendTo of script element doesn't work.
+            html = '<script type="text/javascript" src="' + $('#import')[0].value + '"></script>'
+            $(html).appendTo('head')
+            ###
+            script = document.createElement('script')
+            script.type = 'text/javascript'
+            script.src = $('#import')[0].value
+            document.head.appendChild(script)
+        $('#import')[0].selectedIndex = 0 # index = 0 means "Import..."
+        $('#import').selectmenu('refresh')
 
     compileSource()

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html manifest="site.manifest">
-<html>
 <head>
 <title>Siphon: CoffeeScript Programming Environment</title>
 <meta charset="UTF-8">
@@ -25,8 +24,11 @@
 <script src="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js"></script>
 <!-- CoffeeScriptコンパイラ -->
 <script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
+<!--
+<script type="text/javascript" src="prelude/underscore.js"></script>
 <script type="text/coffeescript" src="prelude/underscore.coffee"></script>
 <script type="text/coffeescript" src="prelude/coffeekup.coffee"></script>
+-->
 <script type="text/coffeescript" src="siphon.coffee"></script>
 <script type="text/javascript">
 
@@ -51,9 +53,14 @@
 		<option>Open...</option>
 	  </select>
 	  <div id="save" data-role="button" data-icon="check">Save</div>
-	  <div id="saveas" data-role="button" data-icon="plus">Save As...</div>
+	  <div id="saveas" data-role="button" data-icon="star">Save As...</div>
 	  <select id="delete" data-icon="delete" data-iconpos="left">
 		<option>Delete...</option>
+	  </select>
+	  <select id="import" data-icon="plus" data-iconpos="left">
+		<option value="" disabled="true">Import...</option>
+		<option value="prelude/underscore.js">Underscore: functional programming</option>
+		<option value="prelude/coffeekup.js">CoffeeKup: markup language</option>
 	  </select>
 	  <div id="about" data-role="button" data-icon="info">About Siphon</div>
 	</div>

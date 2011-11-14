@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#version 106
+# version 117
 
 CACHE:
 siphon.html
@@ -11,11 +11,13 @@ http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.css
 http://code.jquery.com/mobile/1.0rc1/images/ajax-loader.png
 http://code.jquery.com/mobile/1.0rc1/images/icons-18-white.png
 http://jashkenas.github.com/coffee-script/extras/coffee-script.js
+http://www.google-analytics.com/ga.js
 images/icon.png
 images/startup.png
-prelude/coffeekup-LICENSE
-prelude/coffeekup.coffee
-prelude/underscore.coffee
+# prelude/underscore.coffee
+# prelude/coffeekup.coffee
+prelude/underscore.js
+prelude/coffeekup.js
 
 NETWORK:
 ../sounds/bin090208110829001.mp3
