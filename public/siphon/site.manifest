@@ -14,9 +14,8 @@ siphon.coffee
 http://www.google-analytics.com/ga.js
 images/icon.png
 images/startup.png
-# prelude/underscore.coffee
+http://documentcloud.github.com/underscore/underscore-min.js
 # prelude/coffeekup.coffee
-prelude/underscore.js
 prelude/coffeekup.js
 
 NETWORK:
