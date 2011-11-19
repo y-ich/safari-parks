@@ -97,7 +97,7 @@ get '/dic/search' do
     end
   end
 
-  if params[:twitter_id] and not params[:twitter_id] =~ /^\w+$/
+  if params[:twitter_id] and not params[:twitter_id] =~ /^\w*$/
     result = 'ブックマークのtwitter_idが正しいかご確認ください\n' + result
   end
 
