@@ -89,14 +89,25 @@ clickSaveas = ->
         localStorage.setItem(currentFile, $('#edit').val())
         resetSelects()
 
-adjustEditHeight = ->
-    $('#keys').css('bottm': 380 + 'px')
-    $('#edit').css('height': restHeight + 'px')
-    restHeight = window.innerHeight - (380 + (58 + 12) * 2 + 56)
-    $('#edit').css('height': restHeight + 'px')
-    $('#edit').css('max-height': restHeight + 'px')
+iOSKeyboardHeight = 307
 
-#
+layoutEditor = ->
+    restHeight = window.innerHeight -
+        $('.ui-header').outerHeight(true) - $('#error').outerHeight(true) -
+        ($('#edit').outerHeight(true) - $('#edit').height()) -
+        $('.ui-footer').outerHeight(true)
+    if $('#keyboard-on')[0].checked
+        keybackHeight = iOSKeyboardHeight + $('#keys').outerHeight(true) -
+            $('.ui-footer').outerHeight(true)
+        restHeight -= keybackHeight
+        $('#keyback').height(keybackHeight + 'px')
+        $('#keyback').css('display', 'block')
+    else
+        $('#keyback').css('display', 'none')
+    restHeight = Math.max(restHeight, 12)
+    $('#edit').css('height', restHeight + 'px')
+    $('#edit').css('max-height', restHeight + 'px')
+
 #
 # global variables
 #
@@ -264,13 +275,15 @@ window.applicationCache.addEventListener 'error', ->
     alert 'Sorry. Application cache error.' if debugMode
     # error occurs offline without calling update().
 
+
 $(document).ready ->
     window.applicationCache.update() if navigator.onLine
 
     # jQuery Mobile setting
     $('#editorpage').addBackBtn = false # no back button on top page.
 
-    adjustEditHeight()
+    layoutEditor()
+
     # problem
     #  When debug console is enabled on iPad, just after loading,
     #  1. the debug console is not showed
@@ -278,7 +291,7 @@ $(document).ready ->
     #  3. so the edit area is larger than intention.
     #  4. the position of soft key buttons is higher than intention.
 
-    document.body.onresize = adjustEditHeight
+    document.body.onresize = layoutEditor
 
     if not debugMode
         # prevents page scroll
@@ -340,7 +353,7 @@ $(document).ready ->
     $('#saveas').click clickSaveas
 
     $('#about').click ->
-        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.2.3\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
+        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.2.4\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
 
     resetSelects() # "Open...", and "Delete..." menus
 
@@ -372,5 +385,7 @@ $(document).ready ->
             document.head.appendChild(script)
         $('#import')[0].selectedIndex = 0 # index = 0 means "Import..."
         $('#import').selectmenu('refresh')
+
+    $('#keyboard-on').change layoutEditor
 
     compileSource()

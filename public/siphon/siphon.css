@@ -10,11 +10,9 @@
 }
 
 #main {
-	position: absolute;
 	margin: 0;
 	padding: 0;
 	width: 100%;
-	height: 100%;
 }
 
 textarea#edit {
@@ -28,6 +26,7 @@ textarea#edit {
 
 #error {
 	margin-top: 15px;
+	margin-bottom: 15px;
 	margin-left: 15px;
 	width: 95%;
 	height: 24px;
@@ -36,16 +35,15 @@ textarea#edit {
 	border: 1px solid black;
 }
 
-#keys {
-	position: absolute;
+#keyback {
 	width: 100%;
-	bottom: 0;
-	margin: 0;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(200,200,210)), to(rgb(67,68,75)));
+}
+
+#keys {
+	width: 100%;
 	padding-top: 7px;
 	padding-left: 15px;
-	height: 485px;
-/*	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(158,157,167)), to(rgb(67,68,75))); */
-	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(200,200,210)), to(rgb(67,68,75)));
 }
 
 .clear {

@@ -1,151 +1,177 @@
 <!DOCTYPE html>
 <html manifest="site.manifest">
-<head>
-<title>Siphon: CoffeeScript Programming Environment</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
-<!-- フルスクリーンモード -->
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<!-- 数字を電話番号とみなさないように-->
-<meta name="format-detection" content="telephone=no" />
-<link rel="shortcut icon" href="images/favicon.ico" />
-<link rel="icon" href="images/favicon.ico" />
-<!-- ホーム画面用アイコン -->
-<link rel="apple-touch-icon" href="images/icon.png" />
-<!-- 起動画面 -->
-<link rel="apple-touch-startup-image" href="images/startup.png" />
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
-<link rel="stylesheet" type="text/css" href="siphon.css" />
-<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-<script>
-	$(document).bind("mobileinit", function(){
-	$.mobile.page.prototype.options.addBackBtn = true;});
-</script>
-<script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
-<!-- CoffeeScriptコンパイラ -->
-<script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
-<script type="text/coffeescript" src="siphon.coffee"></script>
-<script type="text/javascript">
+  <head>
+	<title>Siphon: CoffeeScript Programming Environment</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+	<!-- フルスクリーンモード -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<!-- 数字を電話番号とみなさないように-->
+	<meta name="format-detection" content="telephone=no" />
+	<link rel="shortcut icon" href="images/favicon.ico" />
+	<link rel="icon" href="images/favicon.ico" />
+	<!-- ホーム画面用アイコン -->
+	<link rel="apple-touch-icon" href="images/icon.png" />
+	<!-- 起動画面 -->
+	<link rel="apple-touch-startup-image" href="images/startup.png" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+	<link rel="stylesheet" type="text/css" href="siphon.css" />
+	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script>
+	  $(document).bind("mobileinit", function(){
+	  $.mobile.page.prototype.options.addBackBtn = true;});
+	</script>
+	<script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+	<!-- CoffeeScriptコンパイラ -->
+	<script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
+	<script type="text/coffeescript" src="siphon.coffee"></script>
+	<script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-510249-12']);
-  _gaq.push(['_trackPageview']);
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-510249-12']);
+	  _gaq.push(['_trackPageview']);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+	  (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
 
-</script>
-</head>
+	</script>
+  </head>
 
-<body>
-<div data-role="page" id="editorpage" data-theme="c">
-  <div data-role="header" class="ui-bar" data-theme="c" data-type="horizontal" data-backbtn="false">
-	<div data-role="controlgroup" data-type="horizontal">
-	  <select id="open" data-icon="grid" data-iconpos="left">
-		<option>Open...</option>
-	  </select>
-	  <div id="save" data-role="button" data-icon="check">Save</div>
-	  <div id="saveas" data-role="button" data-icon="star">Save As...</div>
-	  <select id="delete" data-icon="delete" data-iconpos="left">
-		<option>Delete...</option>
-	  </select>
-	  <select id="import" data-icon="plus" data-iconpos="left">
-		<option value="" disabled="true">Import...</option>
-		<option value="http://documentcloud.github.com/underscore/underscore-min.js">Underscore.js: functional programming support</option>
-		<option value="prelude/coffeekup.js">CoffeeKup: markup language</option>
-	  </select>
-	  <div id="about" data-role="button" data-icon="info">About Siphon</div>
-	</div>
-  </div>
-  <div data-role="content" id="main">
-	<form>
-	  <textarea id="edit" class="scroll" spellcheck="false" type="url" autocapitalize="off" autocorrect="off">alert 'Let me run and edit me!'</textarea>
-	</form>
-	<div id="error"></div>
-	<div id="keys">
-	  <div class="clear">
-		<!-- 
-			 <div class="special button">&larr;</div>
-		  <div class="special button">&rarr;</div>
-		  <div class="special button">end</div>
-		  -->
-		<div title="    " class="key main">tab
-		  <div title="#" class="key sub">#</div>
-		</div>
-		<div title="(" class="key main">(
-		  <div title=")" class="key sub">)</div>
-		</div>
-		<div title="[" class="key main">[
-		  <div title="]" class="key sub">]</div>
-		</div>
-		<div title="{" class="key main">{
-		  <div title="}" class="key sub">}</div>
-		</div>
-		<div title="<" class="key main">&lt;
-		  <div title=">" class="key sub">&gt;</div>
-		</div>
-		<div title="$" class="key main">$
-			<div title="%" class="key sub">%</div>
-		</div>
-		<div title="&" class="key main">&amp;
-		  <div title="|" class="key sub">|</div>
-		</div>
-		<div title="+" class="key main">+
-		  <div title="-" class="key sub">-</div>
-		</div>
-		<div title="*" class="key main">*
-		  <div title="/" class="key sub">/</div>
-		</div>
-		<div title="=" class="key main">=
-		  <div title=":" class="key sub">:</div>
+  <body>
+	<div data-role="page" id="editorpage" data-theme="c">
+	  <div data-role="header" class="ui-bar" data-theme="c" data-type="horizontal" data-backbtn="false">
+		<div data-role="controlgroup" data-type="horizontal">
+		  <select id="open" data-icon="grid" data-iconpos="left">
+			<option>Open...</option>
+		  </select>
+		  <div id="save" data-role="button" data-icon="check">Save</div>
+		  <div id="saveas" data-role="button" data-icon="star">Save As...</div>
+		  <select id="delete" data-icon="delete" data-iconpos="left">
+			<option>Delete...</option>
+		  </select>
+		  <select id="import" data-icon="plus" data-iconpos="left">
+			<option value="" disabled="true">Import...</option>
+			<option value="http://documentcloud.github.com/underscore/underscore-min.js">Underscore.js: functional programming support</option>
+			<option value="prelude/coffeekup.js">CoffeeKup: markup language</option>
+		  </select>
+		  <div id="about" data-role="button" data-icon="info">About Siphon</div>
 		</div>
 	  </div>
-	  <div id="numbers" class="clear">
-		<div title="1" class="key main">1</div>
-		<div title="2" class="key main">2</div>
-		<div title="3" class="key main">3</div>
-		<div title="4" class="key main">4</div>
-		<div title="5" class="key main">5</div>
-		<div title="6" class="key main">6</div>
-		<div title="7" class="key main">7</div>
-		<div title="8" class="key main">8</div>
-		<div title="9" class="key main">9</div>
-		<div title="0" class="key main">0</div>
+	  <div data-role="content" id="main">
+		<form>
+		  <textarea id="edit" class="scroll" spellcheck="false" type="url" autocapitalize="off" autocorrect="off">alert 'Let me run and edit me!'</textarea>
+		</form>
+		<div id="error"></div>
+		<div id="keyback">
+		  <div id="keys">
+			<div class="clear">
+			  <div title="    " class="key main">tab
+				<div title="#" class="key sub">#</div>
+			  </div>
+			  <div title="(" class="key main">(
+				<div title=")" class="key sub">)</div>
+			  </div>
+			  <div title="[" class="key main">[
+				<div title="]" class="key sub">]</div>
+			  </div>
+			  <div title="{" class="key main">{
+				<div title="}" class="key sub">}</div>
+			  </div>
+			  <div title="<" class="key main">&lt;
+				<div title=">" class="key sub">&gt;</div>
+			  </div>
+			  <div title="$" class="key main">$
+				<div title="%" class="key sub">%</div>
+			  </div>
+			  <div title="&" class="key main">&amp;
+				<div title="|" class="key sub">|</div>
+			  </div>
+			  <div title="+" class="key main">+
+				<div title="-" class="key sub">-</div>
+			  </div>
+			  <div title="*" class="key main">*
+				<div title="/" class="key sub">/</div>
+			  </div>
+			  <div title="=" class="key main">=
+				<div title=":" class="key sub">:</div>
+			  </div>
+			</div>
+			<div id="numbers" class="clear">
+			  <div title="1" class="key main">1</div>
+			  <div title="2" class="key main">2</div>
+			  <div title="3" class="key main">3</div>
+			  <div title="4" class="key main">4</div>
+			  <div title="5" class="key main">5</div>
+			  <div title="6" class="key main">6</div>
+			  <div title="7" class="key main">7</div>
+			  <div title="8" class="key main">8</div>
+			  <div title="9" class="key main">9</div>
+			  <div title="0" class="key main">0</div>
+			</div>
+			<div class="clear"></div>
+		  </div>
+		</div>
 	  </div>
-	  <div class="clear"></div>
+	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
+		<div data-role="navbar">
+		  <ul>
+			<li><a href="#editorpage" class="ui-btn-active ui-state-persist">Editor</a></li>
+			<li><a href="#compiledpage">Compiled Code</a></li>
+			<li><a href="#" id="run">Run</a></li>
+			<li><a href="#settingpage">Setting</a></li>
+			<li><a href="#ref">References</a></li>
+		  </ul>
+		</div>
+	  </div>
 	</div>
-  </div>
-  <div data-role="footer" data-position="fixed" data-theme="c">
-	<div data-role="navbar">
-	  <ul>
-		<li><a href="#editorpage" class="ui-btn-active">Editor</a></li>
-		<li><a href="#compiledpage">Compiled Code</a></li>
-		<li><a href="#" id="run">Run</a></li>
-		<li><a href="#debug">Debug</a></li>
-		<li><a href="#ref">References</a></li>
-	  </ul>
+
+	<div data-role="page" id="compiledpage" data-theme="c">
+	  <div data-role="header" data-theme="c">
+		<h1>Compiled JavaScript Code</h1>
+	  </div>
+	  <div data-role="content">
+		<pre id="compiled" class="scroll"></pre>
+	  </div>
+	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
+		<div data-role="navbar">
+		  <ul>
+			<li><a href="#editorpage">Editor</a></li>
+			<li><a href="#compiledpage" class="ui-btn-active ui-state-persist">Compiled Code</a></li>
+			<li><a href="#" id="run">Run</a></li>
+			<li><a href="#refpage">References</a></li>
+			<li><a href="#settingpage">Setting</a></li>
+		  </ul>
+		</div>
+	  </div>
 	</div>
-  </div>
-</div>
 
-<div data-role="page" id="compiledpage" data-theme="c">
-  <div data-role="header" data-theme="c">
-	<h1>Compiled JavaScript Code</h1>
-  </div>
-  <div data-role="content">
-	<pre id="compiled" class="scroll"></pre>
-  </div>
-  <div data-role="footer" data-position="fixed" data-theme="c">
-  </div>
-</div>
+	<div data-role="page" id="settingpage" data-theme="c">
+	  <div data-role="header" data-theme="c">
+		<h1>Siphon Setting</h1>
+	  </div>
+	  <div data-role="content">
+		<form date-inset="true">
+		  <input type="checkbox" id="keyboard-on" checked="true" />
+		  <label for="keyboard-on">Software keyboard enhancement: on</label>
+		</form>
+	  </div>
+	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
+		<div data-role="navbar">
+		  <ul>
+			<li><a href="#editorpage">Editor</a></li>
+			<li><a href="#compiledpage" >Compiled Code</a></li>
+			<li><a href="#" id="run">Run</a></li>
+			<li><a href="#settingpage" class="ui-btn-active ui-state-persist">Setting</a></li>
+			<li><a href="#ref">References</a></li>
+		  </ul>
+		</div>
+	  </div>
+	</div>
+	<div data-role="page" id="refpage" data-theme="c">
+	</div>
 
-<div data-role="page" id="debugpage" data-theme="c">
-</div>
-<div data-role="page" id="refpage" data-theme="c">
-</div>
-
-</body>
+  </body>
 </html>

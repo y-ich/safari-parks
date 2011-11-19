@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# version 118
+# version 143
 
 CACHE:
 siphon.html
@@ -15,7 +15,6 @@ http://www.google-analytics.com/ga.js
 images/icon.png
 images/startup.png
 http://documentcloud.github.com/underscore/underscore-min.js
-# prelude/coffeekup.coffee
 prelude/coffeekup.js
 
 NETWORK:
