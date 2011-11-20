@@ -2,9 +2,15 @@ javascript:{
     var d = document;
     var w = d.getSelection().toString();
     var s = d.createElement('script');
-    function cb(j) {
-	d.body.removeChild(s);
-	alert(j.length ? j : (w + 'は見つかりませんでした'));
+    function cb(o) {
+		d.body.removeChild(s);
+		if (o.text.length) {
+			alert(o.text);
+			window.sp_pronounce = o.wav_us;
+		}
+		else {
+			alert(w + 'は見つかりませんでした');
+		}
     }
     if (w.length == 0) {
 	var fs = window.frames;
@@ -17,8 +23,9 @@ javascript:{
     if (w != null) {
 	s.type = 'text/javascript';
 	s.src = 'http://safari-park.herokuapp.com/dic/search?Word=' +
+/*	s.src = 'http://192.168.1.8:9292/dic/search?Word=' + */
 	    w.replace(/^\s+/, '').replace(/\s+$/, '') + 
-	    '&_callback=cb&twitter_id=y_ich';
+	    '&_callback=cb&twitter_id=&v=2';
 	d.body.appendChild(s);
     }
 }

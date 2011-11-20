@@ -6,6 +6,8 @@
 #   GET parameters - Word, _callback, twitter_id
 # Copyright (C) 2011 ICHIKAWA, Yuji All rights reserved.
 
+require 'uri'
+require 'net/http'
 require 'sinatra'
 require 'fast_stemmer' #for stem
 require 'active_record'
@@ -24,6 +26,7 @@ end
 
 configure :development, :test do
   INTERVALS = [0, 1, 24]
+  enable :logging, :dump_errors, :raise_errors
 end
 
 configure :production do
@@ -39,6 +42,8 @@ end
 repeat_bot = Twitter::Client.new
 
 DIC_FILE = 'PrepTutorEJDIC/PrepTutorEJDIC.UTF-8.txt'
+DIC_SERVICE = 'http://www.thefreedictionary.com/'
+PRONOUNCE_SERVICE = 'http://img2.tfd.com/pp/wav.ashx/'
 
 # returns search result.
 # The format of returned value is ["word\nmeaning", "word\nmeaning", ...].
@@ -76,6 +81,8 @@ get '/siphon/' do
 end
 
 get '/dic/search' do
+  us_wav = ''
+  uk_wav = ''
   result = search(params[:Word])
   if result.empty?
     stem = params[:Word].stem
@@ -84,7 +91,7 @@ get '/dic/search' do
       result = search(stem, 'beginwith')
     end
   end
-  result = result.join('\n')
+  result = result.join('\n') # NOT escape character
 
   if not result.empty?
     tweet = '@nextliteracy ' + result
@@ -95,18 +102,36 @@ get '/dic/search' do
         repeat_bot.delay(:run_at => interval.hours.from_now).update(tweet[0,140])
       end
     end
+    if params[:v]
+      pronounces = Net::HTTP.get(URI.parse(DIC_SERVICE + result.split(/\\n/).first)).scan(/playV2\(.*\)/).collect {|e| e.split("'")[1]}
+      pronounces.each do |e|
+        us_wav = PRONOUNCE_SERVICE + e + '.wav' if e =~ /^en\/US/
+        uk_wav = PRONOUNCE_SERVICE + e + '.wav' if e =~ /^en\/UK/
+      end
+    end
   end
 
   if params[:twitter_id] and not params[:twitter_id] =~ /^\w*$/
     result = 'ブックマークのtwitter_idが正しいかご確認ください\n' + result
   end
 
-  if params[:_callback]
-    content_type('text/javascript', :charset => 'utf-8')
-    params[:_callback] + '("' + result + '");'
+  if not params[:v]
+    if params[:_callback]
+      content_type('text/javascript', :charset => 'utf-8')
+      params[:_callback] + '("' + result + '");'
+    else
+      content_type('text/json', :charset => 'utf-8')
+      '{"text":"' + result + '"}'
+    end
   else
-    content_type('text/json', :charset => 'utf-8')
-    '"' + result + '"'
+    json = '{"text":"' + result + '","wav_us":"' + us_wav + '","wav_uk":"' + uk_wav + '"}'
+    if params[:_callback]
+      content_type('text/javascript', :charset => 'utf-8')
+      params[:_callback] + '(' + json + ');'
+    else
+      content_type('text/json', :charset => 'utf-8')
+      json
+    end
   end
 end
 

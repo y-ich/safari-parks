@@ -7,16 +7,15 @@
 <meta charset="UTF-8">
 <script type="text/javascript">
 function bookmarklet_ipad() {
-return "javascript:{var d=document;var w=d.getSelection().toString();var s=d.createElement('script');function cb(j){d.body.removeChild(s);alert(j.length?j:(w+'%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F'));}if(w.length==0){var fs=window.frames;for(var i=0;(i<fs.length)&&(w.length==0);i++){if(fs[i].getSelection!=null)w=fs[i].getSelection().toString();}console.log(w.length);if(w.length==0)w=prompt('%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B');}if(w!=null){s.type='text/javascript';s.src='http://safari-park.herokuapp.com/dic/search?Word='+w.replace(/^\s+/,'').replace(/\s+$/,'')+'&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "';d.body.appendChild(s);}}";
+return "javascript:{var%20d=document;var%20w=d.getSelection().toString();var%20s=d.createElement('script');function%20cb(o){d.body.removeChild(s);if(o.text.length){alert(o.text);window.sp_pronounce=o.wav_us;}else{alert(w+'%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F');}}if(w.length==0){var%20fs=window.frames;for(var%20i=0;(i<fs.length)&&(w.length==0);i++){if(fs[i].getSelection!=null)w=fs[i].getSelection().toString();}if(w.length==0)w=prompt('%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B');}if(w!=null){s.type='text/javascript';s.src='http://safari-park.herokuapp.com/dic/search?Word='+w.replace(/^\s+/,'').replace(/\s+$/,'')+'&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "&v=2';d.body.appendChild(s);}}";
 }
 
 function bookmarklet_iphone() {
-return "javascript:{var d=document;var w=window;var e=d.createElement('button');function cb(j){d.body.removeChild(d.getElementById('dic_jsonp'));alert((j.length?j:(w+'は見つかりませんでした')));}e.id='dicButton';e.type='button';e.style.position='absolute';e.style.top=(w.pageYOffset+w.innerHeight-24)+'px';e.style.left=(w.pageXOffset+w.innerWidth-56)+'px';e.appendChild(d.createTextNode('E->J'));e.onclick=function(){var w=d.getSelection().toString();var s=d.createElement('script');if(w.length==0){var fs=window.frames;for(var i=0;(i<fs.length)&&(w.length==0);i++){if(fs[i].getSelection!=null)w=fs[i].getSelection().toString();}if(w.length==0)w=prompt('単語を入力');}if(w!=null){s.id='dic_jsonp';s.type='text/javascript';s.src='http://safari-park.herokuapp.com/dic/search?Word='+w.replace(/^\s+/,'').replace(/\s+$/,'')+'&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "';d.body.appendChild(s);}};d.body.appendChild(e);w.addEventListener('scroll',function(){var b=d.getElementById('dicButton');b.style.top=(w.pageYOffset+w.innerHeight-24)+'px';b.style.left=(w.pageXOffset+w.innerWidth-56)+'px';},false);}";
+return "javascript:{var%20d=document;var%20wi=window;var%20e=d.createElement('button');function%20cb(o){d.body.removeChild(d.getElementById('dic_jsonp'));if(o.text.length){alert(o.text);window.sp_pronounce=o.wav_us;}else{alert(w+'%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F');}}e.id='dicButton';e.type='button';e.style.position='absolute';e.style.top=(wi.pageYOffset+wi.innerHeight-24)+'px';e.style.left=(wi.pageXOffset+wi.innerWidth-56)+'px';e.appendChild(d.createTextNode('E->J'));e.onclick=function(){var%20w=d.getSelection().toString();var%20s=d.createElement('script');if(w.length==0){var%20fs=window.frames;for(var%20i=0;(i<fs.length)&&(w.length==0);i++){if(fs[i].getSelection!=null)w=fs[i].getSelection().toString();}if(w.length==0)w=prompt('%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B');}if(w!=null){s.id='dic_jsonp';s.type='text/javascript';s.src='http://safari-park.herokuapp.com/dic/search?Word='+w.replace(/^\s+/,'').replace(/\s+$/,'')+'&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "&v=2';d.body.appendChild(s);}};d.body.appendChild(e);wi.addEventListener('scroll',function(){var%20b=d.getElementById('dicButton');b.style.top=(wi.pageYOffset+wi.innerHeight-24)+'px';b.style.left=(wi.pageXOffset+wi.innerWidth-56)+'px';},false);}";
 }
 
 function generate(uri) {
   document.location = 'bml.html#' + uri;
-  document.getElementById('bookmarklet').href = uri;
 }
 </script>
 <script type="text/javascript">
@@ -34,12 +33,11 @@ function generate(uri) {
 </script>
 </head>
 <body>
-<h1 align="center">Twitter連携機能付き辞書ブックマークレットとAdd-on-Page</h1>
-<p>スマートフォンやiPadに超お勧めの辞書ブックマークレットとAdd-on-Pageのご紹介です。</p>
-<p>Add-on-Pageというのは私の造語です。勝手に言葉造ってすいません。スマートフォンのブラウザのようにアクセスしやすい場所にブックマークバーがない時、ボタンをページ内に追加してしまうといった具合にページ内の機能拡張を表す言葉です。
-</p>
+<h1 align="center">Twitter連携機能付き辞書ブックマークレット</h1>
+<p>パソコンやiPadに超お勧めの辞書ブックマークレットのご紹介です。</p>
 <p>
-iPadやiPhone、Androidケータイで英語のウェブサイトを見るとき、辞書が連携してくれなくて辛くありませんか？。
+iOS5でついにiPadやiPhoneのSafariやメールに辞書連携機能が付きました。便利ですね。
+iOS5以前では、Safariは辞書連携してくれませんでした。元々その悩みを解消するためのブックマークレットでしたが、ついにお役目ご免？いえいえ、iOS5に臆することなく機能強化を図りました。<b>発音機能</b>の追加です。
 </p><p>
 辞書用ブックマークレットはたくさんありますが、みんな、辞書サイトを<b>別のページ</b>で開くか、<b>別の辞書アプリ</b>を開きます。単語の文脈が見えなくなりますし、読んでいたサイトに戻るのも面倒です。
 </p><p>
@@ -47,31 +45,32 @@ iPadやiPhone、Androidケータイで英語のウェブサイトを見るとき
 </p><p>
 また別のアプローチでは、<a target="_blank" href="http://itunes.apple.com/jp/app/idict-for-advanced-learners/id348673070?mt=8">iDict+ for Advanced Learners</a>という辞書アプリケーションにウェブブラウザを取り込む方法があります。iOSがすべてのアプリで使える辞書機能を提供してくれない以上辞書アプリ化が王道ですが、しかし皆さんお気に入りのブラウザというものがありますよね。
 </p><p>
-そこで、単語の意味を<b>ポップアップウィンドウで表示</b>するブックマークレットを作成しました。iPhoneのMobile Safariにはブックマークバーがないからブックマークレットは使いにくい？その通りです。そのためにAdd-on-Pageも用意しました。
+そこで、単語の意味を<b>ポップアップウィンドウで表示</b>するブックマークレットを作成しました。iPhoneのSafariにはブックマークバーが表示されないからブックマークレットは使いにくい？その通りです。そのためにAdd-on-Pageも用意しました。
 <div align="center">iPadの場合<br><img src="images/safari.png"></div>
 <div align="center">iPhoneの場合<br><img src="images/iphone.png"></div>
 
 <h2>こんな機能のブックマークレット/Add-on-Pageです</h2>
 <h3>ブックマークバーが表示されるブラウザでは</h3>
 <ul>
-<li>単語を選択しブックマークレットをタップすると、ポップアップウィンドウで単語の意味を表示します。
-<li>選択せずにブックマークレットをタップすると、ポップアップウィンドウで調べたい単語が入力できます。
+<li>単語を選択しブックマークレットをタップすると、ポップアップウィンドウで単語の意味を表示します。</li>
+<li>選択せずにブックマークレットをタップすると、ポップアップウィンドウで調べたい単語が入力できます。</li>
 <h3>ブックマークバーが表示されないブラウザでは</h3>
-<li>辞書を使いたいウェブページでブックマークレットをタップしてください。上記画面のようにページの右下に"E-&gt;J"ボタンが現れます。
-<li>単語を選択し"E-&gt;J"ボタンをタップすると、ポップアップウィンドウで単語の意味を表示します。タップは<b>ゆっくり</b>するのが使い方のコツです。
-<li>選択せずに"E-&gt;J"ボタンをタップすると、ポップアップウィンドウで調べたい単語が入力できます。
+<li>辞書を使いたいウェブページでブックマークレットをタップしてください。上記画面のようにページの右下に"E-&gt;J"ボタンが現れます。</li>
+<li><del>単語を選択し"E-&gt;J"ボタンをタップすると、ポップアップウィンドウで単語の意味を表示します。タップは<b>ゆっくり</b>するのが使い方のコツです。</del>(iOS5になって、ブタンのタップと同時に選択が解除されるようになってしまったようです。)</li>
+<li>選択せずに"E-&gt;J"ボタンをタップすると、ポップアップウィンドウで調べたい単語が入力できます。</li>
 <h3>共通</h3>
-<li>Twitter連携機能があります。調べた単語と意味を、<b>1時間後、1日後、1週間後、1ヶ月後にTwitterで知らせます。</b>繰り返し思い出して自然に覚えましょう。
+<li>Twitter連携機能があります。調べた単語と意味を、<b>1時間後、1日後、1週間後、1ヶ月後にTwitterで知らせます。</b>繰り返し思い出して自然に覚えましょう。</li>
+<li>発音機能があります。発音用ブックマークをタップすると調べた単語を発音します。</li>
 </ul>
 
 <h2>インストールの仕方</h2>
 <p>
 1. 下の欄にあなたのTwitter IDを入力してください。Twitter連携に興味がなければ空欄のままで結構です。<br>
-URL生成ボタンをタップすると、ページが変わりますのでそのページでインストールを続けてください。
+欄の隣のボタンのどちらかをタップすると、ページが変わりますのでそのページでインストールを続けてください。
 </p>
 <form action="">
 <label>Twitter ID: <input type="text" id="twitter_id" name="twitter_id"></label>
-<input type="button" value="ブックマークバーあり(iPadなど)" onclick="generate(bookmarklet_ipad());">
+<input type="button" value="ブックマークバーあり(パソコン,iPadなど)" onclick="generate(bookmarklet_ipad());">
 <input type="button" value="ブックマークバーなし(iPhoneなど)" onclick="generate(bookmarklet_iphone());">
 </form>
 
@@ -82,12 +81,14 @@ Twitterで<a href="http://twitter.com/#!/repeat_bot">@repeat_bot</a>をフォロ
 あなたがフォローしている人たちが調べた単語をTLに入れることができます。
 
 <h2>謝辞</h2>
+<p>
 バックエンドはHerokuのフリーアカウントを利用させていただいています。
 また、辞書データには根岸英語塾<a href="http://www.tagoemura.com/ptejdicfiles.html">PrepTuTorEJDIC</a>を利用させていただいています。ありがとうございます。
-
-<h2>連絡先</h2>
-ご意見、ご要望はichikawa.yuji at gmail.comまで是非お願いします。
+発音データは、Farlex, Inc.の<a href="http://www.thefreedictionary.com/">THE FREE DICTIONARY</a>を利用させていただいています。ありがとうございます。
 </p>
-<p align="center">Copyright (C) 2011 ICHIKAWA, Yuji All rights reserved.</p>
+<h2>連絡先</h2>
+ご意見、ご要望はTwitter ID <a href="http://twitter.com/#!/repeat_bot">@repeat_bot</a>まで是非お願いします。
+</p>
+<p align="center">Copyright (C) 2011 safari-park All rights reserved.</p>
 </body>
 </html>
