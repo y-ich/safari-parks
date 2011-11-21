@@ -3,8 +3,8 @@ gem 'rake'
 gem 'sinatra'
 gem 'thin'
 gem 'fast-stemmer'
-#gem 'sqlite3'
-gem 'pg'
+gem 'pg', :group => :production
+gem 'sqlite3-ruby', :group => :development
 gem 'activerecord'
 gem 'logger'
 gem 'delayed_job'
