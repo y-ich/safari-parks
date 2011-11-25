@@ -83,6 +83,7 @@ get '/dic/index.html' do
   erb :'dic/index'
 end
 
+
 get '/siphon' do
   redirect '/siphon/index.html'
 end

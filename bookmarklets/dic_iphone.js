@@ -32,8 +32,7 @@ javascript:{
 		if (w != null) {
 			s.id = 'dic_jsonp';
 			s.type = 'text/javascript';
-			s.src = 'http://safari-park.herokuapp.com/dic/search?Word=' +
-/*			s.src = 'http://192.168.1.8:9292/dic/search?Word=' + */
+			s.src = 'SERVER_DOMAIN/dic/search?Word=' +
 				w.replace(/^\s+/, '').replace(/\s+$/, '') + 
 				'&_callback=cb&twitter_id=&v=2';
 			d.body.appendChild(s);

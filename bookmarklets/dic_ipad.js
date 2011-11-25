@@ -5,7 +5,8 @@ javascript:{
     function cb(o) {
 		d.body.removeChild(s);
 		if (o.text.length) {
-			if (confirm(o.text)) (new Audio(o.wav_us)).play();
+			alert(o.text);
+			window.sp_pronounce = o.wav_us;
 		}
 		else {
 			alert(w + 'は見つかりませんでした');

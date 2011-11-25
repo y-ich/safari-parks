@@ -1,5 +1,18 @@
+<%# coding: UTF-8 %>
+<%
+require 'uri'
 
-
+def bookmarklet filename
+  File.open(filename, 'r') do |file|
+    js = URI.escape(file.read).sub(/SERVER_DOMAIN/) do |m|
+      '<%= ' + m + ' %%>'
+    end
+    js.sub(/twitter_id=/) do |m|
+      m + '" + document.getElementById(\'twitter_id\').value + "'
+    end
+  end
+end
+%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -9,14 +22,14 @@
 <meta charset="UTF-8">
 <script type="text/javascript">
 function bookmarklet_pc() {
-  return "javascript:%7Bvar%20d=document,w=d.getSelection().toString(),s=d.createElement(%22script%22);function%20cb(a)%7Bd.body.removeChild(s),a.text.length?confirm(a.text)&&(new%20Audio(a.wav_us)).play():alert(w+%22%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F%22)%7Dif(w.length==0)%7Bvar%20fs=window.frames;for(var%20i=0;i%3Cfs.length&&w.length==0;i++)fs[i].getSelection!=null&&(w=fs[i].getSelection().toString());w.length==0&&(w=prompt(%22%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B%22))%7Dw!=null&&(s.type=%22text/javascript%22,s.src=%22<%= SERVER_DOMAIN %>/dic/search?Word=%22+w.replace(/%5E%5Cs+/,%22%22).replace(/%5Cs+$/,%22%22)+%22&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "&v=2%22,d.body.appendChild(s))%7D;";
+  return "<%= bookmarklet 'bookmarklets/dic.min.js' %>";
 }
 function bookmarklet_ipad() {
-  return "javascript:%7Bvar%20d=document,w=d.getSelection().toString(),s=d.createElement(%22script%22);function%20cb(a)%7Bd.body.removeChild(s),a.text.length?(alert(a.text),window.sp_pronounce=a.wav_us):alert(w+%22%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F%22)%7Dif(w.length==0)%7Bvar%20fs=window.frames;for(var%20i=0;i%3Cfs.length&&w.length==0;i++)fs[i].getSelection!=null&&(w=fs[i].getSelection().toString());w.length==0&&(w=prompt(%22%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B%22))%7Dw!=null&&(s.type=%22text/javascript%22,s.src=%22<%= SERVER_DOMAIN %>/dic/search?Word=%22+w.replace(/%5E%5Cs+/,%22%22).replace(/%5Cs+$/,%22%22)+%22&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "&v=2%22,d.body.appendChild(s))%7D;";
+  return "<%= bookmarklet 'bookmarklets/dic_ipad.min.js' %>";
 }
 
 function bookmarklet_iphone() {
-  return "javascript:%7Bvar%20d=document,wi=window,e=d.createElement(%22button%22);function%20cb(a)%7Bd.body.removeChild(d.getElementById(%22dic_jsonp%22)),a.text.length?(alert(a.text),window.sp_pronounce=a.wav_us):alert(w+%22%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F%22)%7De.id=%22dicButton%22,e.type=%22button%22,e.style.position=%22absolute%22,e.style.top=wi.pageYOffset+wi.innerHeight-24+%22px%22,e.style.left=wi.pageXOffset+wi.innerWidth-56+%22px%22,e.appendChild(d.createTextNode(%22E-%3EJ%22)),e.onclick=function()%7Bvar%20a=d.getSelection().toString(),b=d.createElement(%22script%22);if(a.length==0)%7Bvar%20c=window.frames;for(var%20e=0;e%3Cc.length&&a.length==0;e++)c[e].getSelection!=null&&(a=c[e].getSelection().toString());a.length==0&&(a=prompt(%22%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B%22))%7Da!=null&&(b.id=%22dic_jsonp%22,b.type=%22text/javascript%22,b.src=%22<%= SERVER_DOMAIN %>/dic/search?Word=%22+a.replace(/%5E%5Cs+/,%22%22).replace(/%5Cs+$/,%22%22)+%22&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "&v=2%22,d.body.appendChild(b))%7D,d.body.appendChild(e),wi.addEventListener(%22scroll%22,function()%7Bvar%20a=d.getElementById(%22dicButton%22);a.style.top=wi.pageYOffset+wi.innerHeight-24+%22px%22,a.style.left=wi.pageXOffset+wi.innerWidth-56+%22px%22%7D,!1)%7D;";
+  return "<%= bookmarklet 'bookmarklets/dic_iphone.min.js' %>";
 }
 
 function generate(uri) {
