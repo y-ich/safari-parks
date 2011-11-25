@@ -4,7 +4,7 @@ require 'uri'
 
 def bookmarklet filename
   File.open(filename, 'r') do |file|
-    URI.escape(file.read)
+    URI.encode(file.read)
   end
 end
 %>

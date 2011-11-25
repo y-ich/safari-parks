@@ -4,7 +4,7 @@ require 'uri'
 
 def bookmarklet filename
   File.open(filename, 'r') do |file|
-    js = URI.escape(file.read).sub(/SERVER_DOMAIN/) do |m|
+    js = URI.encode(file.read).sub(/SERVER_DOMAIN/) do |m|
       '<%= ' + m + ' %%>'
     end
     js.sub(/twitter_id=/) do |m|

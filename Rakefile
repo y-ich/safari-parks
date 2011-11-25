@@ -23,5 +23,6 @@ file 'public/dic/bml.html' => ['public/dic/bml.erb', 'bookmarklets/pronounce.min
 end
 
 rule(/\.min.js$/ => [proc {|file_name| file_name.sub(/\.min.js$/, '.js')}]) do |t|
-  sh "uglifyjs -o #{t.name} #{t.prerequisites[0]}"
+  sh "uglifyjs -o #{t.name}.tmp #{t.prerequisites[0]}"
+  sh "gsed -e \"y/\\\"/'/\" #{t.name}.tmp > #{t.name}"
 end
