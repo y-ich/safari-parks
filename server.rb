@@ -8,6 +8,7 @@
 
 require 'uri'
 require 'net/http'
+require 'erb'
 require 'sinatra'
 require 'fast_stemmer' #for stem
 require 'active_record'
@@ -25,11 +26,15 @@ configure do
 end
 
 configure :development, :test do
-  INTERVALS = [0, 1, 24]
   enable :logging, :dump_errors, :raise_errors
+#  SERVER_DOMAIN = 'http://192.168.1.8:9292'
+  SERVER_DOMAIN = 'http://192.168.1.9:9292'
+#  SERVER_DOMAIN = 'http://' + IPSocket::getaddress(Socket::gethostname) + ':9292'
+  INTERVALS = [0, 1, 24]
 end
 
 configure :production do
+  SERVER_DOMAIN = 'http://safari-park.herokuapp.com'
   INTERVALS = [1, 24, 24*7, 24*30]
 end
 
@@ -66,11 +71,16 @@ get '/' do
   redirect '/index.html'
 end
 
-get '/dic/' do
-  redirect '/dic/index.html'
-end
 get '/dic' do
-  redirect '/dic/index.html'
+  erb :'dic/index'
+end
+
+get '/dic/' do
+  erb :'dic/index'
+end
+
+get '/dic/index.html' do
+  erb :'dic/index'
 end
 
 get '/siphon' do
