@@ -5,7 +5,7 @@
   <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-<title>Twitter連携機能付き辞書ブックマークレットとAdd-on-Page</title>
+<title>Twitter連携機能付き辞書ブックマークレット</title>
 <meta charset="UTF-8">
 <script type="text/javascript">
 function bookmarklet_pc() {
@@ -16,7 +16,7 @@ function bookmarklet_ipad() {
 }
 
 function bookmarklet_iphone() {
-  return "javascript:%7Bvar%20d=document,wi=window,e=d.createElement(%22button%22);function%20cb(a)%7Bd.body.removeChild(d.getElementById(%22dic_jsonp%22)),a.text.length?(alert(a.text),window.sp_pronounce=a.wav_us):alert(w+%22%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F%22)%7De.id=%22dicButton%22,e.type=%22button%22,e.style.position=%22absolute%22,e.style.top=wi.pageYOffset+wi.innerHeight-24+%22px%22,e.style.left=wi.pageXOffset+wi.innerWidth-56+%22px%22,e.appendChild(d.createTextNode(%22E-%3EJ%22)),e.onclick=function()%7Bvar%20a=d.getSelection().toString(),b=d.createElement(%22script%22);if(a.length==0)%7Bvar%20c=window.frames;for(var%20e=0;e%3Cc.length&&a.length==0;e++)c[e].getSelection!=null&&(a=c[e].getSelection().toString());a.length==0&&(a=prompt(%22%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B%22))%7Da!=null&&(b.id=%22dic_jsonp%22,b.type=%22text/javascript%22,b.src=%22<%= SERVER_DOMAIN %>/dic/search?Word=%22+a.replace(/%5E%5Cs+/,%22%22).replace(/%5Cs+$/,%22%22)+%22&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "&v=2%22,d.body.appendChild(b))%7D,d.body.appendChild(e),wi.addEventListener(%22scroll%22,function()%7Bvar%20a=d.getElementById(%22dicButton%22);a.style.top=wi.pageYOffset+wi.innerHeight-24+%22px%22,a.style.left=wi.pageXOffset+wi.innerWidth-56+%22px%22%7D,!1)%7D;";
+  return "javascript:%7Bvar%20d=document,wi=window,e=d.createElement(%22button%22);function%20cb(a)%7Bd.body.removeChild(d.getElementById(%22dic_jsonp%22)),a.text.length?(alert(a.text),window.sp_pronounce=a.wav_us):alert(w+%22%E3%81%AF%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F%22)%7De.id=%22dicButton%22,e.type=%22button%22,e.style.position=%22absolute%22,e.style.top=wi.pageYOffset+wi.innerHeight-24+%22px%22,e.style.left=wi.pageXOffset+wi.innerWidth-56+%22px%22,e.appendChild(d.createTextNode(%22E-%3EJ%22)),e.ontouchstart=function()%7Bwi.sp_t=(new%20Date).getTime(),wi.sp_w=d.getSelection().toString()%7D,e.ontouchend=function()%7Bif((new%20Date).getTime()-wi.sp_t%3C500)%7Bvar%20a=wi.sp_w,b=d.createElement(%22script%22);if(a.length==0)%7Bvar%20c=window.frames;for(var%20e=0;e%3Cc.length&&a.length==0;e++)c[e].getSelection!=null&&(a=c[e].getSelection().toString());a.length==0&&(a=prompt(%22%E5%8D%98%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B%22))%7Da!=null&&(b.id=%22dic_jsonp%22,b.type=%22text/javascript%22,b.src=%22<%= SERVER_DOMAIN %>/dic/search?Word=%22+a.replace(/%5E%5Cs+/,%22%22).replace(/%5Cs+$/,%22%22)+%22&_callback=cb&twitter_id=" + document.getElementById('twitter_id').value + "&v=2%22,d.body.appendChild(b))%7Delse%20typeof%20window.sp_pronounce!=%22undefined%22&&window.sp_pronounce!==null?(new%20Audio(window.sp_pronounce)).play():alert(%22%E5%85%88%E3%81%AB%E5%8D%98%E8%AA%9E%E3%82%92%E8%AA%BF%E3%81%B9%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82%22)%7D,d.body.appendChild(e),wi.addEventListener(%22scroll%22,function()%7Bvar%20a=d.getElementById(%22dicButton%22);a.style.top=wi.pageYOffset+wi.innerHeight-24+%22px%22,a.style.left=wi.pageXOffset+wi.innerWidth-56+%22px%22%7D,!1)%7D;";
 }
 
 function generate(uri) {
@@ -50,22 +50,23 @@ iOS5以前では、Safariは辞書連携してくれませんでした。元々�
 </p><p>
 また別のアプローチでは、<a target="_blank" href="http://itunes.apple.com/jp/app/idict-for-advanced-learners/id348673070?mt=8">iDict+ for Advanced Learners</a>という辞書アプリケーションにウェブブラウザを取り込む方法があります。iOSがすべてのアプリで使える辞書機能を提供してくれない以上辞書アプリ化が王道ですが、しかし皆さんお気に入りのブラウザというものがありますよね。
 </p><p>
-そこで、単語の意味を<b>ポップアップウィンドウで表示</b>するブックマークレットを作成しました。iPhoneのSafariにはブックマークバーが表示されないからブックマークレットは使いにくい？その通りです。そのためにAdd-on-Pageも用意しました。
+そこで、単語の意味を<b>ポップアップウィンドウで表示</b>するブックマークレットを作成しました。iPhoneのSafariにはブックマークバーが表示されないからブックマークレットは使いにくい？その通りです。そのためにページにボタンを追加するブックマークレットも用意しました。
 <div align="center">iPadの場合<br><img src="images/safari.png"></div>
 <div align="center">iPhoneの場合<br><img src="images/iphone.png"></div>
 
-<h2>こんな機能のブックマークレット/Add-on-Pageです</h2>
+<h2>こんな機能のブックマークレットです</h2>
 <h3>ブックマークバーが表示されるブラウザでは</h3>
 <ul>
-<li>単語を選択しブックマークレットをタップすると、ポップアップウィンドウで単語の意味を表示します。</li>
-<li>選択せずにブックマークレットをタップすると、ポップアップウィンドウで調べたい単語が入力できます。</li>
+<li>単語を選択し辞書ブックマークレットをタップすると、ポップアップウィンドウで単語の意味を表示します。</li>
+<li>選択せずに辞書ブックマークレットをタップすると、ポップアップウィンドウで調べたい単語が入力できます。</li>
+<li>発音ブックマークレットを使うと、直近に調べた単語を発音します。</li>
 <h3>ブックマークバーが表示されないブラウザでは</h3>
 <li>辞書を使いたいウェブページでブックマークレットをタップしてください。上記画面のようにページの右下に"E-&gt;J"ボタンが現れます。</li>
-<li><del>単語を選択し"E-&gt;J"ボタンをタップすると、ポップアップウィンドウで単語の意味を表示します。タップは<b>ゆっくり</b>するのが使い方のコツです。</del>(iOS5になって、ブタンのタップと同時に選択が解除されるようになってしまったようです。)</li>
+<li><del>単語を選択し"E-&gt;J"ボタンをタップすると、ポップアップウィンドウで単語の意味を表示します。</li>
 <li>選択せずに"E-&gt;J"ボタンをタップすると、ポップアップウィンドウで調べたい単語が入力できます。</li>
+<li>"E-&gt;J"ボタンを長押し(0.5秒以上)すると、直近に調べた単語を発音します。</li>
 <h3>共通</h3>
 <li>Twitter連携機能があります。調べた単語と意味を、<b>1時間後、1日後、1週間後、1ヶ月後にTwitterで知らせます。</b>繰り返し思い出して自然に覚えましょう。</li>
-<li>発音機能があります。発音用ブックマークをタップすると調べた単語を発音します。</li>
 </ul>
 
 <h2>インストールの仕方</h2>
