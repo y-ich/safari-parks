@@ -31,10 +31,6 @@ function bookmarklet_ipad() {
 function bookmarklet_iphone() {
   return "<%= bookmarklet 'bookmarklets/dic_iphone.min.js' %>";
 }
-
-function generate(uri) {
-  document.location = 'bml.html#' + uri;
-}
 </script>
 <script type="text/javascript">
 
@@ -90,8 +86,8 @@ iOS5以前では、Safariは辞書連携してくれませんでした。元々�
 <form action="">
 <label>Twitter ID: <input type="text" id="twitter_id" name="twitter_id"></label>
 <input type="button" value="パソコン用" onclick="document.location = 'bml_pc.html#' + bookmarklet_pc();">
-<input type="button" value="iPad用" onclick="generate(bookmarklet_ipad());">
-<input type="button" value="iPhone用" onclick="generate(bookmarklet_iphone());">
+<input type="button" value="iPad用" onclick="document.location = 'bml.html#' + bookmarklet_ipad();">
+<input type="button" value="iPhone用" onclick="document.location = 'bml_iphone.html#' + bookmarklet_iphone();">
 </form>
 
 <h2>こんな風にも使えます</h2>
