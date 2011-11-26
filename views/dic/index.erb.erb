@@ -4,7 +4,7 @@ require 'uri'
 
 def bookmarklet filename
   File.open(filename, 'r') do |file|
-    js = URI.encode(file.read).sub(/SERVER_DOMAIN/) do |m|
+    js = URI.encode(file.read, /[^^-_.!~*'()a-zA-Z\d;\\\/?:@&=+$,\[\]%\{\}<>]/).sub(/SERVER_DOMAIN/) do |m|
       '<%= ' + m + ' %%>'
     end
     js.sub(/twitter_id=/) do |m|
@@ -99,7 +99,7 @@ Twitterで<a href="http://twitter.com/#!/repeat_bot">@repeat_bot</a>をフォロ
 <h2>謝辞</h2>
 <p>
 バックエンドはHerokuのフリーアカウントを利用させていただいています。
-また、辞書データには根岸英語塾<a href="http://www.tagoemura.com/ptejdicfiles.html">PrepTuTorEJDIC</a>を利用させていただいています。ありがとうございます。
+また、辞書データには根岸英語塾<a href="http://www.tagoemura.com/ptejdicfiles.html">PrepTuTorEJDIC</a>を利用させていただいています。
 発音データは、Farlex, Inc.の<a href="http://www.thefreedictionary.com/">THE FREE DICTIONARY</a>を利用させていただいています。ありがとうございます。
 </p>
 <h2>連絡先</h2>

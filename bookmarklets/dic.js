@@ -12,18 +12,18 @@ javascript:{
 		}
     }
     if (w.length == 0) {
-	var fs = window.frames;
-	for (var i = 0; (i < fs.length) && (w.length == 0); i++) {
-	    if (fs[i].getSelection != null)
-		w = fs[i].getSelection().toString();
-	}
-	if (w.length == 0) w = prompt('単語を入力');
+		var fs = window.frames;
+		for (var i = 0; (i < fs.length) && (w.length == 0); i++) {
+			if (fs[i].getSelection != null)
+				w = fs[i].getSelection().toString(); 
+		}
+		if (w.length == 0) w = prompt('単語を入力');
     }
     if (w != null) {
-	s.type = 'text/javascript';
-	s.src = 'SERVER_DOMAIN/dic/search?Word=' +
-	    w.replace(/^\s+/, '').replace(/\s+$/, '') + 
-	    '&_callback=cb&twitter_id=&v=2';
-	d.body.appendChild(s);
+		s.type = 'text/javascript';
+		s.src = 'SERVER_DOMAIN/dic/search?Word=' +
+			w.replace(/^\s+/, '').replace(/\s+$/, '') + 
+			'&_callback=cb&twitter_id=&v=2';
+		d.body.appendChild(s);
     }
 }
