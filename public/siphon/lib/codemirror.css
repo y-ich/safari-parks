@@ -24,6 +24,7 @@
   text-align: right;
   padding: .4em .2em .4em .4em;
   white-space: pre !important;
+  background-color: white;
 }
 .CodeMirror-lines {
   padding: .4em;
