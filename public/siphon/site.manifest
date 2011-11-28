@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# version 159
+# version 183
 
 CACHE:
 siphon.html
@@ -15,9 +15,16 @@ images/icon.png
 images/favicon.ico
 images/startup.png
 http://documentcloud.github.com/underscore/underscore-min.js
-prelude/coffeekup.js
 http://processingjs.org/content/download/processing-js-1.3.6/processing-1.3.6-api.min.js
+http://autotelicum.github.com/Smooth-CoffeeScript/SmoothCoffeeScript.html
+http://documentcloud.github.com/underscore/
+http://dry.ly/2011/02/21/coffeescript--processingjs--crazy-delicious/
 
 NETWORK:
 ../sounds/bin090208110829001.mp3
 http://www.google-analytics.com/
+
+FALLBACK:
+http://autotelicum.github.com/Smooth-CoffeeScript/SmoothCoffeeScript.html	missing.html
+http://documentcloud.github.com/underscore/	missing.html
+http://dry.ly/2011/02/21/coffeescript--processingjs--crazy-delicious/	missing.html
