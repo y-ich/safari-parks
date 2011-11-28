@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html manifest="site.manifest">
   <head>
@@ -59,7 +60,6 @@
 		  <select id="import" data-icon="plus" data-iconpos="left">
 			<option value="" disabled="true">Import...</option>
 			<option value="http://documentcloud.github.com/underscore/underscore-min.js">Underscore.js: functional programming support</option>
-			<option value="prelude/coffeekup.js">CoffeeKup: markup language</option>
 			<option value="http://processingjs.org/content/download/processing-js-1.3.6/processing-1.3.6-api.min.js">Processing.js API: APIs in visualition language</option>
 		  </select>
 		  <div id="about" data-role="button" data-icon="info">About Siphon</div>
@@ -127,7 +127,7 @@
 			<li><a href="#compiledpage">Compiled Code</a></li>
 			<li><a href="#runpage" class="run">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#refpage">References</a></li>
+			<li><a href="#smooth">References</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -146,8 +146,8 @@
 			<li><a href="#editorpage">Editor</a></li>
 			<li><a href="#compiledpage" class="ui-btn-active ui-state-persist">Compiled Code</a></li>
 			<li><a href="#runpage" class="run">Run</a></li>
-			<li><a href="#refpage">References</a></li>
 			<li><a href="#settingpage">Setting</a></li>
+			<li><a href="#smooth">References</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -167,7 +167,7 @@
 			<li><a href="#compiledpage" >Compiled Code</a></li>
 			<li><a href="#runpage" class="run ui-btn-active ui-state-persist">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#refpage" class="">References</a></li>
+			<li><a href="#smooth">References</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -190,36 +190,65 @@
 			<li><a href="#compiledpage" >Compiled Code</a></li>
 			<li><a href="#runpage" class="run">Run</a></li>
 			<li><a href="#settingpage" class="ui-btn-active ui-state-persist">Setting</a></li>
-			<li><a href="#refpage">References</a></li>
+			<li><a href="#smooth">References</a></li>
 		  </ul>
 		</div>
 	  </div>
 	</div>
-
-	<div data-role="page" id="refpage" data-theme="c">
+	<div data-role="page" id="smooth" data-theme="c">
 	  <div data-role="header" data-theme="c">
-		<h1>References</h1>
+		<h1>Smooth CoffeeScript</h1>
 	  </div>
 	  <div data-role="content">
-		<ol>
-		  <li><a href="http://autotelicum.github.com/Smooth-CoffeeScript/SmoothCoffeeScript.html">"Smooth CoffeeScipt"</a></li>
-		  <li><a href="http://documentcloud.github.com/underscore/">"Underscore.js"</a></li>
-		  <li><a href="http://coffeekup.org/">"CoffeeKup is markup as CoffeeScript."</a></li>
-		  <li><a href="http://dry.ly/2011/02/21/coffeescript--processingjs--crazy-delicious/">"CoffeeScript + Processing.js == Crazy Delicious"</a></li>
-		</ol>
+		<iframe src="http://autotelicum.github.com/Smooth-CoffeeScript/SmoothCoffeeScript.html"></iframe>
 	  </div>
 	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
 		<div data-role="navbar">
 		  <ul>
 			<li><a href="#editorpage">Editor</a></li>
-			<li><a href="#compiledpage" >Compiled Code</a></li>
-			<li><a href="#runpage" class="run">Run</a></li>
-			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#refpage" class="ui-btn-active ui-state-persist">References</a></li>
+			<li><a href="#smooth" class="ui-btn-active ui-state-persist">Smooth CofeeScript</a></li>
+			<li><a href="#underscore">Underscore.js</a></li>
+			<li><a href="#processing">Processing</a></li>
 		  </ul>
 		</div>
 	  </div>
 	</div>
 
+	<div data-role="page" id="underscore" data-theme="c">
+	  <div data-role="header" data-theme="c">
+		<h1>Underscore.js</h1>
+	  </div>
+	  <div data-role="content">
+		<iframe src="http://documentcloud.github.com/underscore/"></iframe>
+	  </div>
+	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
+		<div data-role="navbar">
+		  <ul>
+			<li><a href="#editorpage">Editor</a></li>
+			<li><a href="#smooth">Smooth CofeeScript</a></li>
+			<li><a href="#underscore" class="ui-btn-active ui-state-persist">Underscore.js</a></li>
+			<li><a href="#processing">Processing</a></li>
+		  </ul>
+		</div>
+	  </div>
+	</div>
+	<div data-role="page" id="processing" data-theme="c">
+	  <div data-role="header" data-theme="c">
+		<h1>CoffeeScript + Processing.js == Crazy Delicious</h1>
+	  </div>
+	  <div data-role="content">
+		<iframe src="http://dry.ly/2011/02/21/coffeescript--processingjs--crazy-delicious/"></iframe>
+	  </div>
+	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
+		<div data-role="navbar">
+		  <ul>
+			<li><a href="#editorpage">Editor</a></li>
+			<li><a href="#smooth">Smooth CofeeScript</a></li>
+			<li><a href="#underscore">Underscore.js</a></li>
+			<li><a href="#processing" class="ui-btn-active ui-state-persist">Processing</a></li>
+		  </ul>
+		</div>
+	  </div>
+	</div>
   </body>
 </html>
