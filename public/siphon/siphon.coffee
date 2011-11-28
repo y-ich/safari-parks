@@ -27,7 +27,7 @@ capitalize = (word) -> word.substring(0, 1).toUpperCase() + word.substring(1)
 # code snippets
 #
 
-# inserts str at current caret position in #edit textarea.
+# inserts str at current caret position in CodeMirror.
 stringInput = (str) ->
     codeMirror.replaceRange(str, codeMirror.getCursor())
 
@@ -91,7 +91,7 @@ iOSKeyboardHeight = 307
 layoutEditor = ->
     restHeight = window.innerHeight -
         $('.ui-header').outerHeight(true) - $('#error').outerHeight(true) -
-        ($('#edit').outerHeight(true) - $('#edit').height()) -
+        ($('.CodeMirror').outerHeight(true) - $('.CodeMirror').height()) -
         $('.ui-footer').outerHeight(true)
     if $('#keyboard-on')[0].checked
         keybackHeight = iOSKeyboardHeight + $('#keys').outerHeight(true) -
@@ -102,8 +102,8 @@ layoutEditor = ->
     else
         $('#keyback').css('display', 'none')
     restHeight = Math.max(restHeight, 12)
-    $('#edit').css('height', restHeight + 'px')
-    $('#edit').css('max-height', restHeight + 'px')
+    $('.CodeMirror').css('height', restHeight + 'px')
+    $('.CodeMirror').css('max-height', restHeight + 'px')
 
 #
 # global variables
@@ -332,7 +332,7 @@ $(document).ready ->
     # menu bar
     #
     $('#new').click ->
-        $('#edit').val('')
+        codeMirror.setValue('')
         currentFile = null
 
     $('#save').click ->
