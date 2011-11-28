@@ -6,8 +6,12 @@
 # parameters
 #
 
+# editor
+codeMirror = null
+
 # operation mode
 debugMode = false
+
 
 # constants
 holdTime = 400 # milli seconds
@@ -25,18 +29,11 @@ capitalize = (word) -> word.substring(0, 1).toUpperCase() + word.substring(1)
 
 # inserts str at current caret position in #edit textarea.
 stringInput = (str) ->
-    edit = $('#edit')[0]
-    edit.focus()
-    pos = edit.selectionStart
+    codeMirror.replaceRange(str, codeMirror.getCursor())
 
-    edit.value = edit.value.slice(0, pos) + str + edit.value.slice(pos);
-    pos = pos + str.length;
-    edit.setSelectionRange(pos, pos); # resetting caret position.
-
-
-# compiles the code in #edit textarea into window.compiledJS.
+# compiles the code in codeMirror into window.compiledJS.
 compileSource = ->
-    source = $('#edit').val()
+    source = codeMirror.getValue()
     window.compiledJS = ''
     try
         window.compiledJS = CoffeeScript.compile source, bare: on
@@ -86,7 +83,7 @@ resetSelects = ->
 clickSaveas = ->
         currentFile = prompt 'filename:'
         return if not currentFile?
-        localStorage.setItem(currentFile, $('#edit').val())
+        localStorage.setItem(currentFile, codeMirror.getValue())
         resetSelects()
 
 iOSKeyboardHeight = 307
@@ -282,6 +279,9 @@ $(document).ready ->
     # jQuery Mobile setting
     $('#editorpage').addBackBtn = false # no back button on top page.
 
+    codeMirror = CodeMirror.fromTextArea $('#edit')[0],
+        onChange: -> compileSource()
+
     layoutEditor()
 
     # problem
@@ -326,14 +326,6 @@ $(document).ready ->
 
     $('.key.main').bind 'touchend', (event) -> this.model.touchEnd()
 
-    $('#edit').focus()
-	# problem
-    # My intention is to show native keyboard on load,
-    # but just focus, no keyboard on iPad.
-
-    # real-time compiling for native soft keyboard.
-    $('#edit').keyup -> compileSource()
-
     $('.run').click -> evalJS()
 
     #
@@ -347,7 +339,7 @@ $(document).ready ->
         if not currentFile? or currentFile is ''
             clickSaveas()
         else
-            localStorage.setItem(currentFile, $('#edit').val())
+            localStorage.setItem(currentFile, codeMirror.getValue())
             alert '"' + currentFile + '" was saved.'
 
     $('#saveas').click clickSaveas
@@ -360,7 +352,7 @@ $(document).ready ->
     $('#open').change ->
         currentFile = $('#open')[0].value
         if currentFile? and currentFile isnt ''
-            $('#edit').val localStorage[$('#open')[0].value]
+            codeMirror.setValue localStorage[$('#open')[0].value]
         $('#open')[0].selectedIndex = 0 # index = 0 means "Open..."
         $('#open').selectmenu('refresh')
 

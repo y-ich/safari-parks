@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# version 159
+# version 179
 
 CACHE:
 siphon.html
@@ -17,6 +17,10 @@ images/startup.png
 http://documentcloud.github.com/underscore/underscore-min.js
 prelude/coffeekup.js
 http://processingjs.org/content/download/processing-js-1.3.6/processing-1.3.6-api.min.js
+lib/codemirror.css
+theme/default.css
+lib/codemirror.js
+mode/coffeescript/coffeescript.js
 
 NETWORK:
 ../sounds/bin090208110829001.mp3
