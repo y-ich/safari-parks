@@ -41,7 +41,7 @@ var CodeMirror = (function() {
         mover = code.firstChild, gutter = mover.firstChild, gutterText = gutter.firstChild,
         lineSpace = gutter.nextSibling.firstChild, measure = lineSpace.firstChild,
         cursor = measure.nextSibling, lineDiv = cursor.nextSibling;
-    if (/Mobile\/\w+ Safari\//.test(navigator.userAgent)) input.style.width = "0px";
+    if (/Mobile\//.test(navigator.userAgent)) input.style.width = "0px";
     if (!webkit) lineSpace.draggable = true;
     if (options.tabindex != null) input.tabindex = options.tabindex;
     if (!options.gutter && !options.lineNumbers) gutter.style.display = "none";
