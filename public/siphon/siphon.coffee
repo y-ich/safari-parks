@@ -102,8 +102,7 @@ layoutEditor = ->
     else
         $('#keyback').css('display', 'none')
     restHeight = Math.max(restHeight, 12)
-    $('.CodeMirror').css('height', restHeight + 'px')
-    $('.CodeMirror').css('max-height', restHeight + 'px')
+    codeMirror.getScrollerElement().style.height = restHeight + 'px'
 
 #
 # global variables
