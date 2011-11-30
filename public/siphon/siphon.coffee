@@ -103,6 +103,7 @@ layoutEditor = ->
         $('#keyback').css('display', 'none')
     restHeight = Math.max(restHeight, 12)
     codeMirror.getScrollerElement().style.height = restHeight + 'px'
+    codeMirror.refresh()
 
 #
 # global variables
@@ -271,7 +272,6 @@ window.applicationCache.addEventListener 'error', ->
     alert 'Sorry. Application cache error.' if debugMode
     # error occurs offline without calling update().
 
-
 $(document).ready ->
     window.applicationCache.update() if navigator.onLine
 
@@ -344,7 +344,7 @@ $(document).ready ->
     $('#saveas').click clickSaveas
 
     $('#about').click ->
-        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.3.0\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
+        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.3.1\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
 
     resetSelects() # "Open...", and "Delete..." menus
 
