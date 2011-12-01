@@ -63,7 +63,7 @@
 		  <ul>
 			<li><a href="#editorpage" class="ui-btn-active ui-state-persist">Editor</a></li>
 			<li><a href="#compiledpage">Compiled Code</a></li>
-			<li><a href="#runpage" class="run">Run</a></li>
+			<li><a href="#" class="run">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
 			<li><a href="#smooth" data-transition="flip">References</a></li>
 		  </ul>
@@ -133,7 +133,7 @@
 		  <ul>
 			<li><a href="#editorpage">Editor</a></li>
 			<li><a href="#compiledpage" class="ui-btn-active ui-state-persist">Compiled Code</a></li>
-			<li><a href="#runpage" class="run">Run</a></li>
+			<li><a href="#" class="run">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
 			<li><a href="#smooth" data-transition="flip">References</a></li>
 		  </ul>
@@ -151,7 +151,7 @@
 		  <ul>
 			<li><a href="#editorpage">Editor</a></li>
 			<li><a href="#compiledpage" >Compiled Code</a></li>
-			<li><a href="#runpage" class="run ui-btn-active ui-state-persist">Run</a></li>
+			<li><a href="#" class="run ui-btn-active ui-state-persist">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
 			<li><a href="#smooth" data-transition="flip">References</a></li>
 		  </ul>
@@ -169,17 +169,21 @@
 		  <ul>
 			<li><a href="#editorpage">Editor</a></li>
 			<li><a href="#compiledpage" >Compiled Code</a></li>
-			<li><a href="#runpage" class="run">Run</a></li>
+			<li><a href="#" class="run">Run</a></li>
 			<li><a href="#settingpage" class="ui-btn-active ui-state-persist">Setting</a></li>
 			<li><a href="#smooth" data-transition="flip">References</a></li>
 		  </ul>
 		</div>
 	  </div>
 	  <div data-role="content">
-		<form date-inset="true">
-		  <input type="checkbox" id="keyboard-on" />
-		  <label for="keyboard-on">Software keyboard enhancement: on</label>
-		</form>
+		<div data-role="fieldcontain" date-inset="true">
+		  <fieldset data-role="controlgroup">
+			<input type="checkbox" id="keyboard-on" />
+			<label for="keyboard-on">Enables keyboard enhancement for iPad.</label>
+			<input type="checkbox" id="key-sound" checked />
+			<label for="key-sound">Enables click sound of the above keyboard enhancement.</label>
+		  </fieldset>
+		</div>
 	  </div>
 	</div>
 	<div data-role="page" id="smooth" data-theme="c">

@@ -46,8 +46,8 @@ compileSource = ->
     catch error
         $('#error').text(error.message)
 
-# evaluates the compiled js.
-evalJS = ->
+run = ->
+    document.location = '#runpage' if /#canvas/.test(window.compiledJS)
     try
         eval window.compiledJS
     catch error
@@ -114,6 +114,7 @@ currentFile = null
 
 # key sound
 keySound = new Audio '../sounds/bin090208110829001.mp3'
+keySound.enable = true
 
 #
 # software key with upper flick
@@ -167,7 +168,7 @@ class KeyFSM
         @timer = null
 
     touchStart: (startX, startY) ->
-        keySound.play()
+        keySound.play() if keySound.enable
         @startX = startX
         @startY = startY
         @setState keyActive
@@ -325,7 +326,7 @@ $(document).ready ->
 
     $('.key.main').bind 'touchend', (event) -> this.model.touchEnd()
 
-    $('.run').click -> evalJS()
+    $('.run').click -> run()
 
     #
     # menu bar
@@ -378,5 +379,7 @@ $(document).ready ->
         $('#import').selectmenu('refresh')
 
     $('#keyboard-on').change layoutEditor
+    $('#key-sound').change ->
+        keySound.enable = if $('#key-sound')[0].checked then true else false
 
     compileSource()
