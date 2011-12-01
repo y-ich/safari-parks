@@ -11,7 +11,7 @@ codeMirror = null
 
 # operation mode
 debugMode = false
-
+cacheCheck = true
 
 # constants
 holdTime = 400 # milli seconds
@@ -273,7 +273,7 @@ window.applicationCache.addEventListener 'error', ->
     # error occurs offline without calling update().
 
 $(document).ready ->
-    window.applicationCache.update() if navigator.onLine
+    window.applicationCache.update() if cacheCheck and navigator.onLine
 
     # jQuery Mobile setting
     $('#editorpage').addBackBtn = false # no back button on top page.
@@ -344,7 +344,7 @@ $(document).ready ->
     $('#saveas').click clickSaveas
 
     $('#about').click ->
-        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.3.1\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
+        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.3.2\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
 
     resetSelects() # "Open...", and "Delete..." menus
 

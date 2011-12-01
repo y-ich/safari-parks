@@ -19,10 +19,6 @@
 	<link rel="stylesheet" href="theme/default.css">
 	<link rel="stylesheet" type="text/css" href="siphon.css" />
 	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-	<script>
-	  $(document).bind("mobileinit", function(){
-	  $.mobile.page.prototype.options.addBackBtn = true;});
-	</script>
 	<script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
 	<script src="lib/codemirror.js"></script>
 	<script src="mode/coffeescript/coffeescript.js"></script>
@@ -46,7 +42,7 @@
 
   <body>
 	<div data-role="page" id="editorpage" data-theme="c">
-	  <div data-role="header" class="ui-bar" data-theme="c" data-type="horizontal" data-backbtn="false">
+	  <div data-role="header" class="ui-bar" data-theme="c" data-type="horizontal">
 		<div data-role="controlgroup" data-type="horizontal">
 		  <select id="open" data-icon="grid" data-iconpos="left">
 			<option>Open...</option>
@@ -62,6 +58,15 @@
 			<option value="http://processingjs.org/content/download/processing-js-1.3.6/processing-1.3.6-api.min.js">Processing.js API: APIs in visualition language</option>
 		  </select>
 		  <div id="about" data-role="button" data-icon="info">About Siphon</div>
+		</div>
+		<div data-role="navbar">
+		  <ul>
+			<li><a href="#editorpage" class="ui-btn-active ui-state-persist">Editor</a></li>
+			<li><a href="#compiledpage">Compiled Code</a></li>
+			<li><a href="#runpage" class="run">Run</a></li>
+			<li><a href="#settingpage">Setting</a></li>
+			<li><a href="#smooth" data-transition="flip">References</a></li>
+		  </ul>
 		</div>
 	  </div>
 	  <div data-role="content" id="main">
@@ -119,62 +124,56 @@
 		  </div>
 		</div>
 	  </div>
-	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
-		<div data-role="navbar">
-		  <ul>
-			<li><a href="#editorpage" class="ui-btn-active ui-state-persist">Editor</a></li>
-			<li><a href="#compiledpage">Compiled Code</a></li>
-			<li><a href="#runpage" class="run">Run</a></li>
-			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#smooth">References</a></li>
-		  </ul>
-		</div>
-	  </div>
 	</div>
 
 	<div data-role="page" id="compiledpage" data-theme="c">
 	  <div data-role="header" data-theme="c">
 		<h1>Compiled JavaScript Code</h1>
-	  </div>
-	  <div data-role="content">
-		<pre id="compiled" class="scroll"></pre>
-	  </div>
-	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
 		<div data-role="navbar">
 		  <ul>
 			<li><a href="#editorpage">Editor</a></li>
 			<li><a href="#compiledpage" class="ui-btn-active ui-state-persist">Compiled Code</a></li>
 			<li><a href="#runpage" class="run">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#smooth">References</a></li>
+			<li><a href="#smooth" data-transition="flip">References</a></li>
 		  </ul>
 		</div>
+	  </div>
+	  <div data-role="content">
+		<pre id="compiled" class="scroll"></pre>
 	  </div>
 	</div>
 
 	<div data-role="page" id="runpage" data-theme="c">
 	  <div data-role="header" data-theme="c">
 		<h1>Execution</h1>
-	  </div>
-	  <div data-role="content">
-		<canvas id="canvas"></canvas>
-	  </div>
-	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
 		<div data-role="navbar">
 		  <ul>
 			<li><a href="#editorpage">Editor</a></li>
 			<li><a href="#compiledpage" >Compiled Code</a></li>
 			<li><a href="#runpage" class="run ui-btn-active ui-state-persist">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#smooth">References</a></li>
+			<li><a href="#smooth" data-transition="flip">References</a></li>
 		  </ul>
 		</div>
+	  </div>
+	  <div data-role="content">
+		<canvas id="canvas"></canvas>
 	  </div>
 	</div>
 
 	<div data-role="page" id="settingpage" data-theme="c">
 	  <div data-role="header" data-theme="c">
 		<h1>Siphon Setting</h1>
+		<div data-role="navbar">
+		  <ul>
+			<li><a href="#editorpage">Editor</a></li>
+			<li><a href="#compiledpage" >Compiled Code</a></li>
+			<li><a href="#runpage" class="run">Run</a></li>
+			<li><a href="#settingpage" class="ui-btn-active ui-state-persist">Setting</a></li>
+			<li><a href="#smooth" data-transition="flip">References</a></li>
+		  </ul>
+		</div>
 	  </div>
 	  <div data-role="content">
 		<form date-inset="true">
@@ -182,72 +181,63 @@
 		  <label for="keyboard-on">Software keyboard enhancement: on</label>
 		</form>
 	  </div>
-	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
-		<div data-role="navbar">
-		  <ul>
-			<li><a href="#editorpage">Editor</a></li>
-			<li><a href="#compiledpage" >Compiled Code</a></li>
-			<li><a href="#runpage" class="run">Run</a></li>
-			<li><a href="#settingpage" class="ui-btn-active ui-state-persist">Setting</a></li>
-			<li><a href="#smooth">References</a></li>
-		  </ul>
-		</div>
-	  </div>
 	</div>
 	<div data-role="page" id="smooth" data-theme="c">
 	  <div data-role="header" data-theme="c">
 		<h1>Smooth CoffeeScript</h1>
-	  </div>
-	  <div data-role="content" style="height: 100%;">
-		<iframe src="http://autotelicum.github.com/Smooth-CoffeeScript/SmoothCoffeeScript.html" width="100%" height="100%"></iframe>
-	  </div>
-	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
 		<div data-role="navbar">
 		  <ul>
-			<li><a href="#editorpage">Editor</a></li>
+			<li><a href="#editorpage" data-transition="flip">Editor</a></li>
+			<li></li>
+			<li></li>
+			<li><a href="#underscore" data-transition="fade">Underscore.js</a></li>
+<!--			<li><a href="#processing">Processing</a></li> -->
 			<li><a href="#smooth" class="ui-btn-active ui-state-persist">Smooth CofeeScript</a></li>
-			<li><a href="#underscore">Underscore.js</a></li>
-			<li><a href="#processing">Processing</a></li>
 		  </ul>
 		</div>
+	  </div>
+	  <div data-role="content" style="height: 100%;">
+		<iframe src="Smooth CoffeeScript.html" width="100%" height="100%"></iframe>
 	  </div>
 	</div>
 
 	<div data-role="page" id="underscore" data-theme="c">
 	  <div data-role="header" data-theme="c">
 		<h1>Underscore.js</h1>
-	  </div>
-	  <div data-role="content" style="height: 100%;">
-		<iframe src="http://documentcloud.github.com/underscore/" width="100%" height="100%"></iframe>
-	  </div>
-	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
 		<div data-role="navbar">
 		  <ul>
-			<li><a href="#editorpage">Editor</a></li>
-			<li><a href="#smooth">Smooth CofeeScript</a></li>
+			<li><a href="#editorpage" data-transition="flip">Editor</a></li>
+			<li></li>
+			<li></li>
 			<li><a href="#underscore" class="ui-btn-active ui-state-persist">Underscore.js</a></li>
-			<li><a href="#processing">Processing</a></li>
+<!--			<li><a href="#processing">Processing</a></li> -->
+			<li><a href="#smooth" data-transition="fade">Smooth CofeeScript</a></li>
 		  </ul>
 		</div>
 	  </div>
+	  <div data-role="content" style="height: 100%;">
+		<iframe src="Underscore.js.html" width="100%" height="100%"></iframe>
+	  </div>
 	</div>
+<!--
 	<div data-role="page" id="processing" data-theme="c">
 	  <div data-role="header" data-theme="c">
 		<h1>CoffeeScript + Processing.js == Crazy Delicious</h1>
+		<div data-role="navbar">
+		  <ul>
+			<li><a href="#editorpage">Editor</a></li>
+			<li></li>
+			<li></li>
+			<li><a href="#underscore">Underscore.js</a></li>
+			<li><a href="#processing" class="ui-btn-active ui-state-persist">Processing</a></li>
+			<li><a href="#smooth">Smooth CofeeScript</a></li>
+		  </ul>
+		</div>
 	  </div>
 	  <div data-role="content" style="height: 100%;">
 		<iframe src="http://dry.ly/2011/02/21/coffeescript--processingjs--crazy-delicious/" width="100%" height="100%"></iframe>
 	  </div>
-	  <div data-role="footer" data-position="fixed" data-theme="c" data-id="footer">
-		<div data-role="navbar">
-		  <ul>
-			<li><a href="#editorpage">Editor</a></li>
-			<li><a href="#smooth">Smooth CofeeScript</a></li>
-			<li><a href="#underscore">Underscore.js</a></li>
-			<li><a href="#processing" class="ui-btn-active ui-state-persist">Processing</a></li>
-		  </ul>
-		</div>
-	  </div>
 	</div>
+-->
   </body>
 </html>
