@@ -22,7 +22,7 @@ var CodeMirror = (function() {
     // This mess creates the base DOM structure for the editor.
     wrapper.innerHTML =
       '<div style="overflow: hidden; position: relative; width: 1px; height: 0px;">' + // Wraps and hides input textarea
-        '<textarea style="position: absolute; padding: 0; width: 0px;" wrap="off" ' +
+        '<textarea style="position: absolute; padding: 0; width: 1px;" wrap="off" ' +
           'autocorrect="off" autocapitalize="off"></textarea></div>' +
       '<div class="CodeMirror-scroll cm-s-' + options.theme + '">' +
         '<div style="position: relative">' + // Set to the height of the text, causes scrolling
@@ -119,6 +119,11 @@ var CodeMirror = (function() {
     connect(input, "keypress", operation(onKeyPress));
     connect(input, "focus", onFocus);
     connect(input, "blur", onBlur);
+
+    // In order to improve unexpected scroll during inputting on iPad. by ichikawa.
+    var bodyTop = 0;
+    connect(input, "mousedown", function() {bodyTop = document.body.scrollTop;});
+    connect(input, "focus", function() {window.scrollTo(0, bodyTop);});
 
     connect(scroller, "dragenter", e_stop);
     connect(scroller, "dragover", e_stop);

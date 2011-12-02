@@ -6,8 +6,8 @@
 # parameters
 #
 
-# editor
-codeMirror = null
+# editor object
+editor = null
 
 # operation mode
 debugMode = false
@@ -27,13 +27,9 @@ capitalize = (word) -> word.substring(0, 1).toUpperCase() + word.substring(1)
 # code snippets
 #
 
-# inserts str at current caret position in CodeMirror.
-stringInput = (str) ->
-    codeMirror.replaceRange(str, codeMirror.getCursor())
-
-# compiles the code in codeMirror into window.compiledJS.
+# compiles the code in editor into window.compiledJS.
 compileSource = ->
-    source = codeMirror.getValue()
+    source = editor.getValue()
     window.compiledJS = ''
     try
         window.compiledJS = CoffeeScript.compile source, bare: on
@@ -83,27 +79,25 @@ resetSelects = ->
 clickSaveas = ->
         currentFile = prompt 'filename:'
         return if not currentFile?
-        localStorage.setItem(currentFile, codeMirror.getValue())
+        localStorage.setItem(currentFile, editor.getValue())
         resetSelects()
 
 iOSKeyboardHeight = 307
 
 layoutEditor = ->
     restHeight = window.innerHeight -
-        $('.ui-header').outerHeight(true) - $('#error').outerHeight(true) -
-        ($('.CodeMirror').outerHeight(true) - $('.CodeMirror').height()) -
-        $('.ui-footer').outerHeight(true)
+        $('.ui-header').outerHeight(true) -
+        $('#error').outerHeight(true) -
+        ($(editor.element).outerHeight(true) - $(editor.element).height())
     if $('#keyboard-on')[0].checked
-        keybackHeight = iOSKeyboardHeight + $('#keys').outerHeight(true) -
-            $('.ui-footer').outerHeight(true)
+        $('#keyback').css('display', 'block')
+        keybackHeight = iOSKeyboardHeight + $('#keys').outerHeight(true)
         restHeight -= keybackHeight
         $('#keyback').height(keybackHeight + 'px')
-        $('#keyback').css('display', 'block')
     else
         $('#keyback').css('display', 'none')
     restHeight = Math.max(restHeight, 12)
-    codeMirror.getScrollerElement().style.height = restHeight + 'px'
-    codeMirror.refresh()
+    editor.setHeight restHeight + 'px'
 
 #
 # global variables
@@ -219,9 +213,8 @@ keyActive.touchMove = (fsm, moveX, moveY) ->
 
 keyActive.touchEnd = (fsm) ->
     fsm.clearTimer()
-    stringInput fsm.observer.title
+    editor.insert fsm.observer.title
     fsm.setState keyInactive
-    compileSource()
 
 # subkey active state
 keySubActive = new KeyState()
@@ -236,9 +229,8 @@ keySubActive.touchMove = (fsm, moveX, moveY) ->
         fsm.setState keySubInactive
 
 keySubActive.touchEnd = (fsm) ->
-    stringInput fsm.subkey().title
+    editor.insert fsm.subkey().title
     fsm.setState keyInactive
-    compileSource()
 
 # subkey inactive state
 keySubInactive = new KeyState()
@@ -279,8 +271,32 @@ $(document).ready ->
     # jQuery Mobile setting
     $('#editorpage').addBackBtn = false # no back button on top page.
 
-    codeMirror = CodeMirror.fromTextArea $('#edit')[0],
-        onChange: -> compileSource()
+    if /iPad/.test(navigator.userAgent) or (debugMode and confirm('iPad mode?'))
+        $('#keyboard-on')[0].checked = true
+        editor =
+            element : $('#edit')[0]
+            getValue : -> this.element.value
+            setValue : (str) -> this.element.value = str
+            insert : (str) ->
+                this.element.focus()
+                pos = this.element.selectionStart
+                this.setValue this.getValue().slice(0, pos) + str + this.getValue().slice(pos);
+                pos = pos + str.length;
+                this.element.setSelectionRange(pos, pos); # resetting caret position
+                this.update()
+            setHeight : (str) ->
+                $(this.element).css('height', str)
+                $(this.element).css('max-height', str)
+            update : -> compileSource()
+        $(editor.element).keyup -> compileSource()
+    else
+        editor = CodeMirror.fromTextArea $('#edit')[0],
+            onChange: -> compileSource()
+        editor.element = editor.getWrapperElement()
+        editor.insert = (str) -> this.replaceRange(str, this.getCursor())
+        editor.setHeight = (str) ->
+            this.getScrollerElement().style.height = str
+            this.refresh()
 
     layoutEditor()
 
@@ -332,14 +348,14 @@ $(document).ready ->
     # menu bar
     #
     $('#new').click ->
-        codeMirror.setValue('')
+        editor.setValue('')
         currentFile = null
 
     $('#save').click ->
         if not currentFile? or currentFile is ''
             clickSaveas()
         else
-            localStorage.setItem(currentFile, codeMirror.getValue())
+            localStorage.setItem(currentFile, editor.getValue())
             alert '"' + currentFile + '" was saved.'
 
     $('#saveas').click clickSaveas
@@ -352,7 +368,7 @@ $(document).ready ->
     $('#open').change ->
         currentFile = $('#open')[0].value
         if currentFile? and currentFile isnt ''
-            codeMirror.setValue localStorage[$('#open')[0].value]
+            editor.setValue localStorage[$('#open')[0].value]
         $('#open')[0].selectedIndex = 0 # index = 0 means "Open..."
         $('#open').selectmenu('refresh')
 
@@ -379,7 +395,10 @@ $(document).ready ->
         $('#import').selectmenu('refresh')
 
     $('#keyboard-on').change layoutEditor
+
     $('#key-sound').change ->
         keySound.enable = if $('#key-sound')[0].checked then true else false
+
+    $('#codemirror').change ->
 
     compileSource()
