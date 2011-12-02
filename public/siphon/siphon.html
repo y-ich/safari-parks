@@ -65,7 +65,7 @@
 			<li><a href="#compiledpage">Compiled Code</a></li>
 			<li><a href="#" class="run">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#smooth" data-transition="flip">References</a></li>
+			<li><a href="#smooth" data-transition="fade">References</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -135,7 +135,7 @@
 			<li><a href="#compiledpage" class="ui-btn-active ui-state-persist">Compiled Code</a></li>
 			<li><a href="#" class="run">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#smooth" data-transition="flip">References</a></li>
+			<li><a href="#smooth" data-transition="fade">References</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -153,7 +153,7 @@
 			<li><a href="#compiledpage" >Compiled Code</a></li>
 			<li><a href="#" class="run ui-btn-active ui-state-persist">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#smooth" data-transition="flip">References</a></li>
+			<li><a href="#smooth" data-transition="fade">References</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -171,7 +171,7 @@
 			<li><a href="#compiledpage" >Compiled Code</a></li>
 			<li><a href="#" class="run">Run</a></li>
 			<li><a href="#settingpage" class="ui-btn-active ui-state-persist">Setting</a></li>
-			<li><a href="#smooth" data-transition="flip">References</a></li>
+			<li><a href="#smooth" data-transition="fade">References</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -187,20 +187,20 @@
 	  </div>
 	</div>
 	<div data-role="page" id="smooth" data-theme="c">
-	  <div data-role="header" data-theme="c">
+	  <div data-role="header" data-theme="c" data-position="fixed">
 		<h1>Smooth CoffeeScript</h1>
 		<div data-role="navbar">
 		  <ul>
-			<li><a href="#editorpage" data-transition="flip">Editor</a></li>
+			<li><a href="#editorpage" data-transition="fade">Editor</a></li>
 			<li></li>
 			<li></li>
-			<li><a href="#underscore" data-transition="fade">Underscore.js</a></li>
+			<li><a href="#underscore" data-transition="flip">Underscore.js</a></li>
 			<li><a href="#smooth" class="ui-btn-active ui-state-persist">Smooth CofeeScript</a></li>
 		  </ul>
 		</div>
 	  </div>
 	  <div data-role="content" style="height: 100%;">
-		<iframe src="Smooth CoffeeScript.html" width="100%" height="100%"></iframe>
+		<iframe src="Smooth CoffeeScript.html" width="100%" height="100%"></iframe><!-- width and height don't work on iPad but work on desktop. -->
 	  </div>
 	</div>
 
@@ -209,11 +209,11 @@
 		<h1>Underscore.js</h1>
 		<div data-role="navbar">
 		  <ul>
-			<li><a href="#editorpage" data-transition="flip">Editor</a></li>
+			<li><a href="#editorpage" data-transition="fade">Editor</a></li>
 			<li></li>
 			<li></li>
 			<li><a href="#underscore" class="ui-btn-active ui-state-persist">Underscore.js</a></li>
-			<li><a href="#smooth" data-transition="fade">Smooth CofeeScript</a></li>
+			<li><a href="#smooth" data-transition="flip">Smooth CofeeScript</a></li>
 		  </ul>
 		</div>
 	  </div>

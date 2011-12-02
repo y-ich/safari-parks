@@ -267,6 +267,7 @@ window.applicationCache.addEventListener 'error', ->
 
 $(document).ready ->
     window.applicationCache.update() if cacheCheck and navigator.onLine
+    window.addEventListener 'error', -> alert('onerror') if debugMode
 
     # jQuery Mobile setting
     $('#editorpage').addBackBtn = false # no back button on top page.
@@ -361,7 +362,7 @@ $(document).ready ->
     $('#saveas').click clickSaveas
 
     $('#about').click ->
-        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.3.3\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
+        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.3.4\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
 
     resetSelects() # "Open...", and "Delete..." menus
 
