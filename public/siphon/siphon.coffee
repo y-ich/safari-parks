@@ -11,7 +11,6 @@ editor = null
 
 # operation mode
 debugMode = false
-cacheCheck = true
 
 # constants
 holdTime = 400 # milli seconds
@@ -266,7 +265,10 @@ window.applicationCache.addEventListener 'error', ->
     # error occurs offline without calling update().
 
 $(document).ready ->
-    window.applicationCache.update() if cacheCheck and navigator.onLine
+    try
+        window.applicationCache.update() if navigator.onLine
+    catch e
+        console.log e if debugMode
     window.addEventListener 'error', -> alert('onerror') if debugMode
 
     # jQuery Mobile setting
