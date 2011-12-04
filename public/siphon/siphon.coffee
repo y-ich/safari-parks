@@ -310,21 +310,8 @@ $(document).ready ->
 
     document.body.onresize = layoutEditor
 
-    if not debugMode
-        # prevents page scroll
-        document.ontouchmove = -> event.preventDefault()
-
-        # enables overflow scroll in scroll class
-        $('.scroll').bind 'touchmove', (e) ->
-            event = e.originalEvent
-            event.stopPropagation() if event.targetTouches.length is 2
-        # problem
-        #  Page scroll occurs occasionally.
-        # trial
-        #  Page scroll occurs when there is no space in scroll object if number of fingers are not restricted.
-
-        # prevents native soft keyboard to slip down when button was released.
-        $('.key.main').mousedown (event) -> event.preventDefault()
+    # prevents native soft keyboard to slip down when button was released.
+    $('.key.main').mousedown (event) -> event.preventDefault()
 
     #
     # HTML soft keyboard

@@ -53,7 +53,7 @@ textarea#edit {
 
 .scroll {
 	overflow: auto;
-	-webkit-overflow-scrolling: touch;
+/*	-webkit-overflow-scrolling: touch; /* is buggy. 2011/12/04 */
 }
 
 .key {
