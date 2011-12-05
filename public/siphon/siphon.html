@@ -19,6 +19,11 @@
 	<link rel="stylesheet" href="theme/default.css">
 	<link rel="stylesheet" type="text/css" href="siphon.css" />
 	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript">
+	  $(document).bind("mobileinit", function(){
+	  $.mobile.defaultPageTransition = "fade";
+	  });
+	</script>
 	<script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
 	<script src="lib/codemirror.js"></script>
 	<script src="mode/coffeescript/coffeescript.js"></script>
@@ -135,7 +140,7 @@
 			<li><a href="#compiledpage" class="ui-btn-active ui-state-persist">Compiled Code</a></li>
 			<li><a href="#" class="run">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#smooth" data-transition="fade">References</a></li>
+			<li><a href="#smooth">References</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -153,7 +158,7 @@
 			<li><a href="#compiledpage" >Compiled Code</a></li>
 			<li><a href="#" class="run ui-btn-active ui-state-persist">Run</a></li>
 			<li><a href="#settingpage">Setting</a></li>
-			<li><a href="#smooth" data-transition="fade">References</a></li>
+			<li><a href="#smooth">References</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -171,7 +176,7 @@
 			<li><a href="#compiledpage" >Compiled Code</a></li>
 			<li><a href="#" class="run">Run</a></li>
 			<li><a href="#settingpage" class="ui-btn-active ui-state-persist">Setting</a></li>
-			<li><a href="#smooth" data-transition="fade">References</a></li>
+			<li><a href="#smooth">References</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -191,7 +196,7 @@
 		<h1>Smooth CoffeeScript</h1>
 		<div data-role="navbar">
 		  <ul>
-			<li><a href="#editorpage" data-transition="fade">Editor</a></li>
+			<li><a href="#editorpage">Editor</a></li>
 			<li></li>
 			<li></li>
 			<li><a href="#underscore" data-transition="flip">Underscore.js</a></li>
@@ -209,7 +214,7 @@
 		<h1>Underscore.js</h1>
 		<div data-role="navbar">
 		  <ul>
-			<li><a href="#editorpage" data-transition="fade">Editor</a></li>
+			<li><a href="#editorpage">Editor</a></li>
 			<li></li>
 			<li></li>
 			<li><a href="#underscore" class="ui-btn-active ui-state-persist">Underscore.js</a></li>
