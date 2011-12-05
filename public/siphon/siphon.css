@@ -15,12 +15,16 @@
 	width: 100%;
 }
 
-textarea#edit {
+#edit {
 	margin-top: 15px;
 	margin-left: 15px;
 	width: 94%;
 	height: 320px;
 	background-color: white;
+	font-size: 12pt;
+}
+
+.CodeMirror {
 	font-size: 12pt;
 }
 
