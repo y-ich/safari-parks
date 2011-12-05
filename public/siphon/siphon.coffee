@@ -8,6 +8,7 @@
 
 # editor object
 editor = null
+jsviewer = null
 
 # constants
 holdTime = 400 # milli seconds
@@ -29,17 +30,13 @@ compileSource = ->
     window.compiledJS = ''
     try
         window.compiledJS = CoffeeScript.compile source, bare: on
-        el = $('#compiled')[0]
-        if el.innerText
-            el.innerText = window.compiledJS
-        else
-            $(el).text window.compiledJS
+        jsviewer.setValue window.compiledJS
         $('#error').text('')
     catch error
         $('#error').text(error.message)
 
 run = ->
-    document.location = '#runpage' if /#canvas/.test(window.compiledJS)
+    document.location = '#runpage' if /canvas/.test(window.compiledJS)
     try
         eval window.compiledJS
     catch error
@@ -94,6 +91,13 @@ layoutEditor = ->
         $('#keyback').css('display', 'none')
     restHeight = Math.max(restHeight, 12)
     editor.setHeight restHeight + 'px'
+    jsElement = jsviewer.getWrapperElement()
+    jsviewer.setHeight (window.innerHeight -
+        $('.ui-header').outerHeight(true) -
+        ($(jsElement).outerHeight(true) - $(jsElement).height())) + 'px'
+
+
+
 
 #
 # global variables
@@ -267,7 +271,7 @@ $(document).ready ->
     catch e
         console.log e
     window.addEventListener 'error', (error, file, line) ->
-        console.log eror + 'file: ' + file + ', line: ' + line
+        console.log error.message + ' file: ' + file + ', line: ' + line
 
     # jQuery Mobile setting
     $('#editorpage').addBackBtn = false # no back button on top page.
@@ -281,6 +285,18 @@ $(document).ready ->
     editor.setHeight = (str) ->
         this.getScrollerElement().style.height = str
         this.refresh()
+
+    parent = $('#compiled').parent()[0]
+    $('#compiled').remove()
+    jsviewer = CodeMirror parent, {mode: 'javascript', readOnly: true}
+    jsviewer.setHeight = (str) ->
+        this.getScrollerElement().style.height = str
+        this.refresh()
+    $('textarea', jsviewer.getWrapperElement()).attr('disabled', 'true')
+
+    # for desktop safari or chrome
+    $('#compiledpage').live 'pageshow', (event, ui) ->
+        jsviewer.refresh()
 
     layoutEditor()
     # problem
@@ -331,7 +347,7 @@ $(document).ready ->
     $('#saveas').click clickSaveas
 
     $('#about').click ->
-        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.3.4\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
+        alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.3.5\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
 
     resetSelects() # "Open...", and "Delete..." menus
 
