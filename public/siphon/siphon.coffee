@@ -276,8 +276,6 @@ $(document).ready ->
     # jQuery Mobile setting
     $('#editorpage').addBackBtn = false # no back button on top page.
 
-    $('#keyboard-on')[0].checked = true if /iPad/.test(navigator.userAgent)
-
     editor = CodeMirror.fromTextArea $('#edit')[0],
         onChange: -> compileSource()
     editor.element = editor.getWrapperElement()
@@ -294,9 +292,12 @@ $(document).ready ->
         this.refresh()
     $('textarea', jsviewer.getWrapperElement()).attr('disabled', 'true')
 
-    # for desktop safari or chrome
-    $('#compiledpage').live 'pageshow', (event, ui) ->
-        jsviewer.refresh()
+    if /iPad/.test(navigator.userAgent)
+        $('#keyboard-on')[0].checked = true
+    else
+        # for desktop safari or chrome
+        $('#compiledpage').live 'pageshow', (event, ui) ->
+            jsviewer.refresh()
 
     layoutEditor()
     # problem
