@@ -9,9 +9,6 @@
 # editor object
 editor = null
 
-# operation mode
-debugMode = false
-
 # constants
 holdTime = 400 # milli seconds
 
@@ -249,7 +246,7 @@ keySubInactive.touchEnd = (fsm) ->
 #
 #window.applicationCache.addEventListener 'checking', ->
 window.applicationCache.addEventListener 'noupdate', ->
-    alert 'Manifest has no change.' if debugMode
+    console.log 'Manifest has no change.'
 #window.applicationCache.addEventListener 'downloading', ->
 #window.applicationCache.addEventListener 'progress', ->
 window.applicationCache.addEventListener 'cached', ->
@@ -261,48 +258,31 @@ window.applicationCache.addEventListener 'updateready', ->
 window.applicationCache.addEventListener 'obsolete', ->
     alert 'Manifest was not found, so the application cache is being deleted.'
 window.applicationCache.addEventListener 'error', ->
-    alert 'Sorry. Application cache error.' if debugMode
-    # error occurs offline without calling update().
+    console.log 'Application cache error.'
+    # error occurs when calling update() offline.
 
 $(document).ready ->
     try
         window.applicationCache.update() if navigator.onLine
     catch e
-        console.log e if debugMode
-    window.addEventListener 'error', -> alert('onerror') if debugMode
+        console.log e
+    window.addEventListener 'error', (error, file, line) ->
+        console.log eror + 'file: ' + file + ', line: ' + line
 
     # jQuery Mobile setting
     $('#editorpage').addBackBtn = false # no back button on top page.
 
-    if /iPad/.test(navigator.userAgent) or (debugMode and confirm('iPad mode?'))
-        $('#keyboard-on')[0].checked = true
-        editor =
-            element : $('#edit')[0]
-            getValue : -> this.element.value
-            setValue : (str) -> this.element.value = str
-            insert : (str) ->
-                this.element.focus()
-                pos = this.element.selectionStart
-                this.setValue this.getValue().slice(0, pos) + str + this.getValue().slice(pos);
-                pos = pos + str.length;
-                this.element.setSelectionRange(pos, pos); # resetting caret position
-                this.update()
-            setHeight : (str) ->
-                $(this.element).css('height', str)
-                $(this.element).css('max-height', str)
-            update : -> compileSource()
-        $(editor.element).keyup -> compileSource()
-    else
-        editor = CodeMirror.fromTextArea $('#edit')[0],
-            onChange: -> compileSource()
-        editor.element = editor.getWrapperElement()
-        editor.insert = (str) -> this.replaceRange(str, this.getCursor())
-        editor.setHeight = (str) ->
-            this.getScrollerElement().style.height = str
-            this.refresh()
+    $('#keyboard-on')[0].checked = true if /iPad/.test(navigator.userAgent)
+
+    editor = CodeMirror.fromTextArea $('#edit')[0],
+        onChange: -> compileSource()
+    editor.element = editor.getWrapperElement()
+    editor.insert = (str) -> this.replaceRange(str, this.getCursor())
+    editor.setHeight = (str) ->
+        this.getScrollerElement().style.height = str
+        this.refresh()
 
     layoutEditor()
-
     # problem
     #  When debug console is enabled on iPad, just after loading,
     #  1. the debug console is not showed
@@ -327,7 +307,7 @@ $(document).ready ->
 
     $('.key.main').bind 'touchmove', (event) ->
         this.model.touchMove event.originalEvent
-        event.preventDefault() if debugMode
+        event.preventDefault()
         # Because page scroll are enabled at debug mode, page scroll are disabled on buttons
 
     $('.key.main').bind 'touchend', (event) -> this.model.touchEnd()
