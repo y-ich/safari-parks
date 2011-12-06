@@ -348,6 +348,10 @@ $(document).ready ->
                 '''
         mode: 'coffeescript'
         onChange: -> compileSource()
+        onKeyPrefetch: (e) ->
+          e.metaiPad = $('#command')[0].model? and $('#command')[0].model.state is keyActive
+          e.ctrliPad = $('#control')[0].model? and $('#control')[0].model.state is keyActive
+          e.altiPad = $('#alt')[0].model? and $('#alt')[0].model.state is keyActive
     editor.element = editor.getWrapperElement()
     editor.insert = (str) -> this.replaceRange(str, this.getCursor())
     editor.setHeight = (str) ->

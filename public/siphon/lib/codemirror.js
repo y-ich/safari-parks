@@ -429,13 +429,18 @@ var CodeMirror = (function() {
       e.dataTransfer.setData("Text", txt);
     }
     function onKeyDown(e) {
+      options.onKeyPrefetch && options.onKeyPrefetch(e);
+			var metaKey = e.metaKey || e.metaiPad;
+			var ctrlKey = e.ctrlKey || e.ctrliPad;
+			var altKey = e.altKey || e.altiPad;
+
       if (!focused) onFocus();
 
       var code = e.keyCode;
       // IE does strange things with escape.
       if (ie && code == 27) { e.returnValue = false; }
       // Tries to detect ctrl on non-mac, cmd on mac.
-      var mod = (mac ? e.metaKey : e.ctrlKey) && !e.altKey, anyMod = e.ctrlKey || e.altKey || e.metaKey;
+      var mod = ((mac || ipad) ? metaKey : ctrlKey) && !altKey, anyMod = ctrlKey || altKey || metaKey;
       if (code == 16 || e.shiftKey) shiftSelecting = shiftSelecting || (sel.inverted ? sel.to : sel.from);
       else shiftSelecting = null;
       // First give onKeyEvent option a chance to handle this.
@@ -461,7 +466,7 @@ var CodeMirror = (function() {
       // its start when it is inverted and a movement key is pressed
       // (and later restore it again), shouldn't be used for
       // non-movement keys.
-      curKeyId = (mod ? "c" : "") + (e.altKey ? "a" : "") + code;
+      curKeyId = (mod ? "c" : "") + (altKey ? "a" : "") + code;
       if (sel.inverted && movementKeys[curKeyId] === true) {
         var range = selRange(input);
         if (range) {
@@ -470,7 +475,7 @@ var CodeMirror = (function() {
         }
       }
       // Don't save the key as a movementkey unless it had a modifier
-      if (!mod && !e.altKey) curKeyId = null;
+      if (!mod && !altKey) curKeyId = null;
       fastPoll(curKeyId);
 
       if (options.pollForIME && keyMightStartIME(code)) slowPollInterval = 50;
@@ -486,6 +491,10 @@ var CodeMirror = (function() {
       if (slowPollInterval < 2000 && !alwaysPollForIME) slowPollInterval = 2000;
     }
     function onKeyPress(e) {
+      options.onKeyPrefetch && options.onKeyPrefetch(e);
+			var metaKey = e.metaKey || e.metaiPad;
+			var ctrlKey = e.ctrlKey || e.ctrliPad;
+			var altKey = e.altKey || e.altiPad;
       if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
       if (options.electricChars && mode.electricChars) {
         var ch = String.fromCharCode(e.charCode == null ? e.keyCode : e.charCode);
@@ -495,7 +504,7 @@ var CodeMirror = (function() {
       var code = e.keyCode;
       // Re-stop tab and enter. Necessary on some browsers.
       if (code == 13) {if (!options.readOnly) handleEnter(); e_preventDefault(e);}
-      else if (!e.ctrlKey && !e.altKey && !e.metaKey && code == 9 && options.tabMode != "default") e_preventDefault(e);
+      else if (!ctrlKey && !altKey && !metaKey && code == 9 && options.tabMode != "default") e_preventDefault(e);
       else fastPoll(curKeyId);
     }
 
@@ -1830,6 +1839,7 @@ var CodeMirror = (function() {
     enterMode: "indent",
     electricChars: true,
     onKeyEvent: null,
+    onKeyPrefetch: null,
     lineWrapping: false,
     lineNumbers: false,
     gutter: false,
@@ -2600,6 +2610,7 @@ var CodeMirror = (function() {
 
   var tabSize = 8;
   var mac = /Mac/.test(navigator.platform);
+  var ipad = /iPad/.test(navigator.platform);
   var win = /Win/.test(navigator.platform);
   var movementKeys = {};
   for (var i = 35; i <= 40; ++i)
