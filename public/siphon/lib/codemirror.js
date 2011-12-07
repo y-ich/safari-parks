@@ -429,15 +429,13 @@ var CodeMirror = (function() {
       e.dataTransfer.setData("Text", txt);
     }
     function onKeyDown(e) {
-// 拡張ボタンからここまでは来ているが機能しない。
       options.onKeyPrefetch && options.onKeyPrefetch(e);
 			var metaKey = e.metaKey || e.metaiPad;
 			var ctrlKey = e.ctrlKey || e.ctrliPad;
 			var altKey = e.altKey || e.altiPad;
-
       if (!focused) onFocus();
 
-      var code = e.keyCode;
+      var code = (e.keyCode !== 0) ? e.keyCode : e.keyLocation;
       // IE does strange things with escape.
       if (ie && code == 27) { e.returnValue = false; }
       // Tries to detect ctrl on non-mac, cmd on mac.
@@ -483,26 +481,31 @@ var CodeMirror = (function() {
     }
     function onKeyUp(e) {
       if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
+			var code = (e.keyCode !== 0) ? e.keyCode : e.keyLocation;
+
       if (reducedSelection) {
         reducedSelection = null;
         updateInput = true;
       }
-      if (e.keyCode == 16) shiftSelecting = null;
+      if (code == 16) shiftSelecting = null;
 
       if (slowPollInterval < 2000 && !alwaysPollForIME) slowPollInterval = 2000;
     }
     function onKeyPress(e) {
       options.onKeyPrefetch && options.onKeyPrefetch(e);
+      if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
 			var metaKey = e.metaKey || e.metaiPad;
 			var ctrlKey = e.ctrlKey || e.ctrliPad;
 			var altKey = e.altKey || e.altiPad;
-      if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
+			var keyCode = (e.keyCode !== 0) ? e.keyCode : e.keyLocation;
+			var charCode = (e.charCode !== 0) ? e.keyCode : ((e.keyIdentifier !== '') ? e.keyIdentifier.charCodeAt(0) : 0);
+
       if (options.electricChars && mode.electricChars) {
-        var ch = String.fromCharCode(e.charCode == null ? e.keyCode : e.charCode);
+        var ch = String.fromCharCode(charCode == null ? keyCode : charCode);
         if (mode.electricChars.indexOf(ch) > -1)
           setTimeout(operation(function() {indentLine(sel.to.line, "smart");}), 50);
       }
-      var code = e.keyCode;
+      var code = keyCode;
       // Re-stop tab and enter. Necessary on some browsers.
       if (code == 13) {if (!options.readOnly) handleEnter(); e_preventDefault(e);}
       else if (!ctrlKey && !altKey && !metaKey && code == 9 && options.tabMode != "default") e_preventDefault(e);

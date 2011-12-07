@@ -99,7 +99,12 @@ layoutEditor = ->
 #insert = (str) -> this.replaceRange(str, this.getCursor())
 fireKeyEvent = (type, keyCode, charCode) ->
   e = document.createEvent 'KeyboardEvent'
-  e.initKeyboardEvent type, true, true, window, false, false, false, false, keyCode, charCode
+  e.initKeyboardEvent type, true, true, window, if charCode is 0
+      ''
+    else
+      String.fromCharCode(charCode)
+  , keyCode, false, false, false, false
+  # you don't need to set ctrl/alt/shift/meta keys because it will be set in prefech in key dispach.
   editor.getInputField().dispatchEvent(e)
 
 #
