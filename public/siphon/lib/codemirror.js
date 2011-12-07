@@ -429,6 +429,7 @@ var CodeMirror = (function() {
       e.dataTransfer.setData("Text", txt);
     }
     function onKeyDown(e) {
+// 拡張ボタンからここまでは来ているが機能しない。
       options.onKeyPrefetch && options.onKeyPrefetch(e);
 			var metaKey = e.metaKey || e.metaiPad;
 			var ctrlKey = e.ctrlKey || e.ctrliPad;

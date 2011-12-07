@@ -96,8 +96,11 @@ layoutEditor = ->
         $('.ui-header').outerHeight(true) -
         ($(jsElement).outerHeight(true) - $(jsElement).height())) + 'px'
 
-
-
+#insert = (str) -> this.replaceRange(str, this.getCursor())
+fireKeyEvent = (type, keyCode, charCode) ->
+  e = document.createEvent 'KeyboardEvent'
+  e.initKeyboardEvent type, true, true, window, false, false, false, false, keyCode, charCode
+  editor.getInputField().dispatchEvent(e)
 
 #
 # global variables
@@ -166,10 +169,10 @@ class KeyFSM
         @startX = startX
         @startY = startY
         @setState keyActive
-        context = this
         @timer = setTimeout(=>
                 @setState keySubActive
             , @holdTime) if @subkey()?
+        fireKeyEvent 'keydown', parseInt($(@observer).attr('keycode') ? '0'), 0
 
     touchMove: (event) ->
         touchPoint = event.targetTouches[0]
@@ -177,7 +180,9 @@ class KeyFSM
         moveY = touchPoint.pageY - @startY
         @state.touchMove(this, moveX, moveY)
 
-    touchEnd: -> @state.touchEnd this
+    touchEnd: ->
+      @state.touchEnd this
+      fireKeyEvent 'keyup', parseInt($(@observer).attr('keycode') ? '0'), 0
 
 # controller class to instantiate each state of a key.
 class KeyState
@@ -213,7 +218,9 @@ keyActive.touchMove = (fsm, moveX, moveY) ->
 
 keyActive.touchEnd = (fsm) ->
     fsm.clearTimer()
-    editor.insert fsm.observer.title
+    if fsm.observer.title? and fsm.observer.title isnt ''
+      c = fsm.observer.title.charCodeAt(0)
+      fireKeyEvent 'keypress', c, c
     fsm.setState keyInactive
 
 # subkey active state
@@ -229,7 +236,9 @@ keySubActive.touchMove = (fsm, moveX, moveY) ->
         fsm.setState keySubInactive
 
 keySubActive.touchEnd = (fsm) ->
-    editor.insert fsm.subkey().title
+    if fsm.subkey().title? and fsm.subkey().title isnt ''
+      c = fsm.subkey().title.charCodeAt(0)
+      fireKeyEvent 'keypress', c, c
     fsm.setState keyInactive
 
 # subkey inactive state
@@ -353,7 +362,6 @@ $(document).ready ->
           e.ctrliPad = $('#control')[0].model? and $('#control')[0].model.state is keyActive
           e.altiPad = $('#alt')[0].model? and $('#alt')[0].model.state is keyActive
     editor.element = editor.getWrapperElement()
-    editor.insert = (str) -> this.replaceRange(str, this.getCursor())
     editor.setHeight = (str) ->
         this.getScrollerElement().style.height = str
         this.refresh()
