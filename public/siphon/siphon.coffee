@@ -107,8 +107,19 @@ layoutEditor = ->
 currentFile = null
 
 # key sound
-keySound = new Audio '../sounds/bin090208110829001.mp3'
-keySound.enable = true
+keySound =
+  source: new Audio '../sounds/click.aiff'
+  enable: true
+  play: ->
+    return if not @enable
+    @source.play()
+    keySound.timer = setTimeout(->
+      keySound.source.pause()
+      try
+        keySound.source.currentTime = 0
+      catch e
+    , 30)
+keySound.source.load()
 
 #
 # software key with upper flick
@@ -162,7 +173,7 @@ class KeyFSM
         @timer = null
 
     touchStart: (startX, startY) ->
-        keySound.play() if keySound.enable
+        setTimeout((-> keySound.play()), 0)
         @startX = startX
         @startY = startY
         @setState keyActive
@@ -270,8 +281,6 @@ $(document).ready ->
         window.applicationCache.update() if navigator.onLine
     catch e
         console.log e
-    window.addEventListener 'error', (error, file, line) ->
-        console.log error.message + ' file: ' + file + ', line: ' + line
 
     # jQuery Mobile setting
     $('#editorpage').addBackBtn = false # no back button on top page.
