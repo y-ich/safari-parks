@@ -10,37 +10,24 @@
 editor = null
 jsviewer = null
 
-# constants
-holdTime = 400 # milli seconds
-
 #
 # utility functions
 #
 
-# returns a string with the first character Capitalized.
+# returns a string with the first character capitalized.
 capitalize = (word) -> word.substring(0, 1).toUpperCase() + word.substring(1)
 
 #
 # code snippets
 #
 
-# compiles the code in editor into window.compiledJS.
-compileSource = ->
-    source = editor.getValue()
-    window.compiledJS = ''
-    try
-        window.compiledJS = CoffeeScript.compile source, bare: on
-        jsviewer.setValue window.compiledJS
-        $('#error').text('')
-    catch error
-        $('#error').text(error.message)
-
+# changes page to 'runpage' if the program uses 'canvas' and evals it.
 run = ->
-    document.location = '#runpage' if /canvas/.test(window.compiledJS)
+    document.location = '#runpage' if /canvas/.test jsviewer.getValue()
     try
-        eval window.compiledJS
+        eval jsviewer.getValue()
     catch error
-        alert error
+        alert error.message
 
 
 # utility for resetSelect
@@ -110,21 +97,27 @@ keyCodes =
     'End' : 35
     'PageDown' : 34
 
+KeyboardEvent.DOM_KEY_LOCATION_STANDARD = 0
+
+# emulates keyboard event.
+# Since many properties of KeyboardEvent are read only and can not be set,
+# mobile property is added instead.
 fireKeyEvent = (type, keyIdentifier, keyCode, charCode) ->
-    DOM_KEY_LOCATION_STANDARD = 0
     e = document.createEvent 'KeyboardEvent'
     e.initKeyboardEvent type, true, true, window, keyIdentifier,
-        DOM_KEY_LOCATION_STANDARD, ''
+        KeyboardEvent.DOM_KEY_LOCATION_STANDARD, ''
     # There is no getModifiersState method in webkit, so you have no way to know the content of modifiersList. So I use '' in the last argument.
     e.mobile =
         keyCode : keyCode
         charCode : charCode
     editor.getInputField().dispatchEvent(e)
 
+TextEvent.DOM_INPUT_METHOD_KEYBOARD = 1
+
 fireTextEvent = (str) ->
-    DOM_INPUT_METHOD_KEYBOARD = 1
     e = document.createEvent 'TextEvent'
-    e.initTextEvent 'textInput', true, true, window, str, DOM_INPUT_METHOD_KEYBOARD
+    e.initTextEvent 'textInput', true, true, window, str,
+        TextEvent.DOM_INPUT_METHOD_KEYBOARD
     editor.getInputField().dispatchEvent(e)
 
 #
@@ -135,18 +128,20 @@ fireTextEvent = (str) ->
 currentFile = null
 
 # key sound
+# tunes perfomance by keep pausing during no sound.
 keySound =
-  source: new Audio '../sounds/click.aiff'
-  enable: true
-  play: ->
-    return if not @enable
-    @source.play()
-    keySound.timer = setTimeout(->
-      keySound.source.pause()
-      try
-        keySound.source.currentTime = 0
-      catch e
-    , 30)
+    source : new Audio '../sounds/click.aiff'
+    enable : true
+    play : ->
+        return if not @enable
+        @source.play()
+        keySound.timer = setTimeout ->
+                keySound.source.pause()
+                try
+                    keySound.source.currentTime = 0
+                catch e
+            , 30
+
 keySound.source.load()
 
 #
@@ -177,87 +172,69 @@ keySound.source.load()
 
 # model class
 class KeyFSM
-    constructor: (@state, @observer) ->
-        @startX = 0
-        @startY = 0
-        @timer = null
+    constructor : (@state, @observer, @holdTime) ->
 
-    holdTime: 400 # ms
-
-    setState: (state) ->
+    setState : (state) ->
         @state = state
         @changed()
 
-    subkey: -> if @observer.childNodes.length >= 2
-            @observer.childNodes[1]
-        else
-            null
+    subkey : -> @observer.childNodes[1] ? null
 
-    changed: ->
-        @state.update(@observer, @subkey())
+    changed : -> @state.update(@observer, @subkey())
 
-    clearTimer: ->
+    clearTimer : ->
         clearTimeout @timer if @timer?
         @timer = null
 
-    touchStart: (startX, startY) ->
-        setTimeout((-> keySound.play()), 0)
-        @startX = startX
-        @startY = startY
+    touchStart : (@startX, @startY) ->
+        setTimeout (-> keySound.play()), 0
         @setState keyActive
-        @timer = setTimeout(=>
-                @setState keySubActive
-            , @holdTime) if @subkey()?
-        code = if @observer.id?
-            keyCodes[@observer.id]
-        else if @observer.title?
-            @observer.title.charCodeAt(0)
-        else
-            0
-        fireKeyEvent 'keydown', @observer.id, code, 0
+        if @subkey()?
+            @timer = setTimeout (=> @setState keySubActive), @holdTime
+        fireKeyEvent 'keydown', @observer.id, @keyCode(), 0
 
-    touchMove: (event) ->
+    touchMove : (event) ->
         touchPoint = event.targetTouches[0]
         moveX = touchPoint.pageX - @startX
         moveY = touchPoint.pageY - @startY
-        @state.touchMove(this, moveX, moveY)
+        @state.touchMove this, moveX, moveY
 
-    touchEnd: ->
+    touchEnd : ->
         @state.touchEnd this
-        code = if @observer.id?
-            keyCodes[@observer.id]
-        else if @observer.title?
-            @observer.title.charCodeAt(0)
-        else
-            0
-        fireKeyEvent 'keyup', @observer.id, code, 0
+        fireKeyEvent 'keyup', @observer.id, @keyCode(), 0
+
+    keyCode: ->
+        if @observer.id? then keyCodes[@observer.id]
+        else if @observer.title? then @observer.title.charCodeAt(0)
+        else 0
 
 # controller class to instantiate each state of a key.
 class KeyState
-    constructor: ->
+    constructor : ->
 
-    update: (main, sub) ->
+    update : (main, sub) ->
 
-    touchMove: (fsm, moveX, moveY) ->
+    touchMove : (fsm, moveX, moveY) ->
 
-    touchEnd: (fsm) ->
+    touchEnd : (fsm) ->
 
-    inRange: (moveX, moveY) -> -58 < moveX < 58 and -58*2 < moveY < 58
+    inRange : (moveX, moveY) ->
+        keySize = $('.key').width()
+        -keySize < moveX < keySize and -2 * keySize < moveY < keySize
 
 # inactive state
 keyInactive = new KeyState()
 
-keyInactive.update = (main, sub) ->
-    sub.style.display = 'none' if sub?
+keyInactive.update = (main, sub) -> sub.style.display = 'none' if sub?
 
 # active state
 keyActive = new KeyState()
 
-keyActive.update = (main, sub) ->
-    main.style.backgroundColor = '#a0a0a0'
+keyActive.update = (main, sub) -> main.style.backgroundColor = '#a0a0a0'
 
 keyActive.touchMove = (fsm, moveX, moveY) ->
-    if fsm.subkey()? and moveY < -30 and -30 < moveX < 30
+    flickLength = 30
+    if fsm.subkey()? and moveY < -flickLength and -flickLength < moveX < flickLength
         fsm.clearTimer()
         fsm.setState keySubActive
     else if not @inRange(moveX, moveY)
@@ -276,13 +253,14 @@ keyActive.touchEnd = (fsm) ->
 keySubActive = new KeyState()
 
 keySubActive.update = (main, sub) ->
-    $(sub).css('color', '#fff')
-    $(sub).css('background-image', '-webkit-gradient(linear, left top, left bottom, from(rgb(65,134,245)), to(rgb(25,79,220)))')
+    $(sub).css 'color', '#fff'
+    $(sub).css 'background-image',
+        '-webkit-gradient(linear, left top, left bottom, from(rgb(65,134,245)), to(rgb(25,79,220)))'
     sub.style.display = 'block'
 
 keySubActive.touchMove = (fsm, moveX, moveY) ->
-    if not @inRange(moveX, moveY)
-        fsm.setState keySubInactive
+    fsm.setState keySubInactive unless @inRange(moveX, moveY)
+
 
 keySubActive.touchEnd = (fsm) ->
     if fsm.subkey().title? and fsm.subkey().title isnt ''
@@ -295,38 +273,39 @@ keySubActive.touchEnd = (fsm) ->
 keySubInactive = new KeyState()
 
 keySubInactive.update = (main, sub) ->
-    $(sub).css('color', '#000')
-    $(sub).css('background-image', '-webkit-gradient(linear, left top, left bottom, from(#EEEEF0), to(#D2D2D8))')
+    $(sub).css 'color', '#000'
+    $(sub).css 'background-image',
+        '-webkit-gradient(linear, left top, left bottom, from(#EEEEF0), to(#D2D2D8))'
 
 keySubInactive.touchMove = (fsm, moveX, moveY) ->
     fsm.setState keySubActive if @inRange(moveX, moveY)
 
-keySubInactive.touchEnd = (fsm) ->
-    fsm.setState keyInactive
+keySubInactive.touchEnd = (fsm) -> fsm.setState keyInactive
 
 #
 # Application cache dispatches
 #
-#window.applicationCache.addEventListener 'checking', ->
-window.applicationCache.addEventListener 'noupdate', ->
+appCache = window.applicationCache
+#appCache.addEventListener 'checking', ->
+appCache.addEventListener 'noupdate', ->
     console.log 'Manifest has no change.'
-#window.applicationCache.addEventListener 'downloading', ->
-#window.applicationCache.addEventListener 'progress', ->
-window.applicationCache.addEventListener 'cached', ->
+#appCache.addEventListener 'downloading', ->
+#appCache.addEventListener 'progress', ->
+appCache.addEventListener 'cached', ->
     alert 'Conguatulation! You can use Siphon offline.'
-window.applicationCache.addEventListener 'updateready', ->
+appCache.addEventListener 'updateready', ->
     if confirm 'New version was downloaded. Do you want to update?'
-        window.applicationCache.swapCache()
+        appCache.swapCache()
         location.reload()
-window.applicationCache.addEventListener 'obsolete', ->
+appCache.addEventListener 'obsolete', ->
     alert 'Manifest was not found, so the application cache is being deleted.'
-window.applicationCache.addEventListener 'error', ->
+appCache.addEventListener 'error', ->
     console.log 'Application cache error.'
     # error occurs when calling update() offline.
 
 $(document).ready ->
     try
-        window.applicationCache.update() if navigator.onLine
+        appCache.update() if navigator.onLine
     catch e
         console.log e
 
@@ -334,7 +313,7 @@ $(document).ready ->
     $('#editorpage').addBackBtn = false # no back button on top page.
 
     editor = CodeMirror $('#editor')[0],
-        value:  '''
+        value :  '''
                 ###
                 # This script is from https://github.com/davidguttman/crazy_delicious_coffee_processing/blob/tutorial/public/js/coffee_draw.coffee by D. Guttman.
                 # BEFORE RUNNING THIS SCRIPT, PLEASE IMPORT Processing.js API!
@@ -403,9 +382,9 @@ $(document).ready ->
                 canvas = document.getElementById "canvas"
                 processing = new Processing(canvas, coffee_draw)
                 '''
-        mode: 'coffeescript'
-        onChange: -> compileSource()
-        onKeyPrefetch: (e) ->
+        mode : 'coffeescript'
+        onChange : -> editor.compile()
+        onKeyPrefetch : (e) ->
             e.mobile ?= {}
             e.mobile.metaKey = $('#Meta')[0].model? and
                     $('#Meta')[0].model.state is keyActive
@@ -417,21 +396,26 @@ $(document).ready ->
     editor.setHeight = (str) ->
         this.getScrollerElement().style.height = str
         this.refresh()
+    editor.compile = ->
+        try
+            jsviewer.setValue CoffeeScript.compile @getValue(), bare : on
+            $('#error').text('')
+        catch error
+            $('#error').text(error.message)
 
     parent = $('#compiled').parent()[0]
     $('#compiled').remove()
-    jsviewer = CodeMirror parent, {mode: 'javascript', readOnly: true}
+    jsviewer = CodeMirror parent, {mode : 'javascript', readOnly : true}
     jsviewer.setHeight = (str) ->
         this.getScrollerElement().style.height = str
         this.refresh()
-    $('textarea', jsviewer.getWrapperElement()).attr('disabled', 'true')
+    $('textarea', jsviewer.getWrapperElement()).attr 'disabled', 'true'
 
     if /iPad/.test(navigator.userAgent)
         $('#keyboard-on')[0].checked = true
     else
         # for desktop safari or chrome
-        $('#compiledpage').live 'pageshow', (event, ui) ->
-            jsviewer.refresh()
+        $('#compiledpage').live 'pageshow', (event, ui) -> jsviewer.refresh()
 
     layoutEditor()
     # problem
@@ -453,7 +437,7 @@ $(document).ready ->
         touchPoint = event.originalEvent.targetTouches[0]
 
         # lazy initialization
-        this.model ?= new KeyFSM keyInactive, this
+        this.model ?= new KeyFSM keyInactive, this, 400 #milli seconds
         this.model.touchStart touchPoint.pageX, touchPoint.pageY
 
     $('.key.main').bind 'touchmove', (event) ->
@@ -522,4 +506,4 @@ $(document).ready ->
 
     $('#codemirror').change ->
 
-    compileSource()
+    editor.compile()
