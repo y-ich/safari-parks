@@ -96,24 +96,36 @@ layoutEditor = ->
         $('.ui-header').outerHeight(true) -
         ($(jsElement).outerHeight(true) - $(jsElement).height())) + 'px'
 
-#insert = (str) -> this.replaceRange(str, this.getCursor())
-fireKeyEvent = (type, keyCode, charCode) ->
-  e = document.createEvent 'KeyboardEvent'
-  e.initKeyboardEvent type, true, true, window, if charCode is 0
-      ''
-    else
-      String.fromCharCode(charCode)
-  , keyCode, false, false, false, false
-  # you don't need to set ctrl/alt/shift/meta keys because it will be set in prefech in key dispach.
-  editor.getInputField().dispatchEvent(e)
+keyCodes =
+    'Control' : 17
+    'Alt' : 18
+    'Meta' : 91
+    'Left' : 37
+    'Right' : 39
+    'Up' : 38
+    'Home' : 36
+    'PageUp' : 33
+    'U+0009' : 9 # tab
+    'Down' : 40
+    'End' : 35
+    'PageDown' : 34
 
-DOM_INPUT_METHOD_KEYBOARD = 1
+fireKeyEvent = (type, keyIdentifier, keyCode, charCode) ->
+    DOM_KEY_LOCATION_STANDARD = 0
+    e = document.createEvent 'KeyboardEvent'
+    e.initKeyboardEvent type, true, true, window, keyIdentifier,
+        DOM_KEY_LOCATION_STANDARD, ''
+    # There is no getModifiersState method in webkit, so you have no way to know the content of modifiersList. So I use '' in the last argument.
+    e.mobile =
+        keyCode : keyCode
+        charCode : charCode
+    editor.getInputField().dispatchEvent(e)
+
 fireTextEvent = (str) ->
-  e = document.createEvent 'TextEvent'
-  e.initTextEvent 'textInput', true, true, window, str, DOM_INPUT_METHOD_KEYBOARD
-  console.log editor.getInputField().value
-  editor.getInputField().dispatchEvent(e)
-  console.log editor.getInputField().value
+    DOM_INPUT_METHOD_KEYBOARD = 1
+    e = document.createEvent 'TextEvent'
+    e.initTextEvent 'textInput', true, true, window, str, DOM_INPUT_METHOD_KEYBOARD
+    editor.getInputField().dispatchEvent(e)
 
 #
 # global variables
@@ -196,7 +208,13 @@ class KeyFSM
         @timer = setTimeout(=>
                 @setState keySubActive
             , @holdTime) if @subkey()?
-        fireKeyEvent 'keydown', parseInt($(@observer).attr('keycode') ? '0'), 0
+        code = if @observer.id?
+            keyCodes[@observer.id]
+        else if @observer.title?
+            @observer.title.charCodeAt(0)
+        else
+            0
+        fireKeyEvent 'keydown', @observer.id, code, 0
 
     touchMove: (event) ->
         touchPoint = event.targetTouches[0]
@@ -205,8 +223,14 @@ class KeyFSM
         @state.touchMove(this, moveX, moveY)
 
     touchEnd: ->
-      @state.touchEnd this
-      fireKeyEvent 'keyup', parseInt($(@observer).attr('keycode') ? '0'), 0
+        @state.touchEnd this
+        code = if @observer.id?
+            keyCodes[@observer.id]
+        else if @observer.title?
+            @observer.title.charCodeAt(0)
+        else
+            0
+        fireKeyEvent 'keydown', @observer.id, code, 0
 
 # controller class to instantiate each state of a key.
 class KeyState
@@ -242,10 +266,10 @@ keyActive.touchMove = (fsm, moveX, moveY) ->
 
 keyActive.touchEnd = (fsm) ->
     fsm.clearTimer()
-    if fsm.observer.title? and fsm.observer.title isnt ''
-      c = fsm.observer.title.charCodeAt(0)
+    if fsm.observer.title?
+      code = fsm.observer.title.charCodeAt(0)
       fireTextEvent fsm.observer.title
-      fireKeyEvent 'keypress', c, c
+      fireKeyEvent 'keypress', code, code
     fsm.setState keyInactive
 
 # subkey active state
@@ -382,9 +406,13 @@ $(document).ready ->
         mode: 'coffeescript'
         onChange: -> compileSource()
         onKeyPrefetch: (e) ->
-          e.metaiPad = $('#command')[0].model? and $('#command')[0].model.state is keyActive
-          e.ctrliPad = $('#control')[0].model? and $('#control')[0].model.state is keyActive
-          e.altiPad = $('#alt')[0].model? and $('#alt')[0].model.state is keyActive
+            e.mobile ?= {}
+            e.mobile.metaKey = $('#Meta')[0].model? and
+                    $('#Meta')[0].model.state is keyActive
+            e.mobile.ctrlKey = $('#Control')[0].model? and
+                    $('#Control')[0].model.state is keyActive
+            e.mobile.altKey = $('#Alt')[0].model? and
+                    $('#Alt')[0].model.state is keyActive
     editor.element = editor.getWrapperElement()
     editor.setHeight = (str) ->
         this.getScrollerElement().style.height = str

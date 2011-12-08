@@ -430,12 +430,12 @@ var CodeMirror = (function() {
     }
     function onKeyDown(e) {
       options.onKeyPrefetch && options.onKeyPrefetch(e);
-			var metaKey = e.metaKey || e.metaiPad;
-			var ctrlKey = e.ctrlKey || e.ctrliPad;
-			var altKey = e.altKey || e.altiPad;
+      var metaKey = e.metaKey || e.mobile.metaKey;
+      var ctrlKey = e.ctrlKey || e.mobile.ctrlKey;
+      var altKey = e.altKey || e.mobile.altKey;
       if (!focused) onFocus();
 
-      var code = (e.keyCode !== 0) ? e.keyCode : e.keyLocation;
+      var code = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
       // IE does strange things with escape.
       if (ie && code == 27) { e.returnValue = false; }
       // Tries to detect ctrl on non-mac, cmd on mac.
@@ -447,7 +447,7 @@ var CodeMirror = (function() {
 
       if (code == 33 || code == 34) {scrollPage(code == 34); return e_preventDefault(e);} // page up/down
       if (mod && ((code == 36 || code == 35) || // ctrl-home/end
-                  mac && (code == 38 || code == 40))) { // cmd-up/down
+                  (mac || ipad) && (code == 38 || code == 40))) { // cmd-up/down
         scrollEnd(code == 36 || code == 38); return e_preventDefault(e);
       }
       if (mod && code == 65) {selectAll(); return e_preventDefault(e);} // ctrl-a
@@ -481,7 +481,7 @@ var CodeMirror = (function() {
     }
     function onKeyUp(e) {
       if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
-			var code = (e.keyCode !== 0) ? e.keyCode : e.keyLocation;
+      var code = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
 
       if (reducedSelection) {
         reducedSelection = null;
@@ -494,11 +494,11 @@ var CodeMirror = (function() {
     function onKeyPress(e) {
       options.onKeyPrefetch && options.onKeyPrefetch(e);
       if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
-			var metaKey = e.metaKey || e.metaiPad;
-			var ctrlKey = e.ctrlKey || e.ctrliPad;
-			var altKey = e.altKey || e.altiPad;
-			var keyCode = (e.keyCode !== 0) ? e.keyCode : e.keyLocation;
-			var charCode = (e.charCode !== 0) ? e.keyCode : ((e.keyIdentifier !== '') ? e.keyIdentifier.charCodeAt(0) : 0);
+      var metaKey = e.metaKey || e.mobile.metaKey;
+      var ctrlKey = e.ctrlKey || e.mobile.ctrlKey;
+      var altKey = e.altKey || e.mobile.altKey;
+      var keyCode = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
+      var charCode = typeof e.mobile !== "undefined" && typeof e.mobile.charCode !== "undefined" && e.mobile.charCode !== null ? e.mobile.charCode : e.charCode;
 
       if (options.electricChars && mode.electricChars) {
         var ch = String.fromCharCode(charCode == null ? keyCode : charCode);
