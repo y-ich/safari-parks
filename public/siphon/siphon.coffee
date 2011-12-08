@@ -107,6 +107,14 @@ fireKeyEvent = (type, keyCode, charCode) ->
   # you don't need to set ctrl/alt/shift/meta keys because it will be set in prefech in key dispach.
   editor.getInputField().dispatchEvent(e)
 
+DOM_INPUT_METHOD_KEYBOARD = 1
+fireTextEvent = (str) ->
+  e = document.createEvent 'TextEvent'
+  e.initTextEvent 'textInput', true, true, window, str, DOM_INPUT_METHOD_KEYBOARD
+  console.log editor.getInputField().value
+  editor.getInputField().dispatchEvent(e)
+  console.log editor.getInputField().value
+
 #
 # global variables
 #
@@ -236,6 +244,7 @@ keyActive.touchEnd = (fsm) ->
     fsm.clearTimer()
     if fsm.observer.title? and fsm.observer.title isnt ''
       c = fsm.observer.title.charCodeAt(0)
+      fireTextEvent fsm.observer.title
       fireKeyEvent 'keypress', c, c
     fsm.setState keyInactive
 
@@ -254,6 +263,7 @@ keySubActive.touchMove = (fsm, moveX, moveY) ->
 keySubActive.touchEnd = (fsm) ->
     if fsm.subkey().title? and fsm.subkey().title isnt ''
       c = fsm.subkey().title.charCodeAt(0)
+      fireTextEvent fsm.subkey().title
       fireKeyEvent 'keypress', c, c
     fsm.setState keyInactive
 
