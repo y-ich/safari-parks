@@ -230,7 +230,7 @@ class KeyFSM
             @observer.title.charCodeAt(0)
         else
             0
-        fireKeyEvent 'keydown', @observer.id, code, 0
+        fireKeyEvent 'keyup', @observer.id, code, 0
 
 # controller class to instantiate each state of a key.
 class KeyState
