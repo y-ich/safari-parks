@@ -96,6 +96,7 @@ keyCodes =
     'Down' : 40
     'End' : 35
     'PageDown' : 34
+    'Shift' : 16
 
 KeyboardEvent.DOM_KEY_LOCATION_STANDARD = 0
 
@@ -433,6 +434,9 @@ $(document).ready ->
                     $('#Control')[0].model.state is keyActive
             e.mobile.altKey = $('#Alt')[0].model? and
                     $('#Alt')[0].model.state is keyActive
+            e.mobile.shiftKey = $('#Shift')[0].model? and
+                    $('#Shift')[0].model.state is keyActive
+
     editor.element = editor.getWrapperElement()
     editor.setHeight = (str) ->
         this.getScrollerElement().style.height = str
@@ -456,6 +460,7 @@ $(document).ready ->
         $('#keyboard-on')[0].checked = true
     else
         # for desktop safari or chrome
+        $('#editorpage').live 'pageshow', (event, ui) -> editor.refresh()
         $('#compiledpage').live 'pageshow', (event, ui) -> jsviewer.refresh()
 
     layoutEditor()

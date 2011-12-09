@@ -433,6 +433,7 @@ var CodeMirror = (function() {
       var metaKey = e.metaKey || e.mobile.metaKey;
       var ctrlKey = e.ctrlKey || e.mobile.ctrlKey;
       var altKey = e.altKey || e.mobile.altKey;
+      var shiftKey = e.shiftKey || e.mobile.shiftKey;
       if (!focused) onFocus();
 
       var code = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
@@ -440,7 +441,7 @@ var CodeMirror = (function() {
       if (ie && code == 27) { e.returnValue = false; }
       // Tries to detect ctrl on non-mac, cmd on mac.
       var mod = ((mac || ipad) ? metaKey : ctrlKey) && !altKey, anyMod = ctrlKey || altKey || metaKey;
-      if (code == 16 || e.shiftKey) shiftSelecting = shiftSelecting || (sel.inverted ? sel.to : sel.from);
+      if (code == 16 || shiftKey) shiftSelecting = shiftSelecting || (sel.inverted ? sel.to : sel.from);
       else shiftSelecting = null;
       // First give onKeyEvent option a chance to handle this.
       if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
@@ -453,9 +454,9 @@ var CodeMirror = (function() {
       if (mod && code == 65) {selectAll(); return e_preventDefault(e);} // ctrl-a
       if (!options.readOnly) {
         if (!anyMod && code == 13) {return;} // enter
-        if (!anyMod && code == 9 && handleTab(e.shiftKey)) return e_preventDefault(e); // tab
+        if (!anyMod && code == 9 && handleTab(shiftKey)) return e_preventDefault(e); // tab
         if (mod && code == 90) {undo(); return e_preventDefault(e);} // ctrl-z
-        if (mod && ((e.shiftKey && code == 90) || code == 89)) {redo(); return e_preventDefault(e);} // ctrl-shift-z, ctrl-y
+        if (mod && ((shiftKey && code == 90) || code == 89)) {redo(); return e_preventDefault(e);} // ctrl-shift-z, ctrl-y
       }
       if (code == 36) { if (options.smartHome) { smartHome(); return e_preventDefault(e); } }
 
