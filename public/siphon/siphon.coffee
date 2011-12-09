@@ -115,23 +115,41 @@ fireKeyEvent = (type, keyIdentifier, keyCode, charCode) ->
 
     # Since cursor key doesn't have any effect above, it is treated below.
     if type is 'keydown'
+        shiftKey = $('#Shift')[0].model? and
+            $('#Shift')[0].model.state is keyActive
         switch keyIdentifier
             when 'Left'
                 pos = Math.max ta.selectionEnd - 1, 0
-                ta.setSelectionRange pos, pos
+                ta.setSelectionRange(if shiftKey
+                        ta.selectionStart
+                    else
+                        pos
+                , pos)
             when 'Right'
                 pos = Math.min ta.selectionEnd + 1, ta.value.length
-                ta.setSelectionRange pos, pos
+                ta.setSelectionRange(if shiftKey
+                        ta.selectionStart
+                    else
+                        pos
+                , pos)
             when 'Up'
                 xy = pos2xy ta.value, ta.selectionEnd
                 xy.y = xy.y - 1 if xy.y > 0
                 pos = xy2pos ta.value, xy
-                ta.setSelectionRange pos, pos
+                ta.setSelectionRange(if shiftKey
+                        ta.selectionStart
+                    else
+                        pos
+                , pos)
             when 'Down'
                 xy = pos2xy ta.value, ta.selectionEnd
                 xy.y = xy.y + 1
                 pos = xy2pos ta.value, xy
-                ta.setSelectionRange pos, pos
+                ta.setSelectionRange(if shiftKey
+                        ta.selectionStart
+                    else
+                        pos
+                , pos)
     ta.dispatchEvent(e)
 
 
