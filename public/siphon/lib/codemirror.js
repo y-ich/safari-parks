@@ -481,13 +481,11 @@ var CodeMirror = (function() {
     }
     function onKeyUp(e) {
       if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
-      var code = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
-
       if (reducedSelection) {
         reducedSelection = null;
         updateInput = true;
       }
-      if (code == 16) shiftSelecting = null;
+      if (e.keyCode == 16) shiftSelecting = null;
 
       if (slowPollInterval < 2000 && !alwaysPollForIME) slowPollInterval = 2000;
     }
@@ -719,7 +717,9 @@ var CodeMirror = (function() {
         else {pollingFast = false; slowPoll();}
         endOperation();
       }
-      poll.set(20, p);
+//      poll.set(20, p);
+      if (ipad) p(); else poll.set(20, p);
+// Even delay time = 0, the function that is set by poll.set is executed after long time (keydown's is executed after keyup event.) by ichikawa
     }
 
     // Inspects the textarea, compares its state (content, selection)

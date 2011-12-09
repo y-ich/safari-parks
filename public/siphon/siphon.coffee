@@ -110,7 +110,48 @@ fireKeyEvent = (type, keyIdentifier, keyCode, charCode) ->
     e.mobile =
         keyCode : keyCode
         charCode : charCode
-    editor.getInputField().dispatchEvent(e)
+    ta = editor.getInputField()
+
+    # Since cursor key doesn't have any effect above, it is treated below.
+    if type is 'keydown'
+        switch keyIdentifier
+            when 'Left'
+                pos = Math.max ta.selectionEnd - 1, 0
+                ta.setSelectionRange pos, pos
+            when 'Right'
+                pos = Math.min ta.selectionEnd + 1, ta.value.length
+                ta.setSelectionRange pos, pos
+            when 'Up'
+                xy = pos2xy ta.value, ta.selectionEnd
+                xy.y = xy.y - 1 if xy.y > 0
+                pos = xy2pos ta.value, xy
+                ta.setSelectionRange pos, pos
+            when 'Down'
+                xy = pos2xy ta.value, ta.selectionEnd
+                xy.y = xy.y + 1
+                pos = xy2pos ta.value, xy
+                ta.setSelectionRange pos, pos
+    ta.dispatchEvent(e)
+
+
+pos2xy = (str, pos) ->
+    lines = str.split('\n')
+    head = 0
+    for y in [0...lines.length]
+        if head <= pos <= head + lines[y].length
+            return {x: pos - head, y: y}
+        head += lines[y].length + 1 # +1 is for '\n'.
+    error = new Error()
+    error.name = 'overposition'
+    error.message = 'pos is larger than str.'
+    throw error
+
+xy2pos = (str, xy) ->
+    lines = str.split('\n')
+    return str.length unless 0 <= xy.y < lines.length
+    pos = 0
+    pos += lines[y].length + 1 for y in [0...xy.y]
+    return pos + Math.min(xy.x, lines[y].length)
 
 TextEvent.DOM_INPUT_METHOD_KEYBOARD = 1
 
