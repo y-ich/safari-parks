@@ -303,7 +303,7 @@ var CodeMirror = (function() {
 
       switch (e_button(e)) {
       case 3:
-        if (gecko && !mac) onContextMenu(e);
+        if (gecko && !(mac || ipad)) onContextMenu(e);
         return;
       case 2:
         if (start) setCursor(start.line, start.ch, true);

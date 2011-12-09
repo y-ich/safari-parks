@@ -103,6 +103,7 @@ KeyboardEvent.DOM_KEY_LOCATION_STANDARD = 0
 # emulates keyboard event.
 # Since many properties of KeyboardEvent are read only and can not be set,
 # mobile property is added instead.
+selectionDirection = 'none'
 fireKeyEvent = (type, keyIdentifier, keyCode, charCode) ->
     e = document.createEvent 'KeyboardEvent'
     e.initKeyboardEvent type, true, true, window, keyIdentifier,
@@ -119,37 +120,81 @@ fireKeyEvent = (type, keyIdentifier, keyCode, charCode) ->
             $('#Shift')[0].model.state is keyActive
         switch keyIdentifier
             when 'Left'
-                pos = Math.max ta.selectionEnd - 1, 0
-                ta.setSelectionRange(if shiftKey
-                        ta.selectionStart
+                if shiftKey
+                    if ta.selectionStart == ta.selectionEnd or selectionDirection is 'backward'
+                        pos = Math.max ta.selectionStart - 1, 0
+                        ta.setSelectionRange(pos, ta.selectionEnd)
+                        selectionDirection = 'backward'
                     else
-                        pos
-                , pos)
+                        pos = Math.max ta.selectionEnd - 1, 0
+                        ta.setSelectionRange(ta.selectionStart, pos)
+                        selectionDirection = 'forward'
+                else
+                    pos = Math.max ta.selectionEnd - 1, 0
+                    ta.setSelectionRange(pos, pos)
+                    selectionDirection = 'none'
             when 'Right'
-                pos = Math.min ta.selectionEnd + 1, ta.value.length
-                ta.setSelectionRange(if shiftKey
-                        ta.selectionStart
+                if shiftKey
+                    if ta.selectionStart == ta.selectionEnd or selectionDirection is 'forward'
+                        pos = Math.min ta.selectionEnd + 1, ta.value.length
+                        ta.setSelectionRange(ta.selectionStart, pos)
+                        selectionDirection = 'forward'
                     else
-                        pos
-                , pos)
+                        pos = Math.min ta.selectionStart + 1, ta.value.length
+                        ta.setSelectionRange(pos, ta.selectionEnd)
+                        selectionDirection = 'backward'
+                else
+                    pos = Math.min ta.selectionEnd + 1, ta.value.length
+                    ta.setSelectionRange(pos, pos)
+                    selectionDirection = 'none'
             when 'Up'
-                xy = pos2xy ta.value, ta.selectionEnd
-                xy.y = xy.y - 1 if xy.y > 0
-                pos = xy2pos ta.value, xy
-                ta.setSelectionRange(if shiftKey
-                        ta.selectionStart
+                if shiftKey
+                    if ta.selectionStart == ta.selectionEnd or selectionDirection is 'backward'
+                        xy = pos2xy ta.value, ta.selectionStart
+                        xy.y = xy.y - 1 if xy.y > 0
+                        pos = xy2pos ta.value, xy
+                        ta.setSelectionRange(pos, ta.selectionEnd)
+                        selectionDirection = 'backward'
                     else
-                        pos
-                , pos)
+                        xy = pos2xy ta.value, ta.selectionEnd
+                        xy.y = xy.y - 1 if xy.y > 0
+                        pos = xy2pos ta.value, xy
+                        if pos < ta.selectionStart
+                            ta.setSelectionRange(pos, ta.selectionStart)
+                            selectionDirection = 'backward'
+                        else
+                            ta.setSelectionRange(ta.selectionStart, pos)
+                            selectionDirection = 'forward'
+                else
+                    xy = pos2xy ta.value, ta.selectionEnd
+                    xy.y = xy.y - 1 if xy.y > 0
+                    pos = xy2pos ta.value, xy
+                    ta.setSelectionRange(pos, pos)
+                    selectionDirection = 'none'
             when 'Down'
-                xy = pos2xy ta.value, ta.selectionEnd
-                xy.y = xy.y + 1
-                pos = xy2pos ta.value, xy
-                ta.setSelectionRange(if shiftKey
-                        ta.selectionStart
+                if shiftKey
+                    if ta.selectionStart == ta.selectionEnd or selectionDirection is 'forward'
+                        xy = pos2xy ta.value, ta.selectionEnd
+                        xy.y = xy.y + 1
+                        pos = xy2pos ta.value, xy
+                        ta.setSelectionRange(ta.selectionStart, pos)
+                        selectionDirection = 'forward'
                     else
-                        pos
-                , pos)
+                        xy = pos2xy ta.value, ta.selectionStart
+                        xy.y = xy.y + 1
+                        pos = xy2pos ta.value, xy
+                        if pos > ta.selectionEnd
+                            ta.setSelectionRange(ta.selectionEnd, pos)
+                            selectionDirection = 'forward'
+                        else
+                            ta.setSelectionRange(pos, ta.selectionEnd)
+                            selectionDirection = 'backward'
+                else
+                    xy = pos2xy ta.value, ta.selectionEnd
+                    xy.y = xy.y + 1
+                    pos = xy2pos ta.value, xy
+                    ta.setSelectionRange(pos, pos)
+                    selectionDirection = 'none'
     ta.dispatchEvent(e)
 
 
