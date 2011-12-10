@@ -418,9 +418,7 @@ $(document).ready ->
   $('#editorpage').addBackBtn = false # no back button on top page.
 
   editor = CodeMirror $('#editor')[0],
-    value :  '''
-      alert 'edit me and run!'
-      '''
+    value :  "alert 'edit me and run!'"
     mode : 'coffeescript'
     onChange : -> editor.compile()
     onKeyEvent : (instance, e) ->
