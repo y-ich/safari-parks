@@ -476,7 +476,7 @@ var CodeMirror = (function() {
       }
       // Don't save the key as a movementkey unless it had a modifier
       if (!mod && !altKey) curKeyId = null;
-      fastPoll(curKeyId);
+      fastPoll(curKeyId, code);
 
       if (options.pollForIME && keyMightStartIME(code)) slowPollInterval = 50;
     }
@@ -704,13 +704,13 @@ var CodeMirror = (function() {
         endOperation();
       });
     }
-    function fastPoll(keyId) {
+    function fastPoll(keyId, code) {
       var missed = false;
       pollingFast = true;
       function p() {
         startOperation();
         var changed = readInput();
-        if (changed && keyId) {
+        if (changed) {
           if (changed == "moved" && movementKeys[keyId] == null) movementKeys[keyId] = true;
           if (changed == "changed") movementKeys[keyId] = false;
         }
@@ -718,9 +718,14 @@ var CodeMirror = (function() {
         else {pollingFast = false; slowPoll();}
         endOperation();
       }
-//      poll.set(20, p);
-      if (ipad) p(); else poll.set(20, p);
-// Even delay time = 0, the function that is set by poll.set is executed after long time (keydown's is executed after keyup event.) by ichikawa
+//      poll.set(0, p); // original
+      if (ipad && code >= 37 && code <= 40) // if cursor key
+        p();
+      else
+        poll.set(20, p);
+// Even delay time = 0, the function that is set by poll.set is executed after long time (keydown's is executed after keyup event.) and this cause unstable behavior about cursor key.
+// But when you call p() directly, character inputted is always selected. 
+// What shall I do? by ichikawa
     }
 
     // Inspects the textarea, compares its state (content, selection)
