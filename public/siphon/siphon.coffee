@@ -423,7 +423,7 @@ $(document).ready ->
       '''
     mode : 'coffeescript'
     onChange : -> editor.compile()
-    onKeyPrefetch : (e) ->
+    onKeyEvent : (instance, e) ->
       e.mobile ?= {}
       e.mobile.metaKey = $('#Meta')[0].model? and
         $('#Meta')[0].model.state is keyActive
@@ -433,6 +433,7 @@ $(document).ready ->
         $('#Alt')[0].model.state is keyActive
       e.mobile.shiftKey = $('#Shift')[0].model? and
         $('#Shift')[0].model.state is keyActive
+      return false
 
   editor.element = editor.getWrapperElement()
   editor.setHeight = (str) ->

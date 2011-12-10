@@ -429,13 +429,14 @@ var CodeMirror = (function() {
       e.dataTransfer.setData("Text", txt);
     }
     function onKeyDown(e) {
-      options.onKeyPrefetch && options.onKeyPrefetch(e);
+      // First give onKeyEvent option a chance to handle this.
+      if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
+      if (!focused) onFocus();
+
       var metaKey = e.metaKey || e.mobile.metaKey;
       var ctrlKey = e.ctrlKey || e.mobile.ctrlKey;
       var altKey = e.altKey || e.mobile.altKey;
       var shiftKey = e.shiftKey || e.mobile.shiftKey;
-      if (!focused) onFocus();
-
       var code = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
       // IE does strange things with escape.
       if (ie && code == 27) { e.returnValue = false; }
@@ -443,8 +444,6 @@ var CodeMirror = (function() {
       var mod = ((mac || ipad) ? metaKey : ctrlKey) && !altKey, anyMod = ctrlKey || altKey || metaKey;
       if (code == 16 || shiftKey) shiftSelecting = shiftSelecting || (sel.inverted ? sel.to : sel.from);
       else shiftSelecting = null;
-      // First give onKeyEvent option a chance to handle this.
-      if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
 
       if (code == 33 || code == 34) {scrollPage(code == 34); return e_preventDefault(e);} // page up/down
       if (mod && ((code == 36 || code == 35) || // ctrl-home/end
@@ -481,12 +480,11 @@ var CodeMirror = (function() {
       if (options.pollForIME && keyMightStartIME(code)) slowPollInterval = 50;
     }
     function onKeyUp(e) {
-      options.onKeyPrefetch && options.onKeyPrefetch(e);
+      if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
       var metaKey = e.metaKey || e.mobile.metaKey;
       var ctrlKey = e.ctrlKey || e.mobile.ctrlKey;
       var altKey = e.altKey || e.mobile.altKey;
       var keyCode = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
-      if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
 
       if (reducedSelection) {
         reducedSelection = null;
@@ -497,7 +495,6 @@ var CodeMirror = (function() {
       if (slowPollInterval < 2000 && !alwaysPollForIME) slowPollInterval = 2000;
     }
     function onKeyPress(e) {
-      options.onKeyPrefetch && options.onKeyPrefetch(e);
       if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
       var metaKey = e.metaKey || e.mobile.metaKey;
       var ctrlKey = e.ctrlKey || e.mobile.ctrlKey;
@@ -1855,7 +1852,6 @@ var CodeMirror = (function() {
     enterMode: "indent",
     electricChars: true,
     onKeyEvent: null,
-    onKeyPrefetch: null,
     lineWrapping: false,
     lineNumbers: false,
     gutter: false,
