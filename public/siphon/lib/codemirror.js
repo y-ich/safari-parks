@@ -481,12 +481,18 @@ var CodeMirror = (function() {
       if (options.pollForIME && keyMightStartIME(code)) slowPollInterval = 50;
     }
     function onKeyUp(e) {
+      options.onKeyPrefetch && options.onKeyPrefetch(e);
+      var metaKey = e.metaKey || e.mobile.metaKey;
+      var ctrlKey = e.ctrlKey || e.mobile.ctrlKey;
+      var altKey = e.altKey || e.mobile.altKey;
+      var keyCode = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
       if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
+
       if (reducedSelection) {
         reducedSelection = null;
         updateInput = true;
       }
-      if (e.keyCode == 16) shiftSelecting = null;
+      if (keyCode == 16) shiftSelecting = null;
 
       if (slowPollInterval < 2000 && !alwaysPollForIME) slowPollInterval = 2000;
     }
