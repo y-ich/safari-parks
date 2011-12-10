@@ -303,7 +303,7 @@ var CodeMirror = (function() {
 
       switch (e_button(e)) {
       case 3:
-        if (gecko && !mac) onContextMenu(e);
+        if (gecko && !(mac || ipad)) onContextMenu(e);
         return;
       case 2:
         if (start) setCursor(start.line, start.ch, true);
@@ -429,29 +429,33 @@ var CodeMirror = (function() {
       e.dataTransfer.setData("Text", txt);
     }
     function onKeyDown(e) {
+      // First give onKeyEvent option a chance to handle this.
+      if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
       if (!focused) onFocus();
 
-      var code = e.keyCode;
+      var metaKey = e.metaKey || e.mobile.metaKey;
+      var ctrlKey = e.ctrlKey || e.mobile.ctrlKey;
+      var altKey = e.altKey || e.mobile.altKey;
+      var shiftKey = e.shiftKey || e.mobile.shiftKey;
+      var code = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
       // IE does strange things with escape.
       if (ie && code == 27) { e.returnValue = false; }
       // Tries to detect ctrl on non-mac, cmd on mac.
-      var mod = (mac ? e.metaKey : e.ctrlKey) && !e.altKey, anyMod = e.ctrlKey || e.altKey || e.metaKey;
-      if (code == 16 || e.shiftKey) shiftSelecting = shiftSelecting || (sel.inverted ? sel.to : sel.from);
+      var mod = ((mac || ipad) ? metaKey : ctrlKey) && !altKey, anyMod = ctrlKey || altKey || metaKey;
+      if (code == 16 || shiftKey) shiftSelecting = shiftSelecting || (sel.inverted ? sel.to : sel.from);
       else shiftSelecting = null;
-      // First give onKeyEvent option a chance to handle this.
-      if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
 
       if (code == 33 || code == 34) {scrollPage(code == 34); return e_preventDefault(e);} // page up/down
       if (mod && ((code == 36 || code == 35) || // ctrl-home/end
-                  mac && (code == 38 || code == 40))) { // cmd-up/down
+                  (mac || ipad) && (code == 38 || code == 40))) { // cmd-up/down
         scrollEnd(code == 36 || code == 38); return e_preventDefault(e);
       }
       if (mod && code == 65) {selectAll(); return e_preventDefault(e);} // ctrl-a
       if (!options.readOnly) {
         if (!anyMod && code == 13) {return;} // enter
-        if (!anyMod && code == 9 && handleTab(e.shiftKey)) return e_preventDefault(e); // tab
+        if (!anyMod && code == 9 && handleTab(shiftKey)) return e_preventDefault(e); // tab
         if (mod && code == 90) {undo(); return e_preventDefault(e);} // ctrl-z
-        if (mod && ((e.shiftKey && code == 90) || code == 89)) {redo(); return e_preventDefault(e);} // ctrl-shift-z, ctrl-y
+        if (mod && ((shiftKey && code == 90) || code == 89)) {redo(); return e_preventDefault(e);} // ctrl-shift-z, ctrl-y
       }
       if (code == 36) { if (options.smartHome) { smartHome(); return e_preventDefault(e); } }
 
@@ -461,7 +465,7 @@ var CodeMirror = (function() {
       // its start when it is inverted and a movement key is pressed
       // (and later restore it again), shouldn't be used for
       // non-movement keys.
-      curKeyId = (mod ? "c" : "") + (e.altKey ? "a" : "") + code;
+      curKeyId = (mod ? "c" : "") + (altKey ? "a" : "") + code;
       if (sel.inverted && movementKeys[curKeyId] === true) {
         var range = selRange(input);
         if (range) {
@@ -470,32 +474,43 @@ var CodeMirror = (function() {
         }
       }
       // Don't save the key as a movementkey unless it had a modifier
-      if (!mod && !e.altKey) curKeyId = null;
-      fastPoll(curKeyId);
+      if (!mod && !altKey) curKeyId = null;
+      fastPoll(curKeyId, code);
 
       if (options.pollForIME && keyMightStartIME(code)) slowPollInterval = 50;
     }
     function onKeyUp(e) {
       if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
+      var metaKey = e.metaKey || e.mobile.metaKey;
+      var ctrlKey = e.ctrlKey || e.mobile.ctrlKey;
+      var altKey = e.altKey || e.mobile.altKey;
+      var keyCode = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
+
       if (reducedSelection) {
         reducedSelection = null;
         updateInput = true;
       }
-      if (e.keyCode == 16) shiftSelecting = null;
+      if (keyCode == 16) shiftSelecting = null;
 
       if (slowPollInterval < 2000 && !alwaysPollForIME) slowPollInterval = 2000;
     }
     function onKeyPress(e) {
       if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e))) return;
+      var metaKey = e.metaKey || e.mobile.metaKey;
+      var ctrlKey = e.ctrlKey || e.mobile.ctrlKey;
+      var altKey = e.altKey || e.mobile.altKey;
+      var keyCode = typeof e.mobile !== "undefined" && typeof e.mobile.keyCode !== "undefined" && e.mobile.keyCode !== null ? e.mobile.keyCode : e.keyCode;
+      var charCode = typeof e.mobile !== "undefined" && typeof e.mobile.charCode !== "undefined" && e.mobile.charCode !== null ? e.mobile.charCode : e.charCode;
+
       if (options.electricChars && mode.electricChars) {
-        var ch = String.fromCharCode(e.charCode == null ? e.keyCode : e.charCode);
+        var ch = String.fromCharCode(charCode == null ? keyCode : charCode);
         if (mode.electricChars.indexOf(ch) > -1)
           setTimeout(operation(function() {indentLine(sel.to.line, "smart");}), 50);
       }
-      var code = e.keyCode;
+      var code = keyCode;
       // Re-stop tab and enter. Necessary on some browsers.
       if (code == 13) {if (!options.readOnly) handleEnter(); e_preventDefault(e);}
-      else if (!e.ctrlKey && !e.altKey && !e.metaKey && code == 9 && options.tabMode != "default") e_preventDefault(e);
+      else if (!ctrlKey && !altKey && !metaKey && code == 9 && options.tabMode != "default") e_preventDefault(e);
       else fastPoll(curKeyId);
     }
 
@@ -692,13 +707,13 @@ var CodeMirror = (function() {
         endOperation();
       });
     }
-    function fastPoll(keyId) {
+    function fastPoll(keyId, code) {
       var missed = false;
       pollingFast = true;
       function p() {
         startOperation();
         var changed = readInput();
-        if (changed && keyId) {
+        if (changed) {
           if (changed == "moved" && movementKeys[keyId] == null) movementKeys[keyId] = true;
           if (changed == "changed") movementKeys[keyId] = false;
         }
@@ -706,7 +721,14 @@ var CodeMirror = (function() {
         else {pollingFast = false; slowPoll();}
         endOperation();
       }
-      poll.set(20, p);
+//      poll.set(0, p); // original
+      if (ipad && code >= 37 && code <= 40) // if cursor key
+        p();
+      else
+        poll.set(20, p);
+// Even delay time = 0, the function that is set by poll.set is executed after long time (keydown's is executed after keyup event.) and this cause unstable behavior about cursor key.
+// But when you call p() directly, character inputted is always selected. 
+// What shall I do? by ichikawa
     }
 
     // Inspects the textarea, compares its state (content, selection)
@@ -2600,6 +2622,7 @@ var CodeMirror = (function() {
 
   var tabSize = 8;
   var mac = /Mac/.test(navigator.platform);
+  var ipad = /iPad/.test(navigator.platform);
   var win = /Win/.test(navigator.platform);
   var movementKeys = {};
   for (var i = 35; i <= 40; ++i)
