@@ -296,7 +296,7 @@ class KeyFSM
     @setState keyActive
     if @subkey()?
       @timer = setTimeout (=> @setState keySubActive), @holdTime
-      fireKeyEvent 'keydown', @observer.id, @keyCode(), 0
+    fireKeyEvent 'keydown', @observer.id, @keyCode(), 0
 
   touchMove : (event) ->
     touchPoint = event.targetTouches[0]
