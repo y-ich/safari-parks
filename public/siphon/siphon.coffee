@@ -419,7 +419,7 @@ $(document).ready ->
 
   editor = CodeMirror $('#editor')[0],
     value :  '''
-      alert 'edit me aun run!'
+      alert 'edit me and run!'
       '''
     mode : 'coffeescript'
     onChange : -> editor.compile()
@@ -479,9 +479,9 @@ $(document).ready ->
   $('.key.main').bind 'touchstart', (event) ->
     touchPoint = event.originalEvent.targetTouches[0]
 
-  # lazy initialization
-  this.model ?= new KeyFSM keyInactive, this, 400 #milli seconds
-  this.model.touchStart touchPoint.pageX, touchPoint.pageY
+    # lazy initialization
+    this.model ?= new KeyFSM keyInactive, this, 400 #milli seconds
+    this.model.touchStart touchPoint.pageX, touchPoint.pageY
 
   $('.key.main').bind 'touchmove', (event) ->
     this.model.touchMove event.originalEvent
