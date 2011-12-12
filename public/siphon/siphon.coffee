@@ -9,6 +9,7 @@
 # editor object
 editor = null
 jsviewer = null
+pasteBuffer = null
 
 #
 # utility functions
@@ -217,8 +218,9 @@ xy2pos = (str, xy) ->
   return pos + Math.min(xy.x, lines[y].length)
 
 TextEvent.DOM_INPUT_METHOD_KEYBOARD = 1
+TextEvent.DOM_INPUT_METHOD_PASTE = 2
 
-fireTextEvent = (str) ->
+fireTextEvent = (str, method = TextEvent.DOM_INPUT_METHOD_KEYBOARD) ->
   e = document.createEvent 'TextEvent'
   e.initTextEvent 'textInput', true, true, window, str,
     TextEvent.DOM_INPUT_METHOD_KEYBOARD
@@ -419,6 +421,7 @@ $(document).ready ->
 
   editor = CodeMirror $('#editor')[0],
     value :  "alert 'edit me and run!'"
+    matchBrackets: true
     mode : 'coffeescript'
     onChange : -> editor.compile()
     onKeyEvent : (instance, e) ->
@@ -431,6 +434,24 @@ $(document).ready ->
         $('#Alt')[0].model.state is keyActive
       e.mobile.shiftKey = $('#Shift')[0].model? and
         $('#Shift')[0].model.state is keyActive
+      if e.mobile.metaKey
+        switch e.keyCode
+          when 88 # 'X'.charCodeAt(0)
+            if e.type is 'keydown'
+              pasteBuffer = editor.getSelection()
+              editor.replaceSelection('')
+            e.stop()
+            return true
+          when 67 # 'C'.charCodeAt(0)
+            if e.type is 'keydown'
+              pasteBuffer = editor.getSelection()
+            e.stop()
+            return true
+          when 86 # 'V'.charCodeAt(0)
+            if e.type is 'keydown' and pasteBuffer? and pasteBuffer isnt ''
+              fireTextEvent pasteBuffer, TextEvent.DOM_INPUT_METHOD_PASTE
+            e.stop()
+            return true
       return false
 
   editor.element = editor.getWrapperElement()
@@ -508,7 +529,7 @@ $(document).ready ->
   $('#saveas').click clickSaveas
 
   $('#about').click ->
-    alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.4.0\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
+    alert 'Siphon\nCoffeeScript Programming Environment\nVersion 0.4.1\nCopyright (C) 2011 ICHIKAWA, Yuji All Rights Reserved.'
 
   resetSelects() # "Open...", and "Delete..." menus
 
@@ -544,7 +565,10 @@ $(document).ready ->
   $('#keyboard-on').change layoutEditor
 
   $('#key-sound').change ->
-    keySound.enable = if $('#key-sound')[0].checked then true else false
+    keySound.enable = if this.checked then true else false
+
+  $('#smart-indent').change ->
+    editor.setOption 'tabMode', if this.checked then 'smart' else 'classic'
 
   $('#codemirror').change ->
   editor.compile()
