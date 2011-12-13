@@ -71,10 +71,6 @@ get '/' do
   redirect '/index.html'
 end
 
-get '/dic' do
-  erb :'dic/index'
-end
-
 get '/dic/' do
   erb :'dic/index'
 end
@@ -83,12 +79,16 @@ get '/dic/index.html' do
   erb :'dic/index'
 end
 
-
-get '/siphon' do
-  redirect '/siphon/index.html'
-end
 get '/siphon/' do
-  redirect '/siphon/index.html'
+  redirect 'http://y-ich.github.com/Siphon/'
+end
+
+get '/siphon/index.html' do
+  redirect 'http://y-ich.github.com/Siphon/'
+end
+
+get '/siphon/siphon.html' do
+  redirect 'http://y-ich.github.com/Siphon/siphon.html'
 end
 
 get '/dic/search' do
