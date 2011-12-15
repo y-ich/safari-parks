@@ -7,9 +7,10 @@ def bookmarklet filename
     js = URI.encode(file.read, /[^^-_.!~*'()a-zA-Z\d;\\\/?:@&=+$,\[\]%\{\}<>]/).sub(/SERVER_DOMAIN/) do |m|
       '<%= ' + m + ' %%>'
     end
-    js.sub(/twitter_id=/) do |m|
+		js = js.sub(/twitter_id=/) do |m|
       m + '" + document.getElementById(\'twitter_id\').value + "'
     end
+		js.gsub(/\\/, '\\\\\\')
   end
 end
 %>

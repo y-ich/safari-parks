@@ -6,7 +6,7 @@ javascript:{
 		d.body.removeChild(s);
 		if (o.text.length) {
 			window.sp_pronounce = o.wav_us;
-			if (/Mobile/.test(navigator.userAgent)) {
+			if (/Mobile\//.test(navigator.userAgent)) {
 				alert(o.text);
 			}
 			else
